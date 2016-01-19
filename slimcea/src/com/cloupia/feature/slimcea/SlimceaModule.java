@@ -11,7 +11,7 @@ import com.cloupia.feature.slimcea.accounts.inventory.SlimceaConvergedStackBuild
 import com.cloupia.feature.slimcea.accounts.inventory.SlimceaInventoryItemHandler;
 import com.cloupia.feature.slimcea.accounts.inventory.SlimceaInventoryListener;
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
-import com.cloupia.feature.slimcea.drilldownreports.slimceaAccountSampleDrillDownReport;
+import com.cloupia.feature.slimcea.drilldownreports.SlimceaAccountSampleDrillDownReport;
 import com.cloupia.feature.slimcea.dummyOne.reports.DummyOneSampleReport;
 import com.cloupia.feature.slimcea.lovs.SimpleLovProvider;
 import com.cloupia.feature.slimcea.lovs.SimpleTabularProvider;
