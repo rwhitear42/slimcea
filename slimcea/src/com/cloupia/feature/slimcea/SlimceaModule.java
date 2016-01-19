@@ -25,7 +25,7 @@ import com.cloupia.feature.slimcea.tasks.EnableSNMPNexusTask;
 import com.cloupia.feature.slimcea.tasks.HelloWorldTask;
 import com.cloupia.feature.slimcea.tasks.MultiSelectTabularTask;
 import com.cloupia.feature.slimcea.tasks.RollbackHelloWorldTask;
-import com.cloupia.feature.slimcea.tasks.slimceaTaskContextTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaTaskContextTask;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceStatusParam;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceType;
 import com.cloupia.lib.connector.ConfigItemDef;
@@ -44,9 +44,9 @@ import com.cloupia.feature.slimcea.workflow.WorkflowInputTypeDeclaration;
 import com.cloupia.feature.slimcea.multiselecttabularreports.MultiSelectTabularReport;
 import com.cloupia.feature.slimcea.workflow.InputTypeDeclaration;
 
-public class FooModule extends AbstractCloupiaModule {
+public class SlimceaModule extends AbstractCloupiaModule {
 	
-	private static Logger logger = Logger.getLogger(FooModule.class);
+	private static Logger logger = Logger.getLogger(SlimceaModule.class);
 
 	@Override
 	public AbstractTask[] getTasks() {
@@ -56,7 +56,7 @@ public class FooModule extends AbstractCloupiaModule {
 		AbstractTask task4 = new EnableSNMPNexusTask();
 		AbstractTask task5 = new DisableSNMPNexusTask();
 		AbstractTask task6 = new RollbackHelloWorldTask();
-		AbstractTask task7 = new FooTaskContextTask();
+		AbstractTask task7 = new SlimceaTaskContextTask();
 		AbstractTask task8 = new MultiSelectTabularTask();
 		AbstractTask[] tasks = new AbstractTask[8];
 		tasks[0] = task1;
@@ -85,11 +85,11 @@ public class FooModule extends AbstractCloupiaModule {
 		//this is where you register all your top level reports, i'm only registering the report
 		//extending genericinfraaccountreport because all my other reports are actually drilldown
 		//reports of that report
-		FooAccountSampleDrillDownReport drilReport = new FooAccountSampleDrillDownReport("foo.drilldown.report", "Drill Down", DummyAccount.class);
+		SlimceaAccountSampleDrillDownReport drilReport = new SlimceaAccountSampleDrillDownReport("slimcea.drilldown.report", "Drill Down", DummyAccount.class);
 		
 		CloupiaReport[] reports = new CloupiaReport[5];		
 		reports[0] = new DummyOneSampleReport();
-		reports[1] = new FooAccountSampleReport();
+		reports[1] = new SlimceaAccountSampleReport();
 		
 		reports[2] = drilReport;
 		reports[3] = new AccountSystemTaskReport();
@@ -103,7 +103,7 @@ public class FooModule extends AbstractCloupiaModule {
 
 		//when registering new resource types to limit, you need to provide an id to uniquely identify the resource,
 		//a description of how that resource is computed, and an instance of the computer itself
-		this.registerResourceLimiter(FooConstants.DUMMY_VLAN_RESOURCE_TYPE, FooConstants.DUMMY_VLAN_RESOURCE_DESC, 
+		this.registerResourceLimiter(SlimceaConstants.DUMMY_VLAN_RESOURCE_TYPE, SlimceaConstants.DUMMY_VLAN_RESOURCE_DESC, 
 				new DummyVLANResourceComputer());
 
 		try {
@@ -118,13 +118,13 @@ public class FooModule extends AbstractCloupiaModule {
 			//registering new report context for use in my dummy menu, good rule of thumb, always register your contexts
 			//as early as possible, this way you won't run into any cases where the context does not exist yet and causes
 			//an issue elsewhere in the code!
-			ReportContextRegistry.getInstance().register(FooConstants.DUMMY_CONTEXT_ONE, FooConstants.DUMMY_CONTEXT_ONE_LABEL);
+			ReportContextRegistry.getInstance().register(SlimceaConstants.DUMMY_CONTEXT_ONE, SlimceaConstants.DUMMY_CONTEXT_ONE_LABEL);
 
 			//FooAccount 
-			ReportContextRegistry.getInstance().register(FooConstants.INFRA_ACCOUNT_TYPE, FooConstants.INFRA_ACCOUNT_LABEL);
+			ReportContextRegistry.getInstance().register(SlimceaConstants.INFRA_ACCOUNT_TYPE, SlimceaConstants.INFRA_ACCOUNT_LABEL);
 			
 			//Foo Drill down REport 
-			ReportContextRegistry.getInstance().register(FooConstants.slimcea_ACCOUNT_DRILLDOWN_NAME, FooConstants.slimcea_ACCOUNT_DRILLDOWN_LABEL);
+			ReportContextRegistry.getInstance().register(SlimceaConstants.SLIMCEA_ACCOUNT_DRILLDOWN_NAME, SlimceaConstants.SLIMCEA_ACCOUNT_DRILLDOWN_LABEL);
 			
 			//register the left hand menu provider for the menu item i'm introducing
 			DummyMenuProvider menuProvider = new DummyMenuProvider();
@@ -154,21 +154,21 @@ public class FooModule extends AbstractCloupiaModule {
 	private void createAccountType(){
 		AccountTypeEntry entry=new AccountTypeEntry();
 		// This is mandatory, hold the information for device credential details
-		entry.setCredentialClass(FooAccount.class);
+		entry.setCredentialClass(SlimceaAccount.class);
 		
 		// This is mandatory, type of the Account will be shown in GUI as drill
 		// down box
-		entry.setAccountType(FooConstants.INFRA_ACCOUNT_TYPE);
+		entry.setAccountType(SlimceaConstants.INFRA_ACCOUNT_TYPE);
 		
 		// This is mandatory, label of the Account
-		entry.setAccountLabel(FooConstants.INFRA_ACCOUNT_LABEL);
+		entry.setAccountLabel(SlimceaConstants.INFRA_ACCOUNT_LABEL);
 		
 		// This is mandatory, specify the category of the account type ie.,
 		// Network / Storage / //Compute
 		entry.setCategory(InfraAccountTypes.CAT_STORAGE);
 		
 		//This is mandatory
-		entry.setContextType(ReportContextRegistry.getInstance().getContextByName(FooConstants.INFRA_ACCOUNT_TYPE).getType());
+		entry.setContextType(ReportContextRegistry.getInstance().getContextByName(SlimceaConstants.INFRA_ACCOUNT_TYPE).getType());
 		
 		// This is mandatory, on which accounts either physical or virtual
 		// account , new account //type belong to.
@@ -194,13 +194,13 @@ public class FooModule extends AbstractCloupiaModule {
 		
 		// This is mandatory, to test the connectivity of the new account. The
 		// Handler should be of type PhysicalConnectivityTestHandler.
-		entry.setTestConnectionHandler(new FooTestConnectionHandler());
+		entry.setTestConnectionHandler(new SlimceaTestConnectionHandler());
 		// This is mandatory, we can implement inventory listener according to
 		// the account Type , collect the inventory details.
-		entry.setInventoryListener(new FooInventoryListener());
+		entry.setInventoryListener(new SlimceaInventoryListener());
 		
 		//This is mandatory , to show in the converged stack view
-		entry.setConvergedStackComponentBuilder(new FooConvergedStackBuilder());
+		entry.setConvergedStackComponentBuilder(new SlimceaConvergedStackBuilder());
 		
 		//This is required to show up the details of the stack view in the GUI 
 		//entry.setStackViewItemProvider(new FooStackViewProvider());
@@ -224,7 +224,7 @@ public class FooModule extends AbstractCloupiaModule {
 					AccountTypeEntry fooRecoverPointAccountEntry) {
 				ConfigItemDef fooRecoverPointStateInfo = fooRecoverPointAccountEntry
 						.createInventoryRoot("foo.inventory.root",
-								FooInventoryItemHandler.class);
+								SlimceaInventoryItemHandler.class);
 			}
 
 }

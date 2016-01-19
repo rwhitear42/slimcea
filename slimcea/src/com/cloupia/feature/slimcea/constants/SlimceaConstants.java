@@ -14,9 +14,9 @@ public class SlimceaConstants {
     
 	public static final String NEXUS_DEVICES_LOV_PROVIDER = "NetworkDeviceList";
 
-	public static final String slimcea_HELLO_WORLD_NAME = "slimcea_name_from_other_tasks";
+	public static final String SLIMCEA_HELLO_WORLD_NAME = "slimcea_name_from_other_tasks";
 	
-	public static final String slimcea_MULTI_SELECT_TABULARVALUE_NAME = "SampleTabulerMultiInput";
+	public static final String SLIMCEA_MULTI_SELECT_TABULARVALUE_NAME = "SampleTabulerMultiInput";
 	
 	//this is the unique integer i'm giving for my dummy collector, it's a good idea
 	//to use some large number past 1000 so you avoid any potential collisions
