@@ -4,9 +4,9 @@ import org.apache.log4j.Logger;
 
 import com.cloupia.feature.slimcea.accounts.AccountSystemTaskReport;
 import com.cloupia.feature.slimcea.accounts.DummyAccount;
-import com.cloupia.feature.slimcea.accounts.slimceaAccount;
-import com.cloupia.feature.slimcea.accounts.slimceaAccountSampleReport;
-import com.cloupia.feature.slimcea.accounts.handler.slimceaTestConnectionHandler;
+import com.cloupia.feature.slimcea.accounts.SlimceaAccount;
+import com.cloupia.feature.slimcea.accounts.SlimceaAccountSampleReport;
+import com.cloupia.feature.slimcea.accounts.handler.SlimceaTestConnectionHandler;
 import com.cloupia.feature.slimcea.accounts.inventory.slimceaConvergedStackBuilder;
 import com.cloupia.feature.slimcea.accounts.inventory.slimceaInventoryItemHandler;
 import com.cloupia.feature.slimcea.accounts.inventory.slimceaInventoryListener;
