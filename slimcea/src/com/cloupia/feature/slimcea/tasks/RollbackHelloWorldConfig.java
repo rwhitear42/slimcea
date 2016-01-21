@@ -24,7 +24,7 @@ public class RollbackHelloWorldConfig implements TaskConfigIf {
 	
 	//This field is supposed to consume output from the EmailDatacentersTask, you'll see the
 	//type in user input field below matches the output type in EmailDatacentersTask's output definition.
-	@FormField(label = "Name", help = "Name passed in from previous task", mandatory = true)
+	@FormField(label = "Name Blarg", help = "Name passed in from previous task", mandatory = true)
 	@UserInputField(type = SlimceaConstants.SLIMCEA_HELLO_WORLD_NAME)
     @Persistent
     private String             login;

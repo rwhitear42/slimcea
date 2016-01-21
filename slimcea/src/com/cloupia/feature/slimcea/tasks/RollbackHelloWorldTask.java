@@ -23,7 +23,7 @@ public class RollbackHelloWorldTask extends AbstractTask {
 
 		if (config == null)
 		{
-			throw new Exception("No hello world configuration found for custom action " + context.getActionDef().getName()
+			throw new Exception("No hello world configuration found for custom action blarg" + context.getActionDef().getName()
 					+ " entryId " + configEntryId);
 		}
 
