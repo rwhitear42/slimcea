@@ -174,18 +174,18 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		// account , new account //type belong to.
 		entry.setAccountClass(AccountTypeEntry.PHYSICAL_ACCOUNT);
 		// Optional , prefix of the task
-		entry.setInventoryTaskPrefix("Open Automation Inventory Task");
+		entry.setInventoryTaskPrefix("Slimcea Inventory Task");
 		
 		//Optional. Group inventory system tasks under this folder. 
 		//By default it is grouped under General Tasks
-		entry.setWorkflowTaskCategory("Foo Tasks");
+		entry.setWorkflowTaskCategory("Slimcea Tasks");
 		// Optional , collect the inventory frequency, whenever required you can
 		// change the
 		// inventory collection frequency, in mins.
 		entry.setInventoryFrequencyInMins(15);
 		// This is mandatory,under which pod type , the new account type is
 		// applicable.
-		entry.setPodTypes(new String[] { "FlexPod" });
+		entry.setPodTypes(new String[] { "SlimceaStack" } );
 		
 		
 		// This is optional, dependents on the need of session for collecting
@@ -195,6 +195,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		// This is mandatory, to test the connectivity of the new account. The
 		// Handler should be of type PhysicalConnectivityTestHandler.
 		entry.setTestConnectionHandler(new SlimceaTestConnectionHandler());
+		
 		// This is mandatory, we can implement inventory listener according to
 		// the account Type , collect the inventory details.
 		entry.setInventoryListener(new SlimceaInventoryListener());
@@ -221,9 +222,9 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			}
 
 			private void registerInventoryObjects(
-					AccountTypeEntry fooRecoverPointAccountEntry) {
-				ConfigItemDef fooRecoverPointStateInfo = fooRecoverPointAccountEntry
-						.createInventoryRoot("foo.inventory.root",
+					AccountTypeEntry SlimceaRecoverPointAccountEntry) {
+				ConfigItemDef SlimceaRecoverPointStateInfo = SlimceaRecoverPointAccountEntry
+						.createInventoryRoot("slimcea.inventory.root",
 								SlimceaInventoryItemHandler.class);
 			}
 
