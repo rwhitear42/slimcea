@@ -45,4 +45,5 @@ public class SlimceaConstants {
 	// Workflow task constants.
 	public static final String GENERIC_TEXT_INPUT = "gen_text_input";
 	public static final String PASSWORD = "password";
+	public static final String BOOLEAN = "Boolean";
 }

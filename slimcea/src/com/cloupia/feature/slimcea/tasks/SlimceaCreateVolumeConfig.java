@@ -34,6 +34,36 @@ public class SlimceaCreateVolumeConfig implements TaskConfigIf {
 	@Persistent
 	private String             password;
 
+	@FormField(label = "Nimble Volume Name", help = "Enter Nimble Volume Name", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
+	@Persistent
+	private String             volumeName;
+
+	@FormField(label = "Nimble Volume Size GB", help = "Enter Nimble Volume Size in GB", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
+	@Persistent
+	private String             volumeSizeGB;
+	
+	@FormField(label = "Nimble Volume Description", help = "Enter Nimble Volume Description", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
+	@Persistent
+	private String             description;
+	
+	@FormField(label = "Nimble Volume Data Encryption", help = "Should Volume be Encrypted?", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
+	@UserInputField(type = SlimceaConstants.BOOLEAN)
+	@Persistent
+	private String             dataEncryption;
+	
+	@FormField(label = "Nimble Volume Cache Pinning", help = "Should Volume be Pinned in Cache?", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
+	@UserInputField(type = SlimceaConstants.BOOLEAN)
+	@Persistent
+	private String             cachePinning;
+	
+	@FormField(label = "Nimble Volume Performance Policy", help = "Select an Appropriate Performance Policy", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
+	@Persistent
+	private String             perfPolicy;
+
 	@Override
 	public long getActionId() {
 		return actionId;
@@ -81,6 +111,54 @@ public class SlimceaCreateVolumeConfig implements TaskConfigIf {
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
+	}
+	
+	public String getVolumeName() {
+		return volumeName;
+	}
+
+	public void setVolumeName(String volumeName) {
+		this.volumeName = volumeName;
+	}
+	
+	public String getVolumeSizeGB() {
+		return volumeSizeGB;
+	}
+
+	public void setVolumeSizeGB(String volumeSizeGB) {
+		this.volumeSizeGB = volumeSizeGB;
+	}
+	
+	public String getVolumeDescription() {
+		return description;
+	}
+
+	public void setVolumeDescription(String description) {
+		this.description = description;
+	}
+	
+	public String getVolumeDataEncryption() {
+		return dataEncryption;
+	}
+
+	public void setVolumeDataEncryption(String dataEncryption) {
+		this.dataEncryption = dataEncryption;
+	}
+	
+	public String getVolumeCachePinning() {
+		return cachePinning;
+	}
+
+	public void setVolumeDataCachePinning(String cachePinning) {
+		this.cachePinning = cachePinning;
+	}
+	
+	public String getVolumePerfPolicy() {
+		return perfPolicy;
+	}
+
+	public void setVolumePerfPolicy(String perfPolicy) {
+		this.perfPolicy = perfPolicy;
 	}
 
 }

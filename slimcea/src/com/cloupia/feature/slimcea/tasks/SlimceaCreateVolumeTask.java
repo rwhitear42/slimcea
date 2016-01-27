@@ -17,6 +17,12 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		actionLogger.addInfo("Username: " +config.getUsername());
 		actionLogger.addInfo("Password: " +config.getPassword());
 		actionLogger.addInfo("IP Address: " +config.getIpAddress());
+		actionLogger.addInfo("Volume Name: " +config.getVolumeName());
+		actionLogger.addInfo("Volume Size (GB): " +config.getVolumeSizeGB());
+		actionLogger.addInfo("Volume Description: " +config.getVolumeDescription());
+		actionLogger.addInfo("Data Encryption: " +config.getVolumeDataEncryption());
+		actionLogger.addInfo("Cache Pinning: " +config.getVolumeCachePinning());
+		actionLogger.addInfo("Performance Policy: " +config.getVolumePerfPolicy());
 		
 		//Session session = jsch.getSession(config.getUsername(), config.getIpAddress(), 22);
 		//session.setPassword(config.getPassword());
