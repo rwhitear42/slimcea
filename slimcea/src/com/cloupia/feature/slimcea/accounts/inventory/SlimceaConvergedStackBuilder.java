@@ -24,12 +24,12 @@ public class SlimceaConvergedStackBuilder implements ConvergedStackComponentBuil
 	public ConvergedStackComponentDetail buildConvergedStackComponent(
 			String contextId) throws Exception {
 		ConvergedStackComponentDetail detail = new ConvergedStackComponentDetail();
-		detail.setModel("Dummy Model");
+		detail.setModel("Slimcea 101");
 		detail.setOsVersion("1.0");
-		detail.setVendorLogoUrl("dummy_logo.png");
-		detail.setMgmtIPAddr("172.29.109.219");
+		detail.setVendorLogoUrl("NimbleArray01_100x100.png");
+		detail.setMgmtIPAddr("10.52.249.102");
 		detail.setStatus("OK");
-		detail.setVendorName("Dummy");
+		detail.setVendorName("Whitear");
 		//setting account context type
 		detail.setContextType(ReportContextRegistry.getInstance().getContextByName(SlimceaConstants.INFRA_ACCOUNT_TYPE).getType());
 		//setting context value that should be passed to report implementation

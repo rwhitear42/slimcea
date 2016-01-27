@@ -120,10 +120,10 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			//an issue elsewhere in the code!
 			ReportContextRegistry.getInstance().register(SlimceaConstants.DUMMY_CONTEXT_ONE, SlimceaConstants.DUMMY_CONTEXT_ONE_LABEL);
 
-			//FooAccount 
+			//SlimceaAccount 
 			ReportContextRegistry.getInstance().register(SlimceaConstants.INFRA_ACCOUNT_TYPE, SlimceaConstants.INFRA_ACCOUNT_LABEL);
 			
-			//Foo Drill down REport 
+			//Slimcea Drill down REport 
 			ReportContextRegistry.getInstance().register(SlimceaConstants.SLIMCEA_ACCOUNT_DRILLDOWN_NAME, SlimceaConstants.SLIMCEA_ACCOUNT_DRILLDOWN_LABEL);
 			
 			//register the left hand menu provider for the menu item i'm introducing
