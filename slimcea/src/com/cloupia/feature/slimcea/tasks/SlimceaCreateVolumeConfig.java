@@ -3,6 +3,7 @@ package com.cloupia.feature.slimcea.tasks;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.model.cIM.FormFieldDefinition;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.customactions.UserInputField;
@@ -23,11 +24,13 @@ public class SlimceaCreateVolumeConfig implements TaskConfigIf {
 	@Persistent
 	private String             ipAddress         = "";
 
-	@FormField(label = "Nimble Username", help = "Nimble username", mandatory = true)
+	@FormField(label = "Nimble Username", help = "Nimble username", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
 	@Persistent
 	private String             username;
 
 	@FormField(label = "Password", help = "Password", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_PASSWORD)
+	@UserInputField(type = SlimceaConstants.PASSWORD)
 	@Persistent
 	private String             password;
 
