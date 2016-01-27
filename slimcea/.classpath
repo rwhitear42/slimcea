@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="/Users/rwhitear/slimcea/slimcea/lib/apache-commons-httpclient/httpclient-4.2.2.jar"/>
 	<classpathentry kind="lib" path="/Users/rwhitear/slimcea/slimcea/lib/apache-commons-httpclient/httpcore-4.2.2.jar"/>
 	<classpathentry kind="lib" path="/Users/rwhitear/slimcea/slimcea/lib/apache-commons-httpclient/httpmime-4.2.2.jar"/>
-	<classpathentry kind="lib" path="/Users/rwhitear/slimcea/slimcea/lib/jdo/jdo2-api-2.3-eb.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/rwhitear/slimcea/slimcea/lib/jdo/jdo2-api-2.3-eb.jar"/>
 	<classpathentry kind="lib" path="/Users/rwhitear/slimcea/slimcea/lib/logging/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="/Users/rwhitear/slimcea/slimcea/lib/jsch/jsch-0.1.45.jar"/>
 	<classpathentry kind="lib" path="/Users/rwhitear/slimcea/slimcea/lib/javamail/mailapi.jar"/>
