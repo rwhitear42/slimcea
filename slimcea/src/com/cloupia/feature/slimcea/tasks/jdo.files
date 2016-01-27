@@ -9,3 +9,4 @@
 +DisableSNMPNexusConfig
 +SlimceaTaskContextConfig
 +SlimceaCreateVolumeConfig
++SlimceaDeleteVolumeConfig

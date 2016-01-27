@@ -26,6 +26,7 @@ import com.cloupia.feature.slimcea.tasks.HelloWorldTask;
 import com.cloupia.feature.slimcea.tasks.MultiSelectTabularTask;
 import com.cloupia.feature.slimcea.tasks.RollbackHelloWorldTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateVolumeTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaDeleteVolumeTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaTaskContextTask;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceStatusParam;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceType;
@@ -60,7 +61,8 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		AbstractTask task7 = new SlimceaTaskContextTask();
 		AbstractTask task8 = new MultiSelectTabularTask();
 		AbstractTask task9 = new SlimceaCreateVolumeTask();
-		AbstractTask[] tasks = new AbstractTask[9];
+		AbstractTask task10 = new SlimceaDeleteVolumeTask();
+		AbstractTask[] tasks = new AbstractTask[10];
 		tasks[0] = task1;
 		tasks[1] = task2;
 		tasks[2] = task3;
@@ -70,6 +72,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		tasks[6] = task7;
 		tasks[7] = task8;
 		tasks[8] = task9;
+		tasks[9] = task10;
 		return tasks;
 	}
 
