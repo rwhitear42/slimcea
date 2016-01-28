@@ -10,10 +10,10 @@ import com.cloupia.service.cIM.inframgr.customactions.UserInputField;
 import com.cloupia.service.cIM.inframgr.customactions.WorkflowInputFieldTypeDeclaration;
 import com.cloupia.service.cIM.inframgr.forms.wizard.FormField;
 
-@PersistenceCapable(detachable = "true", table = "slimcea_slimceacreatevolumetask")
-public class SlimceaCreateVolumeConfig implements TaskConfigIf {
+@PersistenceCapable(detachable = "true", table = "slimcea_slimceadeletesnapshottask")
+public class SlimceaDeleteSnapshotConfig implements TaskConfigIf {
 
-	public static final String displayLabel = "Nimble Create Volume";
+	public static final String displayLabel = "Nimble Delete Snapshot";
 	@Persistent
 	private long configEntryId;
 	@Persistent
@@ -39,31 +39,23 @@ public class SlimceaCreateVolumeConfig implements TaskConfigIf {
 	@Persistent
 	private String             volumeName;
 
-	@FormField(label = "Nimble Volume Size GB", help = "Enter Nimble Volume Size in GB", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@FormField(label = "Nimble Snapshot Name", help = "Enter Nimble Snapshot Name", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
 	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
 	@Persistent
-	private String             volumeSizeGB;
+	private String             snapshotName;
 	
-	@FormField(label = "Nimble Volume Description", help = "Enter Nimble Volume Description", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
-	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
-	@Persistent
-	private String             description;
-	
-	@FormField(label = "Nimble Volume Performance Policy", help = "Select an Appropriate Performance Policy", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
-	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
-	@Persistent
-	private String             perfPolicy;
-	
-	@FormField(label = "Nimble Volume Data Encryption", help = "Should Volume be Encrypted", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
-	@UserInputField(type = SlimceaConstants.BOOLEAN)
-	@Persistent
-	private boolean            dataEncryption;
-	
-	@FormField(label = "Nimble Volume Cache Pinning", help = "Should Volume be Pinned in Cache", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
-	@UserInputField(type = SlimceaConstants.BOOLEAN)
-	@Persistent
-	private boolean            cachePinning; 
-	
+	public SlimceaDeleteSnapshotConfig(SlimceaCreateSnapshotConfig config) {
+		this.ipAddress = config.getIpAddress();
+		this.username = config.getUsername();
+		this.password = config.getPassword();
+		this.volumeName = config.getVolumeName();
+		this.snapshotName = config.getSnapshotName();
+	}
+
+	public SlimceaDeleteSnapshotConfig() {
+
+	}
+
 	@Override
 	public long getActionId() {
 		return actionId;
@@ -121,44 +113,12 @@ public class SlimceaCreateVolumeConfig implements TaskConfigIf {
 		this.volumeName = volumeName;
 	}
 	
-	public String getVolumeSizeGB() {
-		return volumeSizeGB;
+	public String getSnapshotName() {
+		return snapshotName;
 	}
 
-	public void setVolumeSizeGB(String volumeSizeGB) {
-		this.volumeSizeGB = volumeSizeGB;
+	public void setSnapshotName(String snapshotName) {
+		this.snapshotName = snapshotName;
 	}
 	
-	public String getVolumeDescription() {
-		return description;
-	}
-
-	public void setVolumeDescription(String description) {
-		this.description = description;
-	}
-	
-	public String getVolumePerfPolicy() {
-		return perfPolicy;
-	}
-
-	public void setVolumePerfPolicy(String perfPolicy) {
-		this.perfPolicy = perfPolicy;
-	}
-	
-	public boolean getVolumeDataEncryption() {
-		return dataEncryption;
-	}
-
-	public void setVolumeDataEncryption(boolean dataEncryption) {
-		this.dataEncryption = dataEncryption;
-	}
-	
-	public boolean getVolumeCachePinning() {
-		return cachePinning;
-	}
-
-	public void setVolumeDataCachePinning(boolean cachePinning) {
-		this.cachePinning = cachePinning;
-	}
-
 }

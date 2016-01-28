@@ -10,10 +10,10 @@ import com.cloupia.service.cIM.inframgr.customactions.UserInputField;
 import com.cloupia.service.cIM.inframgr.customactions.WorkflowInputFieldTypeDeclaration;
 import com.cloupia.service.cIM.inframgr.forms.wizard.FormField;
 
-@PersistenceCapable(detachable = "true", table = "slimcea_slimceacreatevolumetask")
-public class SlimceaCreateVolumeConfig implements TaskConfigIf {
+@PersistenceCapable(detachable = "true", table = "slimcea_slimceacreatesnapshottask")
+public class SlimceaCreateSnapshotConfig implements TaskConfigIf {
 
-	public static final String displayLabel = "Nimble Create Volume";
+	public static final String displayLabel = "Nimble Create Snapshot";
 	@Persistent
 	private long configEntryId;
 	@Persistent
@@ -39,31 +39,26 @@ public class SlimceaCreateVolumeConfig implements TaskConfigIf {
 	@Persistent
 	private String             volumeName;
 
-	@FormField(label = "Nimble Volume Size GB", help = "Enter Nimble Volume Size in GB", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@FormField(label = "Nimble Snapshot Name", help = "Enter Nimble Snapshot Name", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
 	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
 	@Persistent
-	private String             volumeSizeGB;
+	private String             snapshotName;
 	
-	@FormField(label = "Nimble Volume Description", help = "Enter Nimble Volume Description", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@FormField(label = "Nimble Snapshot Description", help = "Enter Nimble Snapshot Description", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
 	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
 	@Persistent
 	private String             description;
 	
-	@FormField(label = "Nimble Volume Performance Policy", help = "Select an Appropriate Performance Policy", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
-	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
-	@Persistent
-	private String             perfPolicy;
-	
-	@FormField(label = "Nimble Volume Data Encryption", help = "Should Volume be Encrypted", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
+	@FormField(label = "Online", help = "Should Volume be Encrypted?", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
 	@UserInputField(type = SlimceaConstants.BOOLEAN)
 	@Persistent
-	private boolean            dataEncryption;
+	private boolean            online;
 	
-	@FormField(label = "Nimble Volume Cache Pinning", help = "Should Volume be Pinned in Cache", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
+	@FormField(label = "Writable", help = "Should Volume be Pinned in Cache?", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
 	@UserInputField(type = SlimceaConstants.BOOLEAN)
 	@Persistent
-	private boolean            cachePinning; 
-	
+	private boolean            writable;
+
 	@Override
 	public long getActionId() {
 		return actionId;
@@ -121,44 +116,36 @@ public class SlimceaCreateVolumeConfig implements TaskConfigIf {
 		this.volumeName = volumeName;
 	}
 	
-	public String getVolumeSizeGB() {
-		return volumeSizeGB;
+	public String getSnapshotName() {
+		return snapshotName;
 	}
 
-	public void setVolumeSizeGB(String volumeSizeGB) {
-		this.volumeSizeGB = volumeSizeGB;
+	public void setSnapshotName(String snapshotName) {
+		this.snapshotName = snapshotName;
 	}
 	
-	public String getVolumeDescription() {
+	public String getSnapshotDescription() {
 		return description;
 	}
 
-	public void setVolumeDescription(String description) {
+	public void setSnapshotDescription(String description) {
 		this.description = description;
 	}
 	
-	public String getVolumePerfPolicy() {
-		return perfPolicy;
+	public boolean getSnapshotOnline() {
+		return online;
 	}
 
-	public void setVolumePerfPolicy(String perfPolicy) {
-		this.perfPolicy = perfPolicy;
+	public void setSnapshotOnline(boolean online) {
+		this.online = online;
 	}
 	
-	public boolean getVolumeDataEncryption() {
-		return dataEncryption;
+	public boolean getSnapshotWritable() {
+		return writable;
 	}
 
-	public void setVolumeDataEncryption(boolean dataEncryption) {
-		this.dataEncryption = dataEncryption;
-	}
-	
-	public boolean getVolumeCachePinning() {
-		return cachePinning;
-	}
-
-	public void setVolumeDataCachePinning(boolean cachePinning) {
-		this.cachePinning = cachePinning;
+	public void setSnapshotWritable(boolean writable) {
+		this.writable = writable;
 	}
 
 }
