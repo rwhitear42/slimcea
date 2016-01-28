@@ -1,5 +1,6 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
@@ -23,16 +24,22 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		actionLogger.addInfo("Data Encryption: " +config.getVolumeDataEncryption());
 		actionLogger.addInfo("Cache Pinning: " +config.getVolumeCachePinning());
 		actionLogger.addInfo("Performance Policy: " +config.getVolumePerfPolicy());
-		
-		//Session session = jsch.getSession(config.getUsername(), config.getIpAddress(), 22);
-		//session.setPassword(config.getPassword());
-			
+
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)
 		//NOTE: use the getTaskType() method in your handler to pass as the 5th argument
 		context.getChangeTracker().undoableResourceAdded("assetType", "idString", "Nimble Create Volume", 
 				"Rollback Create Nimble Volume " + config.getVolumeName(), 
 				new SlimceaDeleteVolumeTask().getTaskName(), new SlimceaDeleteVolumeConfig(config));
+		
+        try
+        {
+            context.saveOutputValue(SlimceaConstants.NIMBLE_VOLUME_NAME, config.getVolumeName());
+
+        } catch (Exception e)
+        {
+            actionLogger.addWarning("Failed to set output variable(s): " + e.getMessage());
+        }
 	}
 
 	@Override
@@ -47,8 +54,11 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 
 	@Override
 	public TaskOutputDefinition[] getTaskOutputDefinitions() {
-		// TODO Auto-generated method stub
-		return null;
+		TaskOutputDefinition[] ops = new TaskOutputDefinition[1];
+		//NOTE: If you want to use the output of this task as input to another task. Then the second argument 
+		//of the output definition MUST MATCH the type of UserInputField in the config of the task that will
+		//be receiving this output.  Take a look at HelloWorldConfig as an example.
+		ops[0] = new TaskOutputDefinition( SlimceaConstants.NIMBLE_VOLUME_NAME, SlimceaConstants.GENERIC_TEXT_INPUT, "Three" );
+		return ops;
 	}
-
 }

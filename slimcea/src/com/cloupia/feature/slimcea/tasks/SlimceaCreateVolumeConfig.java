@@ -49,20 +49,20 @@ public class SlimceaCreateVolumeConfig implements TaskConfigIf {
 	@Persistent
 	private String             description;
 	
-	@FormField(label = "Nimble Volume Data Encryption", help = "Should Volume be Encrypted?", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
-	@UserInputField(type = SlimceaConstants.BOOLEAN)
-	@Persistent
-	private String             dataEncryption;
-	
-	@FormField(label = "Nimble Volume Cache Pinning", help = "Should Volume be Pinned in Cache?", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
-	@UserInputField(type = SlimceaConstants.BOOLEAN)
-	@Persistent
-	private String             cachePinning;
-	
 	@FormField(label = "Nimble Volume Performance Policy", help = "Select an Appropriate Performance Policy", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
 	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
 	@Persistent
 	private String             perfPolicy;
+	
+	@FormField(label = "Nimble Volume Data Encryption", help = "Should Volume be Encrypted", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
+	@UserInputField(type = SlimceaConstants.BOOLEAN)
+	@Persistent
+	private String             dataEncryption;
+	
+	@FormField(label = "Nimble Volume Cache Pinning", help = "Should Volume be Pinned in Cache", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_BOOLEAN)
+	@UserInputField(type = SlimceaConstants.BOOLEAN)
+	@Persistent
+	private String             cachePinning;
 
 	@Override
 	public long getActionId() {
@@ -137,6 +137,14 @@ public class SlimceaCreateVolumeConfig implements TaskConfigIf {
 		this.description = description;
 	}
 	
+	public String getVolumePerfPolicy() {
+		return perfPolicy;
+	}
+
+	public void setVolumePerfPolicy(String perfPolicy) {
+		this.perfPolicy = perfPolicy;
+	}
+	
 	public String getVolumeDataEncryption() {
 		return dataEncryption;
 	}
@@ -151,14 +159,6 @@ public class SlimceaCreateVolumeConfig implements TaskConfigIf {
 
 	public void setVolumeDataCachePinning(String cachePinning) {
 		this.cachePinning = cachePinning;
-	}
-	
-	public String getVolumePerfPolicy() {
-		return perfPolicy;
-	}
-
-	public void setVolumePerfPolicy(String perfPolicy) {
-		this.perfPolicy = perfPolicy;
 	}
 
 }

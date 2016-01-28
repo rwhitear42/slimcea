@@ -18,16 +18,10 @@ import com.cloupia.feature.slimcea.lovs.SimpleTabularProvider;
 import com.cloupia.feature.slimcea.menuProvider.DummyMenuProvider;
 import com.cloupia.feature.slimcea.resourceComputer.DummyVLANResourceComputer;
 import com.cloupia.feature.slimcea.scheduledTasks.DummyScheduleTask;
-import com.cloupia.feature.slimcea.tasks.CreateGroupTask;
-import com.cloupia.feature.slimcea.tasks.DisableSNMPNexusTask;
-import com.cloupia.feature.slimcea.tasks.EmailDatacentersTask;
-import com.cloupia.feature.slimcea.tasks.EnableSNMPNexusTask;
-import com.cloupia.feature.slimcea.tasks.HelloWorldTask;
-import com.cloupia.feature.slimcea.tasks.MultiSelectTabularTask;
-import com.cloupia.feature.slimcea.tasks.RollbackHelloWorldTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaCreateSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateVolumeTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaDeleteSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteVolumeTask;
-import com.cloupia.feature.slimcea.tasks.SlimceaTaskContextTask;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceStatusParam;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceType;
 import com.cloupia.lib.connector.ConfigItemDef;
@@ -52,27 +46,15 @@ public class SlimceaModule extends AbstractCloupiaModule {
 
 	@Override
 	public AbstractTask[] getTasks() {
-		AbstractTask task1 = new CreateGroupTask();
-		AbstractTask task2 = new EmailDatacentersTask();
-		AbstractTask task3 = new HelloWorldTask();
-		AbstractTask task4 = new EnableSNMPNexusTask();
-		AbstractTask task5 = new DisableSNMPNexusTask();
-		AbstractTask task6 = new RollbackHelloWorldTask();
-		AbstractTask task7 = new SlimceaTaskContextTask();
-		AbstractTask task8 = new MultiSelectTabularTask();
-		AbstractTask task9 = new SlimceaCreateVolumeTask();
-		AbstractTask task10 = new SlimceaDeleteVolumeTask();
-		AbstractTask[] tasks = new AbstractTask[10];
+		AbstractTask task1 = new SlimceaCreateVolumeTask();
+		AbstractTask task2 = new SlimceaDeleteVolumeTask();
+		AbstractTask task3 = new SlimceaCreateSnapshotTask();
+		AbstractTask task4 = new SlimceaDeleteSnapshotTask();
+		AbstractTask[] tasks = new AbstractTask[4];
 		tasks[0] = task1;
 		tasks[1] = task2;
 		tasks[2] = task3;
 		tasks[3] = task4;
-		tasks[4] = task5;
-		tasks[5] = task6;
-		tasks[6] = task7;
-		tasks[7] = task8;
-		tasks[8] = task9;
-		tasks[9] = task10;
 		return tasks;
 	}
 

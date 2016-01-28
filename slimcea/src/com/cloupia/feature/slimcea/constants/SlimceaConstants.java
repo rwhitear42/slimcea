@@ -46,4 +46,8 @@ public class SlimceaConstants {
 	public static final String GENERIC_TEXT_INPUT = "gen_text_input";
 	public static final String PASSWORD = "password";
 	public static final String BOOLEAN = "Boolean";
+	
+	// Workflow output values.
+	public static final String NIMBLE_VOLUME_NAME = "NIMBLE_VOLUME_NAME";
+	
 }
