@@ -13,6 +13,7 @@ import com.cloupia.feature.slimcea.accounts.inventory.SlimceaInventoryListener;
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.feature.slimcea.drilldownreports.SlimceaAccountSampleDrillDownReport;
 import com.cloupia.feature.slimcea.dummyOne.reports.DummyOneSampleReport;
+import com.cloupia.feature.slimcea.lovs.NimbleSanProtocolLovProvider;
 import com.cloupia.feature.slimcea.lovs.SimpleLovProvider;
 import com.cloupia.feature.slimcea.lovs.SimpleTabularProvider;
 import com.cloupia.feature.slimcea.menuProvider.DummyMenuProvider;
@@ -22,6 +23,7 @@ import com.cloupia.feature.slimcea.tasks.SlimceaCreateSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateVolumeTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteVolumeTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaMultiSelectTabularTask;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceStatusParam;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceType;
 import com.cloupia.lib.connector.ConfigItemDef;
@@ -50,11 +52,13 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		AbstractTask task2 = new SlimceaDeleteVolumeTask();
 		AbstractTask task3 = new SlimceaCreateSnapshotTask();
 		AbstractTask task4 = new SlimceaDeleteSnapshotTask();
-		AbstractTask[] tasks = new AbstractTask[4];
+		AbstractTask task5 = new SlimceaMultiSelectTabularTask();
+		AbstractTask[] tasks = new AbstractTask[5];
 		tasks[0] = task1;
 		tasks[1] = task2;
 		tasks[2] = task3;
 		tasks[3] = task4;
+		tasks[4] = task5;
 		return tasks;
 	}
 
@@ -97,6 +101,9 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		try {
 			//this is where you should register LOV providers for use in SimpleDummyAction
 			cfr.registerLovProviders(SimpleLovProvider.SIMPLE_LOV_PROVIDER, new SimpleLovProvider());
+			// Slimcea SAN protocol type LOV provider.
+			cfr.registerLovProviders(NimbleSanProtocolLovProvider.NIMBLE_SAN_PROTOCOL_LOV_PROVIDER, new NimbleSanProtocolLovProvider());	
+			
 			//you need to provide a unique id for this tabular provider, along with the implementation class, and the
 			//index of the selection and display columns, for most cases, you can blindly enter 0
 			cfr.registerTabularField(SimpleTabularProvider.SIMPLE_TABULAR_PROVIDER, SimpleTabularProvider.class, "0", "0");

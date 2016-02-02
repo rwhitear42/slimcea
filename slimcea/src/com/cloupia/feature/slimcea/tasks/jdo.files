@@ -5,3 +5,4 @@
 +SlimceaDeleteVolumeConfig
 +SlimceaCreateSnapshotConfig
 +SlimceaDeleteSnapshotConfig
++SlimceaMultiSelectTabularConfig
