@@ -19,8 +19,10 @@ import com.cloupia.feature.slimcea.lovs.SimpleTabularProvider;
 import com.cloupia.feature.slimcea.menuProvider.DummyMenuProvider;
 import com.cloupia.feature.slimcea.resourceComputer.DummyVLANResourceComputer;
 import com.cloupia.feature.slimcea.scheduledTasks.DummyScheduleTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaCreateIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateVolumeTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaDeleteIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteVolumeTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaMultiSelectTabularTask;
@@ -53,12 +55,16 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		AbstractTask task3 = new SlimceaCreateSnapshotTask();
 		AbstractTask task4 = new SlimceaDeleteSnapshotTask();
 		AbstractTask task5 = new SlimceaMultiSelectTabularTask();
-		AbstractTask[] tasks = new AbstractTask[5];
+		AbstractTask task6 = new SlimceaCreateIgroupTask();
+		AbstractTask task7 = new SlimceaDeleteIgroupTask();
+		AbstractTask[] tasks = new AbstractTask[7];
 		tasks[0] = task1;
 		tasks[1] = task2;
 		tasks[2] = task3;
 		tasks[3] = task4;
 		tasks[4] = task5;
+		tasks[5] = task6;
+		tasks[6] = task7;
 		return tasks;
 	}
 
@@ -103,7 +109,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			cfr.registerLovProviders(SimpleLovProvider.SIMPLE_LOV_PROVIDER, new SimpleLovProvider());
 			// Slimcea SAN protocol type LOV provider.
 			cfr.registerLovProviders(NimbleSanProtocolLovProvider.NIMBLE_SAN_PROTOCOL_LOV_PROVIDER, new NimbleSanProtocolLovProvider());	
-			
+						
 			//you need to provide a unique id for this tabular provider, along with the implementation class, and the
 			//index of the selection and display columns, for most cases, you can blindly enter 0
 			cfr.registerTabularField(SimpleTabularProvider.SIMPLE_TABULAR_PROVIDER, SimpleTabularProvider.class, "0", "0");
@@ -126,6 +132,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			
 			//Workflow input Types
 			WorkflowInputTypeDeclaration.registerWFInputs();
+			
 			//Workflow input Types for multi select
 			InputTypeDeclaration.registerWFInputs();
 			
@@ -137,7 +144,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			//support for new Account Type
 			createAccountType();
 		} catch (Exception e) {
-			logger.error("Foo Module error registering components.", e);
+			logger.error("Slimcea Module error registering components.", e);
 		}
 		
 	}

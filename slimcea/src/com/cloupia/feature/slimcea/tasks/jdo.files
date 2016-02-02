@@ -6,3 +6,5 @@
 +SlimceaCreateSnapshotConfig
 +SlimceaDeleteSnapshotConfig
 +SlimceaMultiSelectTabularConfig
++SlimceaCreateIgroupConfig
++SlimceaDeleteIgroupConfig

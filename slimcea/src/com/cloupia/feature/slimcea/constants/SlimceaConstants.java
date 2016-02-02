@@ -51,5 +51,6 @@ public class SlimceaConstants {
 	
 	// Workflow output values.
 	public static final String NIMBLE_VOLUME_NAME = "NIMBLE_VOLUME_NAME";
+	public static final String NIMBLE_INITIATOR_GROUP_NAME = "NIMBLE_INITIATOR_GROUP_NAME";
 	
 }
