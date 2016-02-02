@@ -1,4 +1,4 @@
-package com.cloupia.feature.slimcea.workflow;
+package com.cloupia.feature.slimcea.lovs;
 
 import com.cloupia.model.cIM.FormLOVPair;
 import com.cloupia.service.cIM.inframgr.forms.wizard.LOVProviderIf;

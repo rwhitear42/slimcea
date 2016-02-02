@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 
 import com.cloupia.feature.slimcea.accounts.SlimceaAccountSampleReportImpl;
+import com.cloupia.feature.slimcea.lovs.NimbleVolumesLOVProvider;
 import com.cloupia.model.cIM.FormFieldDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionHandlerIf;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionRegistry;
