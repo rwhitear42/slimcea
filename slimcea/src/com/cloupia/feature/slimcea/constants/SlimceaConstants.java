@@ -18,7 +18,7 @@ public class SlimceaConstants {
 	
 	public static final String SLIMCEA_MULTI_SELECT_TABULARVALUE_NAME = "SlimceaSampleTabulerMultiInput";
 	
-	public static final String SLIMCEA_NIMBLE_SAN_PROTOCOL_LOV_NAME = "SlimceaNimbleSanProtocolLovName";
+	public static final String SLIMCEA_NIMBLE_SAN_PROTOCOL_LOV_NAME = "slimcea_NimbleSanProtocolLovName";
 	
 	//this is the unique integer i'm giving for my dummy collector, it's a good idea
 	//to use some large number past 1000 so you avoid any potential collisions
@@ -52,5 +52,6 @@ public class SlimceaConstants {
 	// Workflow output values.
 	public static final String NIMBLE_VOLUME_NAME = "NIMBLE_VOLUME_NAME";
 	public static final String NIMBLE_INITIATOR_GROUP_NAME = "NIMBLE_INITIATOR_GROUP_NAME";
+	public static final String NIMBLE_INITIATOR_NAME = "NIMBLE_INITIATOR_NAME";
 	
 }

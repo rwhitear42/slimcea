@@ -19,6 +19,7 @@ import com.cloupia.feature.slimcea.lovs.SimpleTabularProvider;
 import com.cloupia.feature.slimcea.menuProvider.DummyMenuProvider;
 import com.cloupia.feature.slimcea.resourceComputer.DummyVLANResourceComputer;
 import com.cloupia.feature.slimcea.scheduledTasks.DummyScheduleTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaAddInitiatorToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateVolumeTask;
@@ -26,6 +27,7 @@ import com.cloupia.feature.slimcea.tasks.SlimceaDeleteIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteVolumeTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaMultiSelectTabularTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaRemoveInitiatorFromIgroupTask;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceStatusParam;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceType;
 import com.cloupia.lib.connector.ConfigItemDef;
@@ -57,7 +59,9 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		AbstractTask task5 = new SlimceaMultiSelectTabularTask();
 		AbstractTask task6 = new SlimceaCreateIgroupTask();
 		AbstractTask task7 = new SlimceaDeleteIgroupTask();
-		AbstractTask[] tasks = new AbstractTask[7];
+		AbstractTask task8 = new SlimceaAddInitiatorToIgroupTask();
+		AbstractTask task9 = new SlimceaRemoveInitiatorFromIgroupTask();
+		AbstractTask[] tasks = new AbstractTask[9];
 		tasks[0] = task1;
 		tasks[1] = task2;
 		tasks[2] = task3;
@@ -65,6 +69,8 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		tasks[4] = task5;
 		tasks[5] = task6;
 		tasks[6] = task7;
+		tasks[7] = task8;
+		tasks[8] = task9;
 		return tasks;
 	}
 
