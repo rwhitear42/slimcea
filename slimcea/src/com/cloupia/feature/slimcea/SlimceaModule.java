@@ -28,8 +28,10 @@ import com.cloupia.feature.slimcea.tasks.SlimceaDeleteIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteVolumeTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDisassocVolFromVolumeCollectionTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaMapVolumeToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaMultiSelectTabularTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaRemoveInitiatorFromIgroupTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaUnMapVolFromIgroupTask;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceStatusParam;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceType;
 import com.cloupia.lib.connector.ConfigItemDef;
@@ -65,7 +67,9 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		AbstractTask task9   = new SlimceaRemoveInitiatorFromIgroupTask();
 		AbstractTask task10  = new SlimceaAssocVolToVolumeCollectionTask();
 		AbstractTask task11  = new SlimceaDisassocVolFromVolumeCollectionTask();
-		AbstractTask[] tasks = new AbstractTask[11];
+		AbstractTask task12  = new SlimceaMapVolumeToIgroupTask();
+		AbstractTask task13  = new SlimceaUnMapVolFromIgroupTask();
+		AbstractTask[] tasks = new AbstractTask[13];
 		tasks[0]  = task1;
 		tasks[1]  = task2;
 		tasks[2]  = task3;
@@ -77,6 +81,8 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		tasks[8]  = task9;
 		tasks[9]  = task10;		
 		tasks[10] = task11;
+		tasks[11] = task12;
+		tasks[12] = task13;
 		return tasks;
 	}
 
