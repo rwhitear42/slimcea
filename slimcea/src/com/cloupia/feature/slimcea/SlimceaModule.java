@@ -20,12 +20,14 @@ import com.cloupia.feature.slimcea.menuProvider.DummyMenuProvider;
 import com.cloupia.feature.slimcea.resourceComputer.DummyVLANResourceComputer;
 import com.cloupia.feature.slimcea.scheduledTasks.DummyScheduleTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAddInitiatorToIgroupTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaAssocVolToVolumeCollectionTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateVolumeTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteVolumeTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaDisassocVolFromVolumeCollectionTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaMultiSelectTabularTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaRemoveInitiatorFromIgroupTask;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceStatusParam;
@@ -52,25 +54,29 @@ public class SlimceaModule extends AbstractCloupiaModule {
 
 	@Override
 	public AbstractTask[] getTasks() {
-		AbstractTask task1 = new SlimceaCreateVolumeTask();
-		AbstractTask task2 = new SlimceaDeleteVolumeTask();
-		AbstractTask task3 = new SlimceaCreateSnapshotTask();
-		AbstractTask task4 = new SlimceaDeleteSnapshotTask();
-		AbstractTask task5 = new SlimceaMultiSelectTabularTask();
-		AbstractTask task6 = new SlimceaCreateIgroupTask();
-		AbstractTask task7 = new SlimceaDeleteIgroupTask();
-		AbstractTask task8 = new SlimceaAddInitiatorToIgroupTask();
-		AbstractTask task9 = new SlimceaRemoveInitiatorFromIgroupTask();
-		AbstractTask[] tasks = new AbstractTask[9];
-		tasks[0] = task1;
-		tasks[1] = task2;
-		tasks[2] = task3;
-		tasks[3] = task4;
-		tasks[4] = task5;
-		tasks[5] = task6;
-		tasks[6] = task7;
-		tasks[7] = task8;
-		tasks[8] = task9;
+		AbstractTask task1   = new SlimceaCreateVolumeTask();
+		AbstractTask task2   = new SlimceaDeleteVolumeTask();
+		AbstractTask task3   = new SlimceaCreateSnapshotTask();
+		AbstractTask task4   = new SlimceaDeleteSnapshotTask();
+		AbstractTask task5   = new SlimceaMultiSelectTabularTask();
+		AbstractTask task6   = new SlimceaCreateIgroupTask();
+		AbstractTask task7   = new SlimceaDeleteIgroupTask();
+		AbstractTask task8   = new SlimceaAddInitiatorToIgroupTask();
+		AbstractTask task9   = new SlimceaRemoveInitiatorFromIgroupTask();
+		AbstractTask task10  = new SlimceaAssocVolToVolumeCollectionTask();
+		AbstractTask task11  = new SlimceaDisassocVolFromVolumeCollectionTask();
+		AbstractTask[] tasks = new AbstractTask[11];
+		tasks[0]  = task1;
+		tasks[1]  = task2;
+		tasks[2]  = task3;
+		tasks[3]  = task4;
+		tasks[4]  = task5;
+		tasks[5]  = task6;
+		tasks[6]  = task7;
+		tasks[7]  = task8;
+		tasks[8]  = task9;
+		tasks[9]  = task10;		
+		tasks[10] = task11;
 		return tasks;
 	}
 
