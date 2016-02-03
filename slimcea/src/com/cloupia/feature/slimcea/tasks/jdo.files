@@ -10,3 +10,5 @@
 +SlimceaDeleteIgroupConfig
 +SlimceaAddInitiatorToIgroupConfig
 +SlimceaRemoveInitiatorFromIgroupConfig
++SlimceaAssocVolToVolumeCollectionConfig
++SlimceaDisassocVolFromVolumeCollectionConfig
