@@ -1,5 +1,25 @@
 package com.cloupia.feature.slimcea.tasks;
 
+/*
+import java.io.IOException;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+*/
+import java.util.*;
+import com.cloupia.lib.util.*;
+import org.apache.commons.httpclient.*;
+import org.apache.commons.httpclient.cookie.*;
+import org.apache.commons.httpclient.methods.*;
+import org.apache.commons.httpclient.auth.*;
+import org.apache.commons.httpclient.protocol.*;
+import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
+//import com.cloupia.lib.cIaaS.vcd.api.*;
+
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
@@ -25,6 +45,73 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		actionLogger.addInfo("Cache Pinning: " +config.getVolumeCachePinning());
 		actionLogger.addInfo("Performance Policy: " +config.getVolumePerfPolicy());
 
+		/*
+		//
+		// Going to try and make a simple HTTP request.
+		//
+		
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		
+		HttpGet httpget = new HttpGet("http://10.52.249.102/");
+		
+		CloseableHttpResponse response;
+		
+		try {
+			response = httpclient.execute(httpget);
+			
+			System.out.print(response);
+					
+			response.close();
+			
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		//
+		//
+		//
+		 * 
+		 */
+		
+		//
+		// Try HttpClient using older libraries.
+		//
+		
+		HttpClient httpClient = new HttpClient();
+
+		//httpClient = CustomEasySSLSocketFactory.getIgnoreSSLClient("10.52.249.102", 443);
+
+		httpClient.getHostConfiguration().setHost("10.52.249.102", 80, "http"); 
+
+		//httpClient.getHostConfiguration().setHost("10.52.249.102", 443, "https"); 
+
+		httpClient.getParams().setCookiePolicy("default");
+
+		GetMethod httpMethod = new GetMethod("/");
+
+		httpMethod.addRequestHeader("Content-Type", "application/json");
+
+		httpClient.executeMethod(httpMethod);
+		   
+		int statusCode = httpMethod.getStatusCode();
+
+		String response = httpMethod.getResponseBodyAsString();
+
+		httpMethod.releaseConnection();
+
+		actionLogger.addInfo("Response: " +response );
+		
+		actionLogger.addInfo("Status Code: " +statusCode );
+		
+		//
+		//
+		//
+		
+		
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)
 		//NOTE: use the getTaskType() method in your handler to pass as the 5th argument

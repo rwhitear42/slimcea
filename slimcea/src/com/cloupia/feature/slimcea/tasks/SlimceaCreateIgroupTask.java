@@ -1,5 +1,8 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
@@ -22,6 +25,27 @@ public class SlimceaCreateIgroupTask extends AbstractTask {
 		actionLogger.addInfo("Initiator Group Name: " +config.getInitiatorGroupName());
 		actionLogger.addInfo("Initiator Group Description: " +config.getDescription());
 
+		//
+		// Inbuilt HTTP test.
+		//
+		
+		// Create an instance of HttpClient.
+		HttpClient client = new HttpClient();
+		
+		client.getHostConfiguration().setHost("10.52.249.102", 80, "http");
+		
+		GetMethod method = new GetMethod("/");
+		
+		int statusCode = client.executeMethod(method);
+		
+		actionLogger.addInfo("HTTP Status Code: " +statusCode );
+		
+		method.releaseConnection();
+		//
+		//
+		//
+		
+		
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)
 		//NOTE: use the getTaskType() method in your handler to pass as the 5th argument

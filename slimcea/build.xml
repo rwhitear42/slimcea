@@ -40,6 +40,7 @@
         <copy todir="${basedir}/build/${moduleID}/lib">
 	        <fileset dir="${basedir}/lib">
                 <include name="jsch/**"/>
+	        	<include name="apache-commons-httpclient/**"/>
 	        </fileset>
         </copy>
 		<zip destfile="${basedir}/feature-${moduleID}.zip" basedir="${basedir}/build">
