@@ -20,6 +20,14 @@ import org.apache.commons.httpclient.protocol.*;
 import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 //import com.cloupia.lib.cIaaS.vcd.api.*;
 
+import java.io.ByteArrayInputStream;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.protocol.Protocol;
+
+import com.cloupia.feature.slimcea.http.MySSLSocketFactory;
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
@@ -45,37 +53,6 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		actionLogger.addInfo("Cache Pinning: " +config.getVolumeCachePinning());
 		actionLogger.addInfo("Performance Policy: " +config.getVolumePerfPolicy());
 
-		/*
-		//
-		// Going to try and make a simple HTTP request.
-		//
-		
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		
-		HttpGet httpget = new HttpGet("http://10.52.249.102/");
-		
-		CloseableHttpResponse response;
-		
-		try {
-			response = httpclient.execute(httpget);
-			
-			System.out.print(response);
-					
-			response.close();
-			
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-		//
-		//
-		//
-		 * 
-		 */
 		
 		//
 		// Try HttpClient using older libraries.
@@ -83,9 +60,9 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		
 		HttpClient httpClient = new HttpClient();
 
-		//httpClient = CustomEasySSLSocketFactory.getIgnoreSSLClient("10.52.249.102", 443);
+		Protocol.registerProtocol("https", new Protocol("https", new MySSLSocketFactory(), 443));
 
-		httpClient.getHostConfiguration().setHost("10.52.249.102", 80, "http"); 
+		httpClient.getHostConfiguration().setHost("10.52.249.102", 443, "https"); 
 
 		//httpClient.getHostConfiguration().setHost("10.52.249.102", 443, "https"); 
 
