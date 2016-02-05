@@ -34,6 +34,8 @@ import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
+import com.rwhitear.ucsdHttpRequest.UCSDHttpRequest;
+import com.rwhitear.ucsdHttpRequest.constants.HttpRequestConstants;
 
 
 public class SlimceaCreateVolumeTask extends AbstractTask {
@@ -57,7 +59,7 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		//
 		// Try HttpClient using older libraries.
 		//
-		
+		/*
 		HttpClient httpClient = new HttpClient();
 
 		Protocol.registerProtocol("https", new Protocol("https", new MySSLSocketFactory(), 443));
@@ -83,11 +85,34 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		actionLogger.addInfo("Response: " +response );
 		
 		actionLogger.addInfo("Status Code: " +statusCode );
-		
+		*/
 		//
 		//
 		//
 		
+		// ucsdHttpRequest testing.
+		
+		UCSDHttpRequest hr = new UCSDHttpRequest();
+		
+		hr.setIpAddress("1.1.1.1");
+		
+		actionLogger.addInfo("ucsdHttpRequest Testing...");
+		
+		actionLogger.addInfo("IP Address: " +hr.getIpAddress());
+		actionLogger.addInfo("Protocol: " +hr.getProtocol());
+		actionLogger.addInfo("Port: " +hr.getPort());
+		actionLogger.addInfo("Username: " +hr.getUsername());
+		actionLogger.addInfo("Password: " +hr.getPassword());
+		
+		hr.addContentTypeHeader(HttpRequestConstants.CONTENT_TYPE_JSON);
+		
+		hr.addContentTypeHeader(HttpRequestConstants.CONTENT_TYPE_XML);
+		
+		ArrayList<String> blarg = hr.getContentTypeHeaders();
+		
+		for( String iter : blarg ) {
+			actionLogger.addInfo("Content-Type header: " +iter);
+		}
 		
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)

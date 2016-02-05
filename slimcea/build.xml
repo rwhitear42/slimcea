@@ -41,6 +41,7 @@
 	        <fileset dir="${basedir}/lib">
                 <include name="jsch/**"/>
 	        	<include name="apache-commons-httpclient/**"/>
+	        	<include name="ucsd-httprequest/**"/>
 	        </fileset>
         </copy>
 		<zip destfile="${basedir}/feature-${moduleID}.zip" basedir="${basedir}/build">
