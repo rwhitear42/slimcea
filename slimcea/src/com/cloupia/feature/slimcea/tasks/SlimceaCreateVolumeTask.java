@@ -56,63 +56,24 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		actionLogger.addInfo("Performance Policy: " +config.getVolumePerfPolicy());
 
 		
-		//
-		// Try HttpClient using older libraries.
-		//
-		/*
-		HttpClient httpClient = new HttpClient();
-
-		Protocol.registerProtocol("https", new Protocol("https", new MySSLSocketFactory(), 443));
-
-		httpClient.getHostConfiguration().setHost("10.52.249.102", 443, "https"); 
-
-		//httpClient.getHostConfiguration().setHost("10.52.249.102", 443, "https"); 
-
-		httpClient.getParams().setCookiePolicy("default");
-
-		GetMethod httpMethod = new GetMethod("/");
-
-		httpMethod.addRequestHeader("Content-Type", "application/json");
-
-		httpClient.executeMethod(httpMethod);
-		   
-		int statusCode = httpMethod.getStatusCode();
-
-		String response = httpMethod.getResponseBodyAsString();
-
-		httpMethod.releaseConnection();
-
-		actionLogger.addInfo("Response: " +response );
-		
-		actionLogger.addInfo("Status Code: " +statusCode );
-		*/
-		//
-		//
-		//
-		
 		// ucsdHttpRequest testing.
 		
-		UCSDHttpRequest hr = new UCSDHttpRequest();
+		UCSDHttpRequest request = new UCSDHttpRequest("10.52.249.102","https", 443);
 		
-		hr.setIpAddress("1.1.1.1");
+		request.addContentTypeHeader(HttpRequestConstants.CONTENT_TYPE_JSON);
+				
+		request.setUri("/v1/tokens");
 		
-		actionLogger.addInfo("ucsdHttpRequest Testing...");
+		request.setMethodType("POST");
 		
-		actionLogger.addInfo("IP Address: " +hr.getIpAddress());
-		actionLogger.addInfo("Protocol: " +hr.getProtocol());
-		actionLogger.addInfo("Port: " +hr.getPort());
-		actionLogger.addInfo("Username: " +hr.getUsername());
-		actionLogger.addInfo("Password: " +hr.getPassword());
+		request.setBodyText("{\"data\":{\"username\":\"apiuser\",\"password\":\"C1sco123\"}}");
 		
-		hr.addContentTypeHeader(HttpRequestConstants.CONTENT_TYPE_JSON);
+		request.execute();
 		
-		hr.addContentTypeHeader(HttpRequestConstants.CONTENT_TYPE_XML);
+		actionLogger.addInfo("Status Code: " +request.getStatusCode());
 		
-		ArrayList<String> blarg = hr.getContentTypeHeaders();
-		
-		for( String iter : blarg ) {
-			actionLogger.addInfo("Content-Type header: " +iter);
-		}
+		actionLogger.addInfo("HTTP Response:\n\n" +request.getHttpResponse());	
+
 		
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)
