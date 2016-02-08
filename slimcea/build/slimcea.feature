@@ -5,6 +5,7 @@
       			"features/slimcea/lib/apache-commons-httpclient/httpcore-4.4.3.jar", 
       			"features/slimcea/lib/apache-commons-httpclient/commons-logging-1.2.jar", 
       			"features/slimcea/lib/apache-commons-httpclient/commons-codec-1.9.jar",
-      			"features/slimcea/lib/ucsd-httprequest/httpRequest-ucsd-1.0.jar" ],
+      			"features/slimcea/lib/ucsd-httprequest/httpRequest-ucsd-1.0.jar",
+      			"features/slimcea/lib/nimblerest-rwhitear/nimblerest-rwhitear-1.0.jar" ],
       features: [ "com.cloupia.feature.slimcea.SlimceaModule" ]
 }

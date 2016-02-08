@@ -10,32 +10,33 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 */
-import java.util.*;
-import com.cloupia.lib.util.*;
-import org.apache.commons.httpclient.*;
-import org.apache.commons.httpclient.cookie.*;
-import org.apache.commons.httpclient.methods.*;
-import org.apache.commons.httpclient.auth.*;
-import org.apache.commons.httpclient.protocol.*;
-import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
+//import java.util.*;
+//import com.cloupia.lib.util.*;
+//import org.apache.commons.httpclient.*;
+//import org.apache.commons.httpclient.cookie.*;
+//import org.apache.commons.httpclient.methods.*;
+//import org.apache.commons.httpclient.auth.*;
+//import org.apache.commons.httpclient.protocol.*;
+//import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 //import com.cloupia.lib.cIaaS.vcd.api.*;
 
-import java.io.ByteArrayInputStream;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.protocol.Protocol;
+//import java.io.ByteArrayInputStream;
+//import org.apache.commons.httpclient.HttpClient;
+//import org.apache.commons.httpclient.methods.GetMethod;
+//import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
+//import org.apache.commons.httpclient.methods.PostMethod;
+//import org.apache.commons.httpclient.protocol.Protocol;
 
-import com.cloupia.feature.slimcea.http.MySSLSocketFactory;
+//import com.cloupia.feature.slimcea.http.MySSLSocketFactory;
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
-import com.rwhitear.ucsdHttpRequest.UCSDHttpRequest;
-import com.rwhitear.ucsdHttpRequest.constants.HttpRequestConstants;
+import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
+//import com.rwhitear.ucsdHttpRequest.UCSDHttpRequest;
+//import com.rwhitear.ucsdHttpRequest.constants.HttpRequestConstants;
 
 
 public class SlimceaCreateVolumeTask extends AbstractTask {
@@ -55,7 +56,7 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		actionLogger.addInfo("Cache Pinning: " +config.getVolumeCachePinning());
 		actionLogger.addInfo("Performance Policy: " +config.getVolumePerfPolicy());
 
-		
+		/*
 		// ucsdHttpRequest testing.
 		
 		UCSDHttpRequest request = new UCSDHttpRequest("10.52.249.102","https", 443);
@@ -73,7 +74,12 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		actionLogger.addInfo("Status Code: " +request.getStatusCode());
 		
 		actionLogger.addInfo("HTTP Response:\n\n" +request.getHttpResponse());	
-
+		 */
+		
+		// nimbleREST library testing.
+		
+		actionLogger.addInfo("Session Token: " + new GetSessionToken("192.168.30.52", "apiuser", "C1sco123").getNewToken());
+		
 		
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)
