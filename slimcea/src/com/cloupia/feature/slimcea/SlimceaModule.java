@@ -21,6 +21,7 @@ import com.cloupia.feature.slimcea.resourceComputer.DummyVLANResourceComputer;
 import com.cloupia.feature.slimcea.scheduledTasks.DummyScheduleTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAddInitiatorToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAssocVolToVolumeCollectionTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaCloneVolumeTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateVolumeTask;
@@ -69,7 +70,9 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		AbstractTask task11  = new SlimceaDisassocVolFromVolumeCollectionTask();
 		AbstractTask task12  = new SlimceaMapVolumeToIgroupTask();
 		AbstractTask task13  = new SlimceaUnMapVolFromIgroupTask();
-		AbstractTask[] tasks = new AbstractTask[13];
+		AbstractTask task14  = new SlimceaCloneVolumeTask();
+		
+		AbstractTask[] tasks = new AbstractTask[14];
 		tasks[0]  = task1;
 		tasks[1]  = task2;
 		tasks[2]  = task3;
@@ -83,6 +86,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		tasks[10] = task11;
 		tasks[11] = task12;
 		tasks[12] = task13;
+		tasks[13] = task14;
 		return tasks;
 	}
 
