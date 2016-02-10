@@ -49,7 +49,12 @@ public class SlimceaCloneVolumeConfig implements TaskConfigIf {
 	@Persistent
 	private String             cloneName;
 
+	@FormField(label = "Nimble Clone IGroup Name", help = "Enter Nimble Clone IGroup Name", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
+	@Persistent
+	private String             initiatorGroupName;
 
+	
 	@Override
 	public long getActionId() {
 		return actionId;
@@ -121,6 +126,14 @@ public class SlimceaCloneVolumeConfig implements TaskConfigIf {
 
 	public void setCloneName(String cloneName) {
 		this.cloneName = cloneName;
+	}
+
+	public String getInitiatorGroupName() {
+		return initiatorGroupName;
+	}
+
+	public void setInitiatorGroupName(String initiatorGroupName) {
+		this.initiatorGroupName = initiatorGroupName;
 	}
 	
 }

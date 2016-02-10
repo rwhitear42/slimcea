@@ -1,48 +1,22 @@
 package com.cloupia.feature.slimcea.tasks;
 
-/*
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-*/
-//import java.util.*;
-//import com.cloupia.lib.util.*;
-//import org.apache.commons.httpclient.*;
-//import org.apache.commons.httpclient.cookie.*;
-//import org.apache.commons.httpclient.methods.*;
-//import org.apache.commons.httpclient.auth.*;
-//import org.apache.commons.httpclient.protocol.*;
-//import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
-//import com.cloupia.lib.cIaaS.vcd.api.*;
-
-//import java.io.ByteArrayInputStream;
-//import org.apache.commons.httpclient.HttpClient;
-//import org.apache.commons.httpclient.methods.GetMethod;
-//import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
-//import org.apache.commons.httpclient.methods.PostMethod;
-//import org.apache.commons.httpclient.protocol.Protocol;
-
-//import com.cloupia.feature.slimcea.http.MySSLSocketFactory;
-import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
+import com.rwhitear.nimbleRest.accessControlRecords.CreateAccessControlRecord;
+import com.rwhitear.nimbleRest.accessControlRecords.DeleteAccessControlRecord;
+import com.rwhitear.nimbleRest.accessControlRecords.GetAccessControlRecords;
+import com.rwhitear.nimbleRest.accessControlRecords.json.ACRobject;
+import com.rwhitear.nimbleRest.accessControlRecords.json.GetACRdetailResponse;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
-//import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
-//import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailResponse;
+import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
+import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailResponse;
 import com.rwhitear.nimbleRest.snapshots.GetSnapshots;
 import com.rwhitear.nimbleRest.snapshots.json.GetSnapshotDetailResponse;
 import com.rwhitear.nimbleRest.volumes.GetVolumes;
 import com.rwhitear.nimbleRest.volumes.VolumeClone;
-//import com.rwhitear.ucsdHttpRequest.UCSDHttpRequest;
-//import com.rwhitear.ucsdHttpRequest.constants.HttpRequestConstants;
 import com.rwhitear.nimbleRest.volumes.json.GetVolumesSummaryResponse;
 
 
@@ -53,11 +27,6 @@ public class SlimceaCloneVolumeTask extends AbstractTask {
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaCloneVolumeConfig config = (SlimceaCloneVolumeConfig) context.loadConfigObject();
 
-		actionLogger.addInfo("Username: " +config.getUsername());
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Volume Name: " +config.getVolumeName());
-
 		
 		// nimbleREST library testing.
 		
@@ -67,41 +36,72 @@ public class SlimceaCloneVolumeTask extends AbstractTask {
 		String volumeName = config.getVolumeName();
 		String baseSnapshotName = config.getBaseSnapshotName();
 		String cloneName = config.getCloneName();
-		//String initiatorGroupName = "UCS3-iGroup";
+		String initiatorGroupName = config.getInitiatorGroupName();
 		
 		
 		// Retrieve Nimble array auth token.
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
-		actionLogger.addInfo("Session Token: " + token);
 		
 		// Get volume ID for 'volumeName'.
+		actionLogger.addInfo("Retrieving volume ID for volume ["+ volumeName + "].");
+		
 		String volumeJsonData = new GetVolumes(ipAddress, token).getSummary();
 				
 		String volID = new GetVolumesSummaryResponse(volumeJsonData).getVolumeID(volumeName);
-
-		if( !volID.equals(null) ) {
-			
-			actionLogger.addInfo("Volume ID for volume "+ volumeName +" is: " +volID);
-		}
+		
 		
 		// Get snapshot ID for volume snapshot 'baseSnapshotName'.
+		actionLogger.addInfo("Retrieving snapshot ID for snapshot ["+ baseSnapshotName + "].");
+		
 		String volumeSnapshotJsonData = new GetSnapshots(ipAddress, token, volID).getSnapshotSummary();
 		
-		actionLogger.addInfo("Snapshot ID for snapshot "+baseSnapshotName+": " +new GetSnapshotDetailResponse(volumeSnapshotJsonData).getSnapshotID(baseSnapshotName));
-	
 		String snapID = new GetSnapshotDetailResponse(volumeSnapshotJsonData).getSnapshotID(baseSnapshotName);
+
+			
+		// Create clone.
+		actionLogger.addInfo("Creating volume clone [" + cloneName + "] from snapshot ["+ baseSnapshotName + "].");
+		
+		new VolumeClone(ipAddress, token).create(cloneName, snapID);
+				
 		
 		// Initiator Groups
-		//String iGroupJsonData = new GetInitiatorGroups(ipAddress, token).getInitiatorGroupSummary();
+		actionLogger.addInfo("Retrieving Initiator Group ID for iGroup ["+ initiatorGroupName + "].");
 		
-		//actionLogger.addInfo("Initiator Group ID: " +new GetInitiatorGroupsDetailResponse(iGroupJsonData).getInitiatorGroupID(initiatorGroupName));
-		 
-		String response = new VolumeClone(ipAddress, token).create(cloneName, snapID);
+		String iGroupJsonData = new GetInitiatorGroups(ipAddress, token).getInitiatorGroupSummary();
 		
-		actionLogger.addInfo("Create clone response: " + response);
+		actionLogger.addInfo("iGroupJasonData" + iGroupJsonData);
+		
+		String iGroupID = new GetInitiatorGroupsDetailResponse(iGroupJsonData).getInitiatorGroupID(initiatorGroupName);
+		
+		
+		// Delete Access Control Records for 'cloneName'.
+		String acrJsonData =  new GetAccessControlRecords(ipAddress, token, cloneName).getACRsummary();
+
+		ACRobject acrObj = new GetACRdetailResponse(acrJsonData).getResponseObject();
+		
+		for( int i = 0; i < acrObj.getData().size(); i++ ) {
+			actionLogger.addInfo( "Deleting ACR ID " + acrObj.getData().get(i).getId() );
+			
+			new DeleteAccessControlRecord( ipAddress, token, acrObj.getData().get(i).getId()).deleteRecord();
+		}
+				
+		
+		// Retrieve cloned Volume ID.
+		actionLogger.addInfo("Retrieving volume ID for volume ["+ cloneName + "].");
+		
+		String cloneVolumeJsonData = new GetVolumes(ipAddress, token).getSummary();
+		
+		String cloneVolID = new GetVolumesSummaryResponse(cloneVolumeJsonData).getVolumeID(cloneName);
 
 		
+		// Create new ACR.
+		if( !cloneVolID.equals(null) ) {
+			
+			actionLogger.addInfo("Creating new Access Control Record for volume ["+ cloneName + "] and Initiator Group [" + initiatorGroupName + "].");
+			
+			actionLogger.addInfo("Create ACR JSON Response:\n"  + new CreateAccessControlRecord(ipAddress, token, cloneVolID, iGroupID).create());
+		}
 			
 		
 		
