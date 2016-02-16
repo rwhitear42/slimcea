@@ -35,15 +35,13 @@ import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
-import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
-import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailResponse;
-import com.rwhitear.nimbleRest.snapshots.GetSnapshots;
-import com.rwhitear.nimbleRest.snapshots.json.GetSnapshotDetailResponse;
-import com.rwhitear.nimbleRest.volumes.GetVolumes;
-import com.rwhitear.nimbleRest.volumes.VolumeClone;
+import com.rwhitear.nimbleRest.performancePolicies.GetPerformancePolicies;
+import com.rwhitear.nimbleRest.performancePolicies.json.ParsePerfPolicyDetailResponse;
+import com.rwhitear.nimbleRest.performancePolicies.json.PerfPoliciesDetailJsonObject;
+import com.rwhitear.nimbleRest.volumes.CreateVolume;
+
 //import com.rwhitear.ucsdHttpRequest.UCSDHttpRequest;
 //import com.rwhitear.ucsdHttpRequest.constants.HttpRequestConstants;
-import com.rwhitear.nimbleRest.volumes.json.GetVolumesSummaryResponse;
 
 
 public class SlimceaCreateVolumeTask extends AbstractTask {
@@ -53,6 +51,7 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaCreateVolumeConfig config = (SlimceaCreateVolumeConfig) context.loadConfigObject();
 
+		/*
 		actionLogger.addInfo("Username: " +config.getUsername());
 		actionLogger.addInfo("Password: " +config.getPassword());
 		actionLogger.addInfo("IP Address: " +config.getIpAddress());
@@ -62,7 +61,7 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		actionLogger.addInfo("Data Encryption: " +config.getVolumeDataEncryption());
 		actionLogger.addInfo("Cache Pinning: " +config.getVolumeCachePinning());
 		actionLogger.addInfo("Performance Policy: " +config.getVolumePerfPolicy());
-
+		*/
 		
 		// nimbleREST library testing.
 		
@@ -70,44 +69,52 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		String password = config.getPassword();
 		String ipAddress = config.getIpAddress();
 		String volumeName = config.getVolumeName();
-		String baseSnapshotName = "baseline";
-		String cloneName = "sql-2-dbclone";
-		String initiatorGroupName = "UCS3-iGroup";
+		String	volumeSizeGB	= config.getVolumeSizeGB();
+		String	description		= config.getVolumeDescription();
+		String	perfPolicy		= config.getVolumePerfPolicy();
+		boolean	dataEncryption	= config.getVolumeDataEncryption();
+		boolean	cachePinning	= config.getVolumeCachePinning();
 		
-		
+	
+		// Retrieve the performance policy ID for perfPolicy.
+		String perfPolicyID = "";
+
 		// Retrieve Nimble array auth token.
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
-		actionLogger.addInfo("Session Token: " + token);
+		// Retrieve JSON response for detailed Performance Policy information.
+		String perfPolicyJsonData = new GetPerformancePolicies(ipAddress, token).getDetail();
 		
-		// Get volume ID for 'volumeName'.
-		String volumeJsonData = new GetVolumes(ipAddress, token).getSummary();
-				
-		String volID = new GetVolumesSummaryResponse(volumeJsonData).getVolumeID(volumeName);
+		//System.out.println("Performance Policy Detail JSON: " + perfPolicyJsonData );
+		actionLogger.addInfo("Performance Policy Detail JSON: " + perfPolicyJsonData );
+		
+		PerfPoliciesDetailJsonObject perfPolicyDetail = new ParsePerfPolicyDetailResponse(perfPolicyJsonData).parse();
 
-		if( !volID.equals(null) ) {
+		for( int i=0; i < perfPolicyDetail.getData().size(); i++ ) {
 			
-			actionLogger.addInfo("Volume ID for volume "+ volumeName +" is: " +volID);
+			if( perfPolicyDetail.getData().get(i).getName().equals(perfPolicy) ) {
+				
+				//System.out.println("Found performance policy id [" + 
+				//		perfPolicyDetail.getData().get(i).getId() + 
+				//		"] for Performance Policy [" + perfPolicy + "].");
+				actionLogger.addInfo("Found performance policy id [" + 
+						perfPolicyDetail.getData().get(i).getId() + 
+						"] for Performance Policy [" + perfPolicy + "].");
+				
+				perfPolicyID = perfPolicyDetail.getData().get(i).getId();
+				
+				break;
+			}
 		}
 		
-		// Get snapshot ID for volume snapshot 'baseSnapshotName'.
-		String volumeSnapshotJsonData = new GetSnapshots(ipAddress, token, volID).getSnapshotSummary();
+		// Go ahead and create the volume.
+		CreateVolume cv = new CreateVolume(ipAddress, token);
 		
-		actionLogger.addInfo("Snapshot ID for snapshot "+baseSnapshotName+": " +new GetSnapshotDetailResponse(volumeSnapshotJsonData).getSnapshotID(baseSnapshotName));
+		String createResp = cv.create(volumeName, description, perfPolicyID, dataEncryption, volumeSizeGB, cachePinning);
+		
+		//System.out.println("Create Volume Response: " + createResp);
+		actionLogger.addInfo("Create Volume Response: " + createResp);
 	
-		String snapID = new GetSnapshotDetailResponse(volumeSnapshotJsonData).getSnapshotID(baseSnapshotName);
-		
-		// Initiator Groups
-		String iGroupJsonData = new GetInitiatorGroups(ipAddress, token).getInitiatorGroupSummary();
-		
-		actionLogger.addInfo("Initiator Group ID: " +new GetInitiatorGroupsDetailResponse(iGroupJsonData).getInitiatorGroupID(initiatorGroupName));
-		 
-		String response = new VolumeClone(ipAddress, token).create(cloneName, snapID);
-		
-		actionLogger.addInfo("Create clone response: " + response);
-
-		
-			
 		
 		
 		//if user decides to rollback a workflow containing this task, then using the change tracker

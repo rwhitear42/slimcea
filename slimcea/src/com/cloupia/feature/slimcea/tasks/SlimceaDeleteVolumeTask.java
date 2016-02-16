@@ -23,11 +23,6 @@ public class SlimceaDeleteVolumeTask extends AbstractTask {
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaDeleteVolumeConfig config = (SlimceaDeleteVolumeConfig) context.loadConfigObject();
 
-		actionLogger.addInfo("Username: " +config.getUsername());
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Volume Name: " +config.getVolumeName());
-		
 		String ipAddress = config.getIpAddress();
 		String username = config.getUsername();
 		String password = config.getPassword();
