@@ -1,14 +1,17 @@
 package com.cloupia.feature.slimcea.tasks;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
+import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
+import com.rwhitear.nimbleRest.exceptions.InitiatorGroupException;
+import com.rwhitear.nimbleRest.initiatorGroups.CreateInitiatorGroup;
+import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
+import com.rwhitear.nimbleRest.initiatorGroups.ParseInitiatorGroupsDetailResponse;
+import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailObject;
 
 
 public class SlimceaCreateIgroupTask extends AbstractTask {
@@ -18,33 +21,50 @@ public class SlimceaCreateIgroupTask extends AbstractTask {
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaCreateIgroupConfig config = (SlimceaCreateIgroupConfig) context.loadConfigObject();
 
+		/*
 		actionLogger.addInfo("Username: " +config.getUsername());
 		actionLogger.addInfo("Password: " +config.getPassword());
 		actionLogger.addInfo("IP Address: " +config.getIpAddress());
 		actionLogger.addInfo("Protocol: " +config.getSanProtocol());
 		actionLogger.addInfo("Initiator Group Name: " +config.getInitiatorGroupName());
 		actionLogger.addInfo("Initiator Group Description: " +config.getDescription());
+		*/
+		
+		String ipAddress 			= config.getIpAddress();
+		String username 			= config.getUsername();
+		String password 			= config.getPassword(); 
+		String initiatorGroupName 	= config.getInitiatorGroupName();
+		String description			= config.getDescription();
+		String sanProtocol 			= config.getSanProtocol();
+		
+		// Retrieve Nimble array auth token.
+		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
+		
+		// Check that the initiator group doesn't already exist.
+		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
+		
+		actionLogger.addInfo("Initiator Groups Response: " +iGroupsResponse );
+		
+		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 
-		//
-		// Inbuilt HTTP test.
-		//
+		for( int i=0; i < iGroupObj.getData().size(); i++ ) {
+			
+			if( iGroupObj.getData().get(i).getName().equals(initiatorGroupName) ) {
+				
+				throw new InitiatorGroupException("Initiator group [" +initiatorGroupName+ "] already exists." );
+				
+			}
+			
+		}
+
+		// Initiator group doesn't exist. Go ahead and create the initiator group.
+		CreateInitiatorGroup cig = new CreateInitiatorGroup(ipAddress, token);
 		
-		// Create an instance of HttpClient.
-		HttpClient client = new HttpClient();
+		String createResp = cig.create(initiatorGroupName, description, sanProtocol);
 		
-		client.getHostConfiguration().setHost("10.52.249.102", 80, "http");
-		
-		GetMethod method = new GetMethod("/");
-		
-		int statusCode = client.executeMethod(method);
-		
-		actionLogger.addInfo("HTTP Status Code: " +statusCode );
-		
-		method.releaseConnection();
-		//
-		//
-		//
-		
+		actionLogger.addInfo("Create Initiator Group Response: " + createResp);
+
+
 		
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)

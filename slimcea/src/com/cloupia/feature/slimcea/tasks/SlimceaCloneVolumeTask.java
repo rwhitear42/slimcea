@@ -11,8 +11,10 @@ import com.rwhitear.nimbleRest.accessControlRecords.GetAccessControlRecords;
 import com.rwhitear.nimbleRest.accessControlRecords.json.ACRobject;
 import com.rwhitear.nimbleRest.accessControlRecords.json.GetACRdetailResponse;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
+import com.rwhitear.nimbleRest.exceptions.InitiatorGroupException;
 import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
-import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailResponse;
+import com.rwhitear.nimbleRest.initiatorGroups.ParseInitiatorGroupsDetailResponse;
+import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailObject;
 import com.rwhitear.nimbleRest.snapshots.GetSnapshots;
 import com.rwhitear.nimbleRest.snapshots.json.GetSnapshotDetailResponse;
 import com.rwhitear.nimbleRest.volumes.GetVolumes;
@@ -68,12 +70,37 @@ public class SlimceaCloneVolumeTask extends AbstractTask {
 		// Initiator Groups
 		actionLogger.addInfo("Retrieving Initiator Group ID for iGroup ["+ initiatorGroupName + "].");
 		
-		String iGroupJsonData = new GetInitiatorGroups(ipAddress, token).getInitiatorGroupSummary();
+		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
-		actionLogger.addInfo("iGroupJasonData" + iGroupJsonData);
+		System.out.println("iGroupsResponse: " + iGroupsResponse);
 		
-		String iGroupID = new GetInitiatorGroupsDetailResponse(iGroupJsonData).getInitiatorGroupID(initiatorGroupName);
+		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 		
+		System.out.println("Initiator Groups size: " + iGroupObj.getData().size() );
+		
+
+		String iGroupID = "";
+		
+		for( int i=0; i < iGroupObj.getData().size(); i++ ) {
+			
+			if( iGroupObj.getData().get(i).getName().equals(initiatorGroupName)) {
+				
+				iGroupID = iGroupObj.getData().get(i).getId();
+				
+				System.out.println("iGroup ID ["+iGroupID+"] found for iGroup name [" +iGroupObj.getData().get(i).getName()+ "]." );
+				
+				break;
+				
+			}
+			
+		}
+		
+		// If iGroupID is unset, then the previous for loop failed to match the iGroup name.
+		if( iGroupID == "" ) {
+			
+			throw new InitiatorGroupException("Initiator group [" +initiatorGroupName+ "] doesn't exist." );
+			
+		}
 		
 		// Delete Access Control Records for 'cloneName'.
 		String acrJsonData =  new GetAccessControlRecords(ipAddress, token, cloneName).getACRsummary();
