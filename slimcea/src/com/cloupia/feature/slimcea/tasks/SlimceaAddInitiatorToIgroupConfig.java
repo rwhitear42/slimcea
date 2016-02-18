@@ -39,10 +39,15 @@ public class SlimceaAddInitiatorToIgroupConfig implements TaskConfigIf {
 	@Persistent
 	private String	initiatorGroupName;
 
-	@FormField(label = "Nimble Initiator Name", help = "Enter Nimble Initiator Name", mandatory = false, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@FormField(label = "Nimble Initiator Name", help = "Enter Nimble Initiator Name", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
 	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
 	@Persistent
 	private String	initiatorName;
+	
+	@FormField(label = "Nimble IQN", help = "Enter Nimble IQN", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
+	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
+	@Persistent
+	private String	iqn;
 	
 	
 	@Override
@@ -108,6 +113,14 @@ public class SlimceaAddInitiatorToIgroupConfig implements TaskConfigIf {
 
 	public void setInitiatorName(String initiatorName) {
 		this.initiatorName = initiatorName;
+	}
+
+	public String getIqn() {
+		return iqn;
+	}
+
+	public void setIqn(String iqn) {
+		this.iqn = iqn;
 	}
 	
 }

@@ -20,6 +20,7 @@ import com.cloupia.feature.slimcea.menuProvider.DummyMenuProvider;
 import com.cloupia.feature.slimcea.resourceComputer.DummyVLANResourceComputer;
 import com.cloupia.feature.slimcea.scheduledTasks.DummyScheduleTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAddInitiatorToIgroupTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaAddIscsiInitiatorToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAssocVolToVolumeCollectionTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCloneVolumeTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCreateIgroupTask;
@@ -32,6 +33,7 @@ import com.cloupia.feature.slimcea.tasks.SlimceaDisassocVolFromVolumeCollectionT
 import com.cloupia.feature.slimcea.tasks.SlimceaMapVolumeToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaMultiSelectTabularTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaRemoveInitiatorFromIgroupTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaRemoveIscsiInitiatorFromIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaUnMapVolFromIgroupTask;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceStatusParam;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceType;
@@ -71,8 +73,10 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		AbstractTask task12  = new SlimceaMapVolumeToIgroupTask();
 		AbstractTask task13  = new SlimceaUnMapVolFromIgroupTask();
 		AbstractTask task14  = new SlimceaCloneVolumeTask();
+		AbstractTask task15  = new SlimceaAddIscsiInitiatorToIgroupTask();
+		AbstractTask task16  = new SlimceaRemoveIscsiInitiatorFromIgroupTask();
 		
-		AbstractTask[] tasks = new AbstractTask[14];
+		AbstractTask[] tasks = new AbstractTask[16];
 		tasks[0]  = task1;
 		tasks[1]  = task2;
 		tasks[2]  = task3;
@@ -87,6 +91,8 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		tasks[11] = task12;
 		tasks[12] = task13;
 		tasks[13] = task14;
+		tasks[14] = task15;
+		tasks[15] = task16;
 		return tasks;
 	}
 
@@ -209,7 +215,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		entry.setInventoryFrequencyInMins(15);
 		// This is mandatory,under which pod type , the new account type is
 		// applicable.
-		entry.setPodTypes(new String[] { "SlimceaStack" } );
+		entry.setPodTypes(new String[] { "SmartStack" } );
 		
 		
 		// This is optional, dependents on the need of session for collecting

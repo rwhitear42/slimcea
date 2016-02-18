@@ -15,3 +15,5 @@
 +SlimceaMapVolumeToIgroupConfig
 +SlimceaUnMapVolFromIgroupConfig
 +SlimceaCloneVolumeConfig
++SlimceaAddIscsiInitiatorToIgroupConfig
++SlimceaRemoveIscsiInitiatorFromIgroupConfig

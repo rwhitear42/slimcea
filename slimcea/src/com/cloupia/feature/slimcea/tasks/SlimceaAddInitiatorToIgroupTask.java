@@ -6,6 +6,12 @@ import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
+import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
+import com.rwhitear.nimbleRest.exceptions.InitiatorGroupException;
+import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
+import com.rwhitear.nimbleRest.initiatorGroups.ParseInitiatorGroupsDetailResponse;
+import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailObject;
+import com.rwhitear.nimbleRest.initiators.CreateIscsiInitiator;
 
 
 public class SlimceaAddInitiatorToIgroupTask extends AbstractTask {
@@ -15,11 +21,56 @@ public class SlimceaAddInitiatorToIgroupTask extends AbstractTask {
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaAddInitiatorToIgroupConfig config = (SlimceaAddInitiatorToIgroupConfig) context.loadConfigObject();
 
-		actionLogger.addInfo("Username: " +config.getUsername());
+		/*
 		actionLogger.addInfo("Password: " +config.getPassword());
 		actionLogger.addInfo("IP Address: " +config.getIpAddress());
 		actionLogger.addInfo("Initiator Group Name: " +config.getInitiatorGroupName());
 		actionLogger.addInfo("Initiator Name: " +config.getInitiatorName());
+		*/
+		
+		String ipAddress = config.getIpAddress();
+		String username = config.getUsername();
+		String password = config.getPassword(); 
+		String initiatorGroupName = config.getInitiatorGroupName();
+		String initiatorLabel = config.getInitiatorName();
+		String iqn = config.getIqn();
+
+		// Retrieve Nimble array auth token.
+		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
+		
+		// Get iGroupID.
+		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
+		
+		actionLogger.addInfo("Initiator Groups Response: " +iGroupsResponse );
+		
+		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
+
+		String initiatorGroupID = "";
+		
+		for( int i=0; i < iGroupObj.getData().size(); i++ ) {
+			
+			if( iGroupObj.getData().get(i).getName().equals(initiatorGroupName) ) {
+				
+				initiatorGroupID = iGroupObj.getData().get(i).getId();
+				
+				break;
+			}
+			
+		}
+
+		if( initiatorGroupID == "" ) {
+			
+			throw new InitiatorGroupException("Failed to find initiator group [" +initiatorGroupName+ "]." );
+		}
+		
+		// Getting this far means an iGroup match was made. Continue.
+		CreateIscsiInitiator cii = new CreateIscsiInitiator(ipAddress, token);
+		
+		String ciiCreateResponse = cii.create(initiatorGroupID, initiatorLabel, iqn);
+		
+		actionLogger.addInfo("ciiCreateResponse: " + ciiCreateResponse );
+
+
 
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)
