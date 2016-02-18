@@ -22,22 +22,22 @@ public class SlimceaDisassocVolFromVolumeCollectionConfig implements TaskConfigI
 	@FormField(label = "Nimble Array IP", help = "Nimble Array IP Address", mandatory = true)
 	@UserInputField(type = WorkflowInputFieldTypeDeclaration.IPADDRESS)
 	@Persistent
-	private String             ipAddress         = "";
+	private String             	ipAddress         = "";
 
 	@FormField(label = "Nimble Username", help = "Nimble username", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
 	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
 	@Persistent
-	private String             username;
+	private String         		username;
 
 	@FormField(label = "Password", help = "Password", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_PASSWORD)
 	@UserInputField(type = SlimceaConstants.PASSWORD)
 	@Persistent
-	private String             password;
+	private String				password;
 
 	@FormField(label = "Nimble Volume Name", help = "Enter Nimble Volume Name", mandatory = true, type = FormFieldDefinition.FIELD_TYPE_TEXT)
 	@UserInputField(type = SlimceaConstants.GENERIC_TEXT_INPUT)
 	@Persistent
-	private String	volumeName;
+	private String				volumeName;
 
 	public SlimceaDisassocVolFromVolumeCollectionConfig() {
 

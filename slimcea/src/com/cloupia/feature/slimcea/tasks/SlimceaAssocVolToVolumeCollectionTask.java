@@ -6,6 +6,16 @@ import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
+import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
+import com.rwhitear.nimbleRest.exceptions.VolumeIdException;
+import com.rwhitear.nimbleRest.exceptions.volumeCollectionException;
+import com.rwhitear.nimbleRest.volumeCollections.AddVolumeToVolCollection;
+import com.rwhitear.nimbleRest.volumeCollections.GetVolumeCollections;
+import com.rwhitear.nimbleRest.volumeCollections.json.ParseVolCollectionsDetailResponse;
+import com.rwhitear.nimbleRest.volumeCollections.json.VolCollectionsDetailJsonObject;
+import com.rwhitear.nimbleRest.volumes.GetVolumes;
+import com.rwhitear.nimbleRest.volumes.json.ParseVolumeDetailResponse;
+import com.rwhitear.nimbleRest.volumes.json.VolumesDetailJsonObject;
 
 
 public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
@@ -15,17 +25,107 @@ public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaAssocVolToVolumeCollectionConfig config = (SlimceaAssocVolToVolumeCollectionConfig) context.loadConfigObject();
 
+		/*
 		actionLogger.addInfo("Username: " +config.getUsername());
 		actionLogger.addInfo("Password: " +config.getPassword());
 		actionLogger.addInfo("IP Address: " +config.getIpAddress());
 		actionLogger.addInfo("Volume Name: " +config.getVolumeName());
 		actionLogger.addInfo("Volume Collection Name: " +config.getVolumeCollectionName());
+		*/
+		
+		String ipAddress = config.getIpAddress();
+		String username = config.getUsername();
+		String password = config.getPassword(); 
+		String volumeName = config.getVolumeName();
+		String volCollName = config.getVolumeCollectionName();
+
+		// Retrieve Nimble array auth token.
+		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
+
+		// Check that the volume exists and retrieve its id.
+		
+		// Retrieve JSON response for detailed Volume information.
+		String volumesJsonData = new GetVolumes(ipAddress, token).getDetail();
+
+		actionLogger.addInfo("Volumes Detail JSON: " + volumesJsonData );
+		//actionLogger.addInfo("Volume Collections Detail JSON: " + volCollectinoJsonData );
+		
+		VolumesDetailJsonObject volumeDetail = new ParseVolumeDetailResponse(volumesJsonData).parse();
+		
+		String volID = "";
+				
+		for( int i=0; i < volumeDetail.getData().size(); i++ ) {
+					
+			//System.out.println("Volume collection name["+i+"]: " + volCollDetail.getData().get(i).getName() );
+
+			if( volumeDetail.getData().get(i).getName().equals(volumeName) ) {
+						
+				actionLogger.addInfo("Found volume ["+volumeName+"] with id["+
+						volumeDetail.getData().get(i).getId() +"].");
+						
+				volID = volumeDetail.getData().get(i).getId();
+						
+				break;
+					
+			}
+					
+		}
+				
+		// Ensure that the volume collection id for volCollName has been found.
+		if( volID == "") {
+					
+			throw new VolumeIdException("Failed to find volume ["+volumeName+"].");
+		
+		}
+	
+		
+		// Check that the volume collection exists and get its id.
+		
+		// Retrieve JSON response for detailed volume collections information.
+		String volCollectionJsonData = new GetVolumeCollections(ipAddress, token).getDetail();
+
+		actionLogger.addInfo("Volume Collections Detail JSON: " + volCollectionJsonData );
+		//actionLogger.addInfo("Volume Collections Detail JSON: " + volCollectinoJsonData );
+		
+		VolCollectionsDetailJsonObject volCollDetail = new ParseVolCollectionsDetailResponse(volCollectionJsonData).parse();
+		
+		String volCollID = "";
+		
+		for( int i=0; i < volCollDetail.getData().size(); i++ ) {
+			
+			//System.out.println("Volume collection name["+i+"]: " + volCollDetail.getData().get(i).getName() );
+
+			if( volCollDetail.getData().get(i).getName().equals(volCollName) ) {
+				
+				actionLogger.addInfo("Found volume collection ["+volCollName+"] with id["+
+						volCollDetail.getData().get(i).getId() +"].");
+				
+				volCollID = volCollDetail.getData().get(i).getId();
+				
+				break;
+				
+			}
+			
+		}
+		
+		// Ensure that the volume collection id for volCollName has been found.
+		if( volCollID == "") {
+			
+			throw new volumeCollectionException("Failed to find volume collection ["+volCollName+"].");
+		}
+		
+		// All prerequisites satisfied. Build the volume to volume collection association.
+		String addVol2VolCollResponse = new AddVolumeToVolCollection(ipAddress, token, volID, volCollID).execute();
+		
+		actionLogger.addInfo("addVol2VolColl Response: " +addVol2VolCollResponse );
+
+		
 
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)
 		//NOTE: use the getTaskType() method in your handler to pass as the 5th argument
 		context.getChangeTracker().undoableResourceAdded("assetType", "idString", "Nimble Associate Volume with Volume Collection", 
-				"Rollback Associate Volume with Volume Collection " + config.getVolumeName(), 
+				"Rollback Associate Volume ["+config.getVolumeName()+"] with Volume Collection [" + config.getVolumeCollectionName() +"].", 
 				new SlimceaDisassocVolFromVolumeCollectionTask().getTaskName(), new SlimceaDisassocVolFromVolumeCollectionConfig(config));
 		
         try

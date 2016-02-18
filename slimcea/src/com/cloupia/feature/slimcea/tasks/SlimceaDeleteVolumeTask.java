@@ -117,7 +117,7 @@ public class SlimceaDeleteVolumeTask extends AbstractTask {
 							+ volDetail.getData().get(i).getVolcoll_id() + "].");
 							
 					String addVolCollResponse = new AddVolumeToVolCollection(ipAddress, token, 
-							volDetail.getData().get(i).getId(), NimbleRESTConstants.NO_VOLUME_COLLECTION_URI ).execute();
+							volDetail.getData().get(i).getId(), NimbleRESTConstants.NO_VOLUME_COLLECTION_ID ).execute();
 							
 					//System.out.println("Add Vol to VolColl Response: \n" + addVolCollResponse );
 					actionLogger.addInfo("Add Vol to VolColl Response: \n" + addVolCollResponse );
