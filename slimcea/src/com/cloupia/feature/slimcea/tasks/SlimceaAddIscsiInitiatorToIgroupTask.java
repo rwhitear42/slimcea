@@ -8,6 +8,7 @@ import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
 import com.rwhitear.nimbleRest.exceptions.InitiatorGroupException;
+import com.rwhitear.nimbleRest.httpErrorHandling.json.ErrorResponseObject;
 import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
 import com.rwhitear.nimbleRest.initiatorGroups.ParseInitiatorGroupsDetailResponse;
 import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailObject;
@@ -70,7 +71,22 @@ public class SlimceaAddIscsiInitiatorToIgroupTask extends AbstractTask {
 		
 		actionLogger.addInfo("ciiCreateResponse: " + ciiCreateResponse );
 
-
+		actionLogger.addInfo("HTTP status code: " + cii.getHttpStatusCode() );
+		
+		if( cii.getHttpStatusCode() != 201 ) {
+			
+			ErrorResponseObject ero = cii.getErrorResponse();
+			
+			for( int i = 0; i < ero.getMessages().size(); i++ ) {
+				
+				actionLogger.addError("Error ["+ero.getMessages().get(i).getCode()+"]: " + ero.getMessages().get(i).getText() );
+				
+			}
+			
+			throw new InitiatorGroupException("Request failed.");
+			
+		}
+		
 
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)
