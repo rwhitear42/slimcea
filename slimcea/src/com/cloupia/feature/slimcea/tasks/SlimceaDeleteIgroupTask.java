@@ -7,6 +7,7 @@ import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
 import com.rwhitear.nimbleRest.exceptions.InitiatorGroupException;
+import com.rwhitear.nimbleRest.httpErrorHandling.json.ErrorResponseObject;
 import com.rwhitear.nimbleRest.initiatorGroups.DeleteInitiatorGroup;
 import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
 import com.rwhitear.nimbleRest.initiatorGroups.ParseInitiatorGroupsDetailResponse;
@@ -69,6 +70,23 @@ public class SlimceaDeleteIgroupTask extends AbstractTask {
 		String deleteResponse = dig.execute();
 		
 		actionLogger.addInfo("Initiator Group Delete Response: " + deleteResponse );
+		
+		actionLogger.addInfo("HTTP status code: " + dig.getHttpStatusCode() );
+		
+		if( (dig.getHttpStatusCode() != 201) && (dig.getHttpStatusCode() != 200) ) {
+			
+			ErrorResponseObject ero = dig.getErrorResponse();
+			
+			for( int i = 0; i < ero.getMessages().size(); i++ ) {
+				
+				actionLogger.addError("Error ["+ero.getMessages().get(i).getCode()+"]: " + ero.getMessages().get(i).getText() );
+				
+			}
+			
+			throw new InitiatorGroupException("Request failed.");
+			
+		}
+
 		
 	}
 

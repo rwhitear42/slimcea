@@ -8,6 +8,7 @@ import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
 import com.rwhitear.nimbleRest.exceptions.InitiatorGroupException;
+import com.rwhitear.nimbleRest.httpErrorHandling.json.ErrorResponseObject;
 import com.rwhitear.nimbleRest.initiatorGroups.CreateInitiatorGroup;
 import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
 import com.rwhitear.nimbleRest.initiatorGroups.ParseInitiatorGroupsDetailResponse;
@@ -64,6 +65,21 @@ public class SlimceaCreateIgroupTask extends AbstractTask {
 		
 		actionLogger.addInfo("Create Initiator Group Response: " + createResp);
 
+		actionLogger.addInfo("HTTP status code: " + cig.getHttpStatusCode() );
+		
+		if( (cig.getHttpStatusCode() != 201) && (cig.getHttpStatusCode() != 200) ) {
+			
+			ErrorResponseObject ero = cig.getErrorResponse();
+			
+			for( int i = 0; i < ero.getMessages().size(); i++ ) {
+				
+				actionLogger.addError("Error ["+ero.getMessages().get(i).getCode()+"]: " + ero.getMessages().get(i).getText() );
+				
+			}
+			
+			throw new InitiatorGroupException("Request failed.");
+			
+		}
 
 		
 		//if user decides to rollback a workflow containing this task, then using the change tracker

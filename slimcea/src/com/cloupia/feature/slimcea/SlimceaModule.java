@@ -19,6 +19,7 @@ import com.cloupia.feature.slimcea.lovs.SimpleTabularProvider;
 import com.cloupia.feature.slimcea.menuProvider.DummyMenuProvider;
 import com.cloupia.feature.slimcea.resourceComputer.DummyVLANResourceComputer;
 import com.cloupia.feature.slimcea.scheduledTasks.DummyScheduleTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaAddFcInitiatorToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAddInitiatorToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAddIscsiInitiatorToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAssocVolToVolumeCollectionTask;
@@ -32,6 +33,7 @@ import com.cloupia.feature.slimcea.tasks.SlimceaDeleteVolumeTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDisassocVolFromVolumeCollectionTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaMapVolumeToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaMultiSelectTabularTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaRemoveFcInitiatorFromIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaRemoveInitiatorFromIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaRemoveIscsiInitiatorFromIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaUnMapVolFromIgroupTask;
@@ -75,8 +77,10 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		AbstractTask task14  = new SlimceaCloneVolumeTask();
 		AbstractTask task15  = new SlimceaAddIscsiInitiatorToIgroupTask();
 		AbstractTask task16  = new SlimceaRemoveIscsiInitiatorFromIgroupTask();
+		AbstractTask task17  = new SlimceaAddFcInitiatorToIgroupTask();
+		AbstractTask task18  = new SlimceaRemoveFcInitiatorFromIgroupTask();
 		
-		AbstractTask[] tasks = new AbstractTask[16];
+		AbstractTask[] tasks = new AbstractTask[18];
 		tasks[0]  = task1;
 		tasks[1]  = task2;
 		tasks[2]  = task3;
@@ -93,6 +97,8 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		tasks[13] = task14;
 		tasks[14] = task15;
 		tasks[15] = task16;
+		tasks[16] = task17;
+		tasks[17] = task18;
 		return tasks;
 	}
 

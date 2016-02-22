@@ -17,3 +17,5 @@
 +SlimceaCloneVolumeConfig
 +SlimceaAddIscsiInitiatorToIgroupConfig
 +SlimceaRemoveIscsiInitiatorFromIgroupConfig
++SlimceaAddFcInitiatorToIgroupConfig
++SlimceaRemoveFcInitiatorFromIgroupConfig

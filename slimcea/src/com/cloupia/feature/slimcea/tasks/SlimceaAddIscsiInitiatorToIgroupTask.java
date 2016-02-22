@@ -73,7 +73,7 @@ public class SlimceaAddIscsiInitiatorToIgroupTask extends AbstractTask {
 
 		actionLogger.addInfo("HTTP status code: " + cii.getHttpStatusCode() );
 		
-		if( cii.getHttpStatusCode() != 201 ) {
+		if( (cii.getHttpStatusCode() != 201) && (cii.getHttpStatusCode() != 200) ) {
 			
 			ErrorResponseObject ero = cii.getErrorResponse();
 			
