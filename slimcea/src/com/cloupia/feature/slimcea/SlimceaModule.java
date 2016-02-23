@@ -20,7 +20,6 @@ import com.cloupia.feature.slimcea.menuProvider.DummyMenuProvider;
 import com.cloupia.feature.slimcea.resourceComputer.DummyVLANResourceComputer;
 import com.cloupia.feature.slimcea.scheduledTasks.DummyScheduleTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAddFcInitiatorToIgroupTask;
-import com.cloupia.feature.slimcea.tasks.SlimceaAddInitiatorToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAddIscsiInitiatorToIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaAssocVolToVolumeCollectionTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaCloneVolumeTask;
@@ -31,10 +30,10 @@ import com.cloupia.feature.slimcea.tasks.SlimceaDeleteIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteSnapshotTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDeleteVolumeTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaDisassocVolFromVolumeCollectionTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaGetInventoryTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaMapVolumeToIgroupTask;
-import com.cloupia.feature.slimcea.tasks.SlimceaMultiSelectTabularTask;
+//import com.cloupia.feature.slimcea.tasks.SlimceaMultiSelectTabularTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaRemoveFcInitiatorFromIgroupTask;
-import com.cloupia.feature.slimcea.tasks.SlimceaRemoveInitiatorFromIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaRemoveIscsiInitiatorFromIgroupTask;
 import com.cloupia.feature.slimcea.tasks.SlimceaUnMapVolFromIgroupTask;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceStatusParam;
@@ -65,22 +64,20 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		AbstractTask task2   = new SlimceaDeleteVolumeTask();
 		AbstractTask task3   = new SlimceaCreateSnapshotTask();
 		AbstractTask task4   = new SlimceaDeleteSnapshotTask();
-		AbstractTask task5   = new SlimceaMultiSelectTabularTask();
-		AbstractTask task6   = new SlimceaCreateIgroupTask();
-		AbstractTask task7   = new SlimceaDeleteIgroupTask();
-		AbstractTask task8   = new SlimceaAddInitiatorToIgroupTask();
-		AbstractTask task9   = new SlimceaRemoveInitiatorFromIgroupTask();
-		AbstractTask task10  = new SlimceaAssocVolToVolumeCollectionTask();
-		AbstractTask task11  = new SlimceaDisassocVolFromVolumeCollectionTask();
-		AbstractTask task12  = new SlimceaMapVolumeToIgroupTask();
-		AbstractTask task13  = new SlimceaUnMapVolFromIgroupTask();
-		AbstractTask task14  = new SlimceaCloneVolumeTask();
-		AbstractTask task15  = new SlimceaAddIscsiInitiatorToIgroupTask();
-		AbstractTask task16  = new SlimceaRemoveIscsiInitiatorFromIgroupTask();
-		AbstractTask task17  = new SlimceaAddFcInitiatorToIgroupTask();
-		AbstractTask task18  = new SlimceaRemoveFcInitiatorFromIgroupTask();
+		AbstractTask task5   = new SlimceaCreateIgroupTask();
+		AbstractTask task6   = new SlimceaDeleteIgroupTask();
+		AbstractTask task7  = new SlimceaAssocVolToVolumeCollectionTask();
+		AbstractTask task8  = new SlimceaDisassocVolFromVolumeCollectionTask();
+		AbstractTask task9  = new SlimceaMapVolumeToIgroupTask();
+		AbstractTask task10  = new SlimceaUnMapVolFromIgroupTask();
+		AbstractTask task11  = new SlimceaCloneVolumeTask();
+		AbstractTask task12  = new SlimceaAddIscsiInitiatorToIgroupTask();
+		AbstractTask task13  = new SlimceaRemoveIscsiInitiatorFromIgroupTask();
+		AbstractTask task14  = new SlimceaAddFcInitiatorToIgroupTask();
+		AbstractTask task15  = new SlimceaRemoveFcInitiatorFromIgroupTask();
+		AbstractTask task16  = new SlimceaGetInventoryTask();
 		
-		AbstractTask[] tasks = new AbstractTask[18];
+		AbstractTask[] tasks = new AbstractTask[16];
 		tasks[0]  = task1;
 		tasks[1]  = task2;
 		tasks[2]  = task3;
@@ -97,8 +94,6 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		tasks[13] = task14;
 		tasks[14] = task15;
 		tasks[15] = task16;
-		tasks[16] = task17;
-		tasks[17] = task18;
 		return tasks;
 	}
 
@@ -166,6 +161,12 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			
 			//Workflow input Types
 			WorkflowInputTypeDeclaration.registerWFInputs();
+			
+			// Nimble test for perf policies LOV provider.
+			//PerformancePoliciesLOVWorkflowInputType.registerWFInputs();
+			
+			
+			
 			
 			//Workflow input Types for multi select
 			InputTypeDeclaration.registerWFInputs();

@@ -5,11 +5,11 @@
 +SlimceaDeleteVolumeConfig
 +SlimceaCreateSnapshotConfig
 +SlimceaDeleteSnapshotConfig
-+SlimceaMultiSelectTabularConfig
+//+SlimceaMultiSelectTabularConfig
 +SlimceaCreateIgroupConfig
 +SlimceaDeleteIgroupConfig
-+SlimceaAddInitiatorToIgroupConfig
-+SlimceaRemoveInitiatorFromIgroupConfig
+//+SlimceaAddInitiatorToIgroupConfig
+//+SlimceaRemoveInitiatorFromIgroupConfig
 +SlimceaAssocVolToVolumeCollectionConfig
 +SlimceaDisassocVolFromVolumeCollectionConfig
 +SlimceaMapVolumeToIgroupConfig
@@ -19,3 +19,4 @@
 +SlimceaRemoveIscsiInitiatorFromIgroupConfig
 +SlimceaAddFcInitiatorToIgroupConfig
 +SlimceaRemoveFcInitiatorFromIgroupConfig
++SlimceaGetInventoryConfig

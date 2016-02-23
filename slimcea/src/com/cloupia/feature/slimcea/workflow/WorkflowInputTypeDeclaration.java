@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 
 
 import com.cloupia.feature.slimcea.accounts.SlimceaAccountSampleReportImpl;
-import com.cloupia.feature.slimcea.lovs.NimbleVolumesLOVProvider;
+import com.cloupia.feature.slimcea.lovs.NimbleVolumesLOVProviderOLD;
 import com.cloupia.model.cIM.FormFieldDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionHandlerIf;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionRegistry;
@@ -66,8 +66,8 @@ public class WorkflowInputTypeDeclaration {
 				FormFieldDefinition.FIELD_TYPE_EMBEDDED_LOV, "nimbleVolumesLOV"));
 				
 		 LOVProviderRegistry.getInstance()
-         .registerProvider(NimbleVolumesLOVProvider.NAME,
-         new NimbleVolumesLOVProvider());	
+         .registerProvider(NimbleVolumesLOVProviderOLD.NAME,
+         new NimbleVolumesLOVProviderOLD());	
 	}
 	
 	
