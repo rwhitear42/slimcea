@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
@@ -16,6 +18,8 @@ import com.rwhitear.nimbleRest.volumes.json.GetVolumesSummaryResponse;
 
 
 public class SlimceaMapVolumeToIgroupTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaMapVolumeToIgroupTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
@@ -47,11 +51,11 @@ public class SlimceaMapVolumeToIgroupTask extends AbstractTask {
 		
 		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
-		System.out.println("iGroupsResponse: " + iGroupsResponse);
+		logger.info("iGroupsResponse: " + iGroupsResponse);
 		
 		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 		
-		System.out.println("Initiator Groups size: " + iGroupObj.getData().size() );
+		logger.info("Initiator Groups size: " + iGroupObj.getData().size() );
 		
 
 		String iGroupID = "";
@@ -84,7 +88,7 @@ public class SlimceaMapVolumeToIgroupTask extends AbstractTask {
 			
 			actionLogger.addInfo("Creating new Access Control Record for volume ["+ volumeName + "] and Initiator Group [" + initiatorGroupName + "].");
 			
-			actionLogger.addInfo("Create ACR JSON Response:\n"  + new CreateAccessControlRecord(ipAddress, token, volID, iGroupID).create());
+			logger.info("Create ACR JSON Response:\n"  + new CreateAccessControlRecord(ipAddress, token, volID, iGroupID).create());
 		}
 
 		

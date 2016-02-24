@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
@@ -18,19 +20,14 @@ import com.rwhitear.nimbleRest.volumes.json.VolumesDetailJsonObject;
 
 
 public class SlimceaDeleteSnapshotTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaDeleteSnapshotTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaDeleteSnapshotConfig config = (SlimceaDeleteSnapshotConfig) context.loadConfigObject();
 
-		/*
-		actionLogger.addInfo("Username: " +config.getUsername());
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Volume Name: " +config.getVolumeName());
-		actionLogger.addInfo("Snapshot Name: " +config.getSnapshotName());
-		*/
 		
 		String ipAddress = config.getIpAddress();
 		String username = config.getUsername();
@@ -46,7 +43,7 @@ public class SlimceaDeleteSnapshotTask extends AbstractTask {
 		// Get volumeID for volumeName.
 		String gvResponse = new GetVolumes(ipAddress, token).getDetail();
 		
-		actionLogger.addInfo("GetVolumes JSON: " + gvResponse );		
+		logger.info("GetVolumes JSON: " + gvResponse );		
 		
 		
 		// Parse JSON for volumeID for volumeName.
@@ -80,7 +77,7 @@ public class SlimceaDeleteSnapshotTask extends AbstractTask {
 		// Now that we have the volumeID, we can go ahead and get the snapshot ID for snapShotName.
 		String gsResponse = new GetSnapshots(ipAddress, token, volumeID).getDetail();
 
-		actionLogger.addInfo("GetSnapshots JSON: " +gsResponse );
+		logger.info("GetSnapshots JSON: " +gsResponse );
 		
 		GetSnapshotDetailResponse gsdr = new GetSnapshotDetailResponse(gsResponse);
 		
@@ -95,13 +92,13 @@ public class SlimceaDeleteSnapshotTask extends AbstractTask {
 		// Snapshot ID retrieved successfully. Offline the snapshot in case it is in an online state.
 		String offSnapResponse = new OfflineSnapshot(ipAddress, token, snapID).execute();
 				
-		actionLogger.addInfo("Offline snapshot response: " +offSnapResponse );
+		logger.info("Offline snapshot response: " +offSnapResponse );
 				
 		// Final step. Delete the snapshot.
 				
 		String delSnapResponse = new DeleteSnapshot(ipAddress, token, snapID).execute();
 				
-		actionLogger.addInfo("Delete snapshot response: " +delSnapResponse );
+		logger.info("Delete snapshot response: " +delSnapResponse );
 		
 	}
 

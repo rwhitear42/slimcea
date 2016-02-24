@@ -142,6 +142,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			//you need to provide a unique id for this tabular provider, along with the implementation class, and the
 			//index of the selection and display columns, for most cases, you can blindly enter 0
 			cfr.registerTabularField(SimpleTabularProvider.SIMPLE_TABULAR_PROVIDER, SimpleTabularProvider.class, "0", "0");
+			
 			//this is where you should add your schedule tasks
 			addScheduleTask(new DummyScheduleTask());
 			

@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
@@ -8,17 +10,19 @@ import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext
 
 
 public class SlimceaUnMapVolFromIgroupTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaUnMapVolFromIgroupTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaUnMapVolFromIgroupConfig config = (SlimceaUnMapVolFromIgroupConfig) context.loadConfigObject();
 
-		actionLogger.addInfo("Username: " +config.getUsername());
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Volume Name: " +config.getVolumeName());
-		actionLogger.addInfo("Initiator Group Name: " +config.getInitiatorGroupName());
+		logger.info("Username: " +config.getUsername());
+		logger.info("Password: " +config.getPassword());
+		logger.info("IP Address: " +config.getIpAddress());
+		logger.info("Volume Name: " +config.getVolumeName());
+		logger.info("Initiator Group Name: " +config.getInitiatorGroupName());
 		
 	}
 

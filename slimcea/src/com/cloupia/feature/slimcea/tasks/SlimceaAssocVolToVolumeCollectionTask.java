@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
@@ -19,19 +21,14 @@ import com.rwhitear.nimbleRest.volumes.json.VolumesDetailJsonObject;
 
 
 public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaAssocVolToVolumeCollectionTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaAssocVolToVolumeCollectionConfig config = (SlimceaAssocVolToVolumeCollectionConfig) context.loadConfigObject();
 
-		/*
-		actionLogger.addInfo("Username: " +config.getUsername());
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Volume Name: " +config.getVolumeName());
-		actionLogger.addInfo("Volume Collection Name: " +config.getVolumeCollectionName());
-		*/
 		
 		String ipAddress = config.getIpAddress();
 		String username = config.getUsername();
@@ -47,8 +44,7 @@ public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
 		// Retrieve JSON response for detailed Volume information.
 		String volumesJsonData = new GetVolumes(ipAddress, token).getDetail();
 
-		actionLogger.addInfo("Volumes Detail JSON: " + volumesJsonData );
-		//actionLogger.addInfo("Volume Collections Detail JSON: " + volCollectinoJsonData );
+		logger.info("Volumes Detail JSON: " + volumesJsonData );
 		
 		VolumesDetailJsonObject volumeDetail = new ParseVolumeDetailResponse(volumesJsonData).parse();
 		
@@ -56,8 +52,6 @@ public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
 				
 		for( int i=0; i < volumeDetail.getData().size(); i++ ) {
 					
-			//System.out.println("Volume collection name["+i+"]: " + volCollDetail.getData().get(i).getName() );
-
 			if( volumeDetail.getData().get(i).getName().equals(volumeName) ) {
 						
 				actionLogger.addInfo("Found volume ["+volumeName+"] with id["+
@@ -84,7 +78,7 @@ public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
 		// Retrieve JSON response for detailed volume collections information.
 		String volCollectionJsonData = new GetVolumeCollections(ipAddress, token).getDetail();
 
-		actionLogger.addInfo("Volume Collections Detail JSON: " + volCollectionJsonData );
+		logger.info("Volume Collections Detail JSON: " + volCollectionJsonData );
 		//actionLogger.addInfo("Volume Collections Detail JSON: " + volCollectinoJsonData );
 		
 		VolCollectionsDetailJsonObject volCollDetail = new ParseVolCollectionsDetailResponse(volCollectionJsonData).parse();
@@ -93,8 +87,6 @@ public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
 		
 		for( int i=0; i < volCollDetail.getData().size(); i++ ) {
 			
-			//System.out.println("Volume collection name["+i+"]: " + volCollDetail.getData().get(i).getName() );
-
 			if( volCollDetail.getData().get(i).getName().equals(volCollName) ) {
 				
 				actionLogger.addInfo("Found volume collection ["+volCollName+"] with id["+
@@ -117,7 +109,7 @@ public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
 		// All prerequisites satisfied. Build the volume to volume collection association.
 		String addVol2VolCollResponse = new AddVolumeToVolCollection(ipAddress, token, volID, volCollID).execute();
 		
-		actionLogger.addInfo("addVol2VolColl Response: " +addVol2VolCollResponse );
+		logger.info("addVol2VolColl Response: " +addVol2VolCollResponse );
 
 		
 

@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
@@ -23,6 +25,8 @@ import com.rwhitear.nimbleRest.volumes.json.GetVolumesSummaryResponse;
 
 
 public class SlimceaCloneVolumeTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaCloneVolumeTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
@@ -72,11 +76,11 @@ public class SlimceaCloneVolumeTask extends AbstractTask {
 		
 		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
-		System.out.println("iGroupsResponse: " + iGroupsResponse);
+		logger.info("iGroupsResponse: " + iGroupsResponse);
 		
 		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 		
-		System.out.println("Initiator Groups size: " + iGroupObj.getData().size() );
+		logger.info("Initiator Groups size: " + iGroupObj.getData().size() );
 		
 
 		String iGroupID = "";
@@ -87,7 +91,7 @@ public class SlimceaCloneVolumeTask extends AbstractTask {
 				
 				iGroupID = iGroupObj.getData().get(i).getId();
 				
-				System.out.println("iGroup ID ["+iGroupID+"] found for iGroup name [" +iGroupObj.getData().get(i).getName()+ "]." );
+				logger.info("iGroup ID ["+iGroupID+"] found for iGroup name [" +iGroupObj.getData().get(i).getName()+ "]." );
 				
 				break;
 				
@@ -127,7 +131,7 @@ public class SlimceaCloneVolumeTask extends AbstractTask {
 			
 			actionLogger.addInfo("Creating new Access Control Record for volume ["+ cloneName + "] and Initiator Group [" + initiatorGroupName + "].");
 			
-			actionLogger.addInfo("Create ACR JSON Response:\n"  + new CreateAccessControlRecord(ipAddress, token, cloneVolID, iGroupID).create());
+			logger.info("Create ACR JSON Response:\n"  + new CreateAccessControlRecord(ipAddress, token, cloneVolID, iGroupID).create());
 		}
 			
 		

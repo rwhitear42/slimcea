@@ -2,7 +2,11 @@ package com.cloupia.feature.slimcea.tasks;
 
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
+import com.cloupia.feature.slimcea.lovs.registration.RegisterInitiatorGroupsLOVs;
 import com.cloupia.feature.slimcea.lovs.registration.RegisterPerformancePoliciesLOVs;
+import com.cloupia.feature.slimcea.lovs.registration.RegisterVolumeCollectionsLOVs;
 import com.cloupia.feature.slimcea.lovs.registration.RegisterVolumesLOVs;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
@@ -14,16 +18,23 @@ import com.rwhitear.nimbleRest.arrays.ParseArraysDetailResponse;
 import com.rwhitear.nimbleRest.arrays.json.GetArraysDetailObject;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
 import com.rwhitear.nimbleRest.exceptions.ArraysException;
+import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
+import com.rwhitear.nimbleRest.initiatorGroups.ParseInitiatorGroupsDetailResponse;
+import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailObject;
 import com.rwhitear.nimbleRest.performancePolicies.GetPerformancePolicies;
 import com.rwhitear.nimbleRest.performancePolicies.json.ParsePerfPolicyDetailResponse;
 import com.rwhitear.nimbleRest.performancePolicies.json.PerfPoliciesDetailJsonObject;
+import com.rwhitear.nimbleRest.volumeCollections.GetVolumeCollections;
+import com.rwhitear.nimbleRest.volumeCollections.json.ParseVolCollectionsDetailResponse;
+import com.rwhitear.nimbleRest.volumeCollections.json.VolCollectionsDetailJsonObject;
 import com.rwhitear.nimbleRest.volumes.GetVolumes;
 import com.rwhitear.nimbleRest.volumes.json.ParseVolumeDetailResponse;
 import com.rwhitear.nimbleRest.volumes.json.VolumesDetailJsonObject;
 
 
-
 public class SlimceaGetInventoryTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaGetInventoryTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
@@ -48,7 +59,7 @@ public class SlimceaGetInventoryTask extends AbstractTask {
 		
 		GetArraysDetailObject arraysObj = new ParseArraysDetailResponse(getArraysResponse).parse();
 		
-		System.out.println("arrays size: " + arraysObj.getData().size() );
+		logger.info("arrays size: " + arraysObj.getData().size() );
 		
 		if( arraysObj.getData().size() != 1 ) {
 			
@@ -66,11 +77,11 @@ public class SlimceaGetInventoryTask extends AbstractTask {
 		// Retrieve JSON response for detailed Performance Policy information.
 		String perfPolicyJsonData = new GetPerformancePolicies(ipAddress, token).getDetail();
 		
-		actionLogger.addInfo("Performance Policy Detail JSON: " + perfPolicyJsonData );
+		logger.info("Performance Policy Detail JSON: " + perfPolicyJsonData );
 		
 		PerfPoliciesDetailJsonObject perfPolicyDetail = new ParsePerfPolicyDetailResponse(perfPolicyJsonData).parse();
 
-		actionLogger.addInfo("Perf Policy Size: " + perfPolicyDetail.getData().size());
+		logger.info("Perf Policy Size: " + perfPolicyDetail.getData().size());
 			
 	
 		HashMap<String,String> pmap = new HashMap<>();
@@ -102,7 +113,42 @@ public class SlimceaGetInventoryTask extends AbstractTask {
 		new RegisterVolumesLOVs( volMap, arrayName ).registerWFInputs();
 		
 		
+		// Get Volume Collections.
 		
+		// Retrieve JSON response for detailed volume collections information.
+		String volCollectionJsonData = new GetVolumeCollections(ipAddress, token).getDetail();
+
+		VolCollectionsDetailJsonObject volCollDetail = new ParseVolCollectionsDetailResponse(volCollectionJsonData).parse();
+		
+		HashMap<String,String> volCollMap = new HashMap<>();
+		
+		for( int i = 0; i < volCollDetail.getData().size(); i++ ) {
+			
+			volCollMap.put( volCollDetail.getData().get(i).getName(), volCollDetail.getData().get(i).getName());
+			
+		}
+
+		new RegisterVolumeCollectionsLOVs( volCollMap, arrayName ).registerWFInputs();
+		
+		
+		// Get Initiator Groups.
+		
+		// Check that iGroup exists.
+		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
+		
+		logger.info("Initiator Groups Response: " +iGroupsResponse );
+		
+		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
+
+		HashMap<String,String> iGroupsMap = new HashMap<>();
+		
+		for( int i = 0; i < iGroupObj.getData().size(); i++ ) {
+			
+			iGroupsMap.put( iGroupObj.getData().get(i).getName(), iGroupObj.getData().get(i).getName());
+			
+		}
+
+		new RegisterInitiatorGroupsLOVs( iGroupsMap, arrayName ).registerWFInputs();
 		
 		
 		

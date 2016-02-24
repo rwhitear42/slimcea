@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
@@ -17,17 +19,13 @@ import com.rwhitear.nimbleRest.initiators.CreateFcInitiator;
 
 public class SlimceaAddFcInitiatorToIgroupTask extends AbstractTask {
 
+	private static Logger logger = Logger.getLogger( SlimceaAddFcInitiatorToIgroupTask.class );
+	
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaAddFcInitiatorToIgroupConfig config = (SlimceaAddFcInitiatorToIgroupConfig) context.loadConfigObject();
 
-		/*
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Initiator Group Name: " +config.getInitiatorGroupName());
-		actionLogger.addInfo("Initiator Name: " +config.getInitiatorName());
-		*/
 		
 		String ipAddress = config.getIpAddress();
 		String username = config.getUsername();
@@ -42,7 +40,7 @@ public class SlimceaAddFcInitiatorToIgroupTask extends AbstractTask {
 		// Get iGroupID.
 		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
-		actionLogger.addInfo("Initiator Groups Response: " +iGroupsResponse );
+		logger.info("Initiator Groups Response: " +iGroupsResponse );
 		
 		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 
@@ -69,7 +67,7 @@ public class SlimceaAddFcInitiatorToIgroupTask extends AbstractTask {
 		
 		String ciiCreateResponse = cii.create(initiatorGroupID, alias, wwpn);
 		
-		actionLogger.addInfo("ciiCreateResponse: " + ciiCreateResponse );
+		logger.info("ciiCreateResponse: " + ciiCreateResponse );
 
 		actionLogger.addInfo("HTTP status code: " + cii.getHttpStatusCode() );
 		

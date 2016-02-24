@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
@@ -15,18 +17,14 @@ import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailObje
 
 
 public class SlimceaDeleteIgroupTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaDeleteIgroupTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaDeleteIgroupConfig config = (SlimceaDeleteIgroupConfig) context.loadConfigObject();
 
-		/*
-		actionLogger.addInfo("Username: " +config.getUsername());
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Initiator Group Name: " +config.getInitiatorGroupName());
-		*/
 		
 		String ipAddress = config.getIpAddress();
 		String username = config.getUsername();
@@ -39,7 +37,7 @@ public class SlimceaDeleteIgroupTask extends AbstractTask {
 		// Check that iGroup exists.
 		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
-		actionLogger.addInfo("Initiator Groups Response: " +iGroupsResponse );
+		logger.info("Initiator Groups Response: " +iGroupsResponse );
 		
 		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 
@@ -69,7 +67,7 @@ public class SlimceaDeleteIgroupTask extends AbstractTask {
 		
 		String deleteResponse = dig.execute();
 		
-		actionLogger.addInfo("Initiator Group Delete Response: " + deleteResponse );
+		logger.info("Initiator Group Delete Response: " + deleteResponse );
 		
 		actionLogger.addInfo("HTTP status code: " + dig.getHttpStatusCode() );
 		

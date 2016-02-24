@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
@@ -14,20 +16,15 @@ import com.rwhitear.nimbleRest.initiators.DeleteInitiator;
 
 
 public class SlimceaRemoveFcInitiatorFromIgroupTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaRemoveFcInitiatorFromIgroupTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaRemoveFcInitiatorFromIgroupConfig config = (SlimceaRemoveFcInitiatorFromIgroupConfig) context.loadConfigObject();
 
-		/*
-		actionLogger.addInfo("Username: " +config.getUsername());
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Initiator Group Name: " +config.getInitiatorGroupName());
-		actionLogger.addInfo("Initiator Name: " +config.getInitiatorName());
-		*/
-		
+
 		String ipAddress = config.getIpAddress();
 		String username = config.getUsername();
 		String password = config.getPassword(); 
@@ -41,7 +38,7 @@ public class SlimceaRemoveFcInitiatorFromIgroupTask extends AbstractTask {
 		// Get iGroupID.
 		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
-		actionLogger.addInfo("Initiator Groups Response: " +iGroupsResponse );
+		logger.info("Initiator Groups Response: " +iGroupsResponse );
 		
 		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 
@@ -73,7 +70,7 @@ public class SlimceaRemoveFcInitiatorFromIgroupTask extends AbstractTask {
 		// Initiator ID found. Go ahead and delete it.
 		String deleteInitiatorResponse = new DeleteInitiator(ipAddress, token, initiatorID).execute();
 		
-		actionLogger.addInfo("deleteInitiatorResponse: " + deleteInitiatorResponse );
+		logger.info("deleteInitiatorResponse: " + deleteInitiatorResponse );
 				
 	}
 

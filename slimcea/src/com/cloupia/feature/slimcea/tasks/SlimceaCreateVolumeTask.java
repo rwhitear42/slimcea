@@ -1,67 +1,40 @@
 package com.cloupia.feature.slimcea.tasks;
 
-/*
-import java.io.IOException;
+import java.util.HashMap;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-*/
-//import java.util.*;
-//import com.cloupia.lib.util.*;
-//import org.apache.commons.httpclient.*;
-//import org.apache.commons.httpclient.cookie.*;
-//import org.apache.commons.httpclient.methods.*;
-//import org.apache.commons.httpclient.auth.*;
-//import org.apache.commons.httpclient.protocol.*;
-//import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
-//import com.cloupia.lib.cIaaS.vcd.api.*;
+import org.apache.log4j.Logger;
 
-//import java.io.ByteArrayInputStream;
-//import org.apache.commons.httpclient.HttpClient;
-//import org.apache.commons.httpclient.methods.GetMethod;
-//import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
-//import org.apache.commons.httpclient.methods.PostMethod;
-//import org.apache.commons.httpclient.protocol.Protocol;
-
-//import com.cloupia.feature.slimcea.http.MySSLSocketFactory;
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
+import com.cloupia.feature.slimcea.lovs.registration.RegisterVolumesLOVs;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
+import com.rwhitear.nimbleRest.arrays.GetArrays;
+import com.rwhitear.nimbleRest.arrays.ParseArraysDetailResponse;
+import com.rwhitear.nimbleRest.arrays.json.GetArraysDetailObject;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
+import com.rwhitear.nimbleRest.exceptions.ArraysException;
 import com.rwhitear.nimbleRest.performancePolicies.GetPerformancePolicies;
 import com.rwhitear.nimbleRest.performancePolicies.json.ParsePerfPolicyDetailResponse;
 import com.rwhitear.nimbleRest.performancePolicies.json.PerfPoliciesDetailJsonObject;
 import com.rwhitear.nimbleRest.volumes.CreateVolume;
+import com.rwhitear.nimbleRest.volumes.GetVolumes;
+import com.rwhitear.nimbleRest.volumes.json.ParseVolumeDetailResponse;
+import com.rwhitear.nimbleRest.volumes.json.VolumesDetailJsonObject;
 
-//import com.rwhitear.ucsdHttpRequest.UCSDHttpRequest;
-//import com.rwhitear.ucsdHttpRequest.constants.HttpRequestConstants;
 
 
 public class SlimceaCreateVolumeTask extends AbstractTask {
 
+	private static Logger logger = Logger.getLogger( SlimceaCreateVolumeTask.class );
+			
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaCreateVolumeConfig config = (SlimceaCreateVolumeConfig) context.loadConfigObject();
 
-		/*
-		actionLogger.addInfo("Username: " +config.getUsername());
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Volume Name: " +config.getVolumeName());
-		actionLogger.addInfo("Volume Size (GB): " +config.getVolumeSizeGB());
-		actionLogger.addInfo("Volume Description: " +config.getVolumeDescription());
-		actionLogger.addInfo("Data Encryption: " +config.getVolumeDataEncryption());
-		actionLogger.addInfo("Cache Pinning: " +config.getVolumeCachePinning());
-		actionLogger.addInfo("Performance Policy: " +config.getVolumePerfPolicy());
-		*/
 		
 		// nimbleREST library testing.
 		
@@ -80,13 +53,18 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		String perfPolicyID = "";
 
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+		
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
 		// Retrieve JSON response for detailed Performance Policy information.
 		String perfPolicyJsonData = new GetPerformancePolicies(ipAddress, token).getDetail();
 		
+		actionLogger.addInfo("Verifying that performance policy [" + perfPolicy + "] exists.");
+		
 		//System.out.println("Performance Policy Detail JSON: " + perfPolicyJsonData );
-		actionLogger.addInfo("Performance Policy Detail JSON: " + perfPolicyJsonData );
+		//actionLogger.addInfo("Performance Policy Detail JSON: " + perfPolicyJsonData );
+		logger.info( "Performance Policy Detail JSON: " + perfPolicyJsonData );
 		
 		PerfPoliciesDetailJsonObject perfPolicyDetail = new ParsePerfPolicyDetailResponse(perfPolicyJsonData).parse();
 
@@ -108,13 +86,58 @@ public class SlimceaCreateVolumeTask extends AbstractTask {
 		}
 		
 		// Go ahead and create the volume.
+		
+		actionLogger.addInfo("Attempting to create volume [" + volumeName + "].");
+		
 		CreateVolume cv = new CreateVolume(ipAddress, token);
 		
 		String createResp = cv.create(volumeName, description, perfPolicyID, dataEncryption, volumeSizeGB, cachePinning);
 		
 		//System.out.println("Create Volume Response: " + createResp);
-		actionLogger.addInfo("Create Volume Response: " + createResp);
+		//actionLogger.addInfo("Create Volume Response: " + createResp);
+		logger.info( "Create Volume Response: " + createResp );
 	
+		actionLogger.addInfo("Volume [" + volumeName + "] successfully created.");
+		
+		
+		// Update Volumes LOVs.
+			
+		actionLogger.addInfo("Re-registering dynamic LOVs.");
+		
+		// Get array name for preamble to LOV name.
+		
+		String arrayName = "";
+		
+		String getArraysResponse = new GetArrays(ipAddress, token).getDetail();
+		
+		GetArraysDetailObject arraysObj = new ParseArraysDetailResponse(getArraysResponse).parse();
+		
+		logger.info("arrays size: " + arraysObj.getData().size() );
+		
+		if( arraysObj.getData().size() != 1 ) {
+			
+			throw new ArraysException("Failed to retrieve array name.");
+			
+		} else {
+			
+			arrayName = arraysObj.getData().get(0).getName();
+			
+		}
+
+		// Retrieve JSON response for detailed Volume information.
+		String volumeJsonData = new GetVolumes(ipAddress, token).getDetail();
+						
+		VolumesDetailJsonObject volDetail = new ParseVolumeDetailResponse(volumeJsonData).parse();
+				
+		HashMap<String,String> volMap = new HashMap<>();
+		
+		for( int i = 0; i < volDetail.getData().size(); i++ ) {
+			
+			volMap.put( volDetail.getData().get(i).getName(), volDetail.getData().get(i).getName() );
+			
+		}
+
+		new RegisterVolumesLOVs( volMap, arrayName ).registerWFInputs();			
 		
 		
 		//if user decides to rollback a workflow containing this task, then using the change tracker

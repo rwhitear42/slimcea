@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
@@ -17,22 +19,13 @@ import com.rwhitear.nimbleRest.volumes.json.VolumesDetailJsonObject;
 
 
 public class SlimceaCreateSnapshotTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaCreateSnapshotTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaCreateSnapshotConfig config = (SlimceaCreateSnapshotConfig) context.loadConfigObject();
-
-		/*
-		actionLogger.addInfo("Username: " +config.getUsername());
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Volume Name: " +config.getVolumeName());
-		actionLogger.addInfo("Snapshot Name: " +config.getSnapshotName());
-		actionLogger.addInfo("Snapshot Description: " +config.getSnapshotDescription());
-		actionLogger.addInfo("Online: " +config.getSnapshotOnline());
-		actionLogger.addInfo("Writable: " +config.getSnapshotWritable());
-		*/
 		
 		
 		String  ipAddress 		= config.getIpAddress();
@@ -53,7 +46,7 @@ public class SlimceaCreateSnapshotTask extends AbstractTask {
 		// Get volumeID for volumeName.
 		String gvResponse = new GetVolumes(ipAddress, token).getDetail();
 		
-		actionLogger.addInfo("GetVolumes JSON: " + gvResponse );		
+		logger.info("GetVolumes JSON: " + gvResponse );		
 		
 		// Parse JSON for volumeID for volumeName.
 		VolumesDetailJsonObject pvsr = new ParseVolumeDetailResponse(gvResponse).parse();
@@ -87,7 +80,7 @@ public class SlimceaCreateSnapshotTask extends AbstractTask {
 		// Now that we have the volumeID, we can go ahead and get the snapshot ID for snapShotName.
 		String gsResponse = new GetSnapshots(ipAddress, token, volumeID).getDetail();
 
-		actionLogger.addInfo("GetSnapshots JSON: " +gsResponse );
+		logger.info("GetSnapshots JSON: " +gsResponse );
 		
 		GetSnapshotDetailResponse gsdr = new GetSnapshotDetailResponse(gsResponse);
 		
@@ -105,7 +98,7 @@ public class SlimceaCreateSnapshotTask extends AbstractTask {
 		
 		String csResponse = cs.execute();
 		
-		actionLogger.addInfo("Create Snapshot Response: " + csResponse );
+		logger.info("Create Snapshot Response: " + csResponse );
 
 		
 			

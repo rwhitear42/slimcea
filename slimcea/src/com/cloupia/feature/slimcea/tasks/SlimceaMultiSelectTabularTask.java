@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
@@ -12,6 +14,8 @@ import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext
  *
  */
 public class SlimceaMultiSelectTabularTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaMultiSelectTabularTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context, CustomActionLogger actionLogger) throws Exception {
@@ -24,10 +28,11 @@ public class SlimceaMultiSelectTabularTask extends AbstractTask {
 					+ " entryId " + configEntryId);
 		}
 
-		actionLogger.addInfo("MultiSelect Tabular Values: " + config.getTabularValues());
-		actionLogger.addInfo("the task type is: " + this.getTaskType());
+		logger.info("MultiSelect Tabular Values: " + config.getTabularValues());
 		
-		actionLogger.addInfo("LOV Values: " + config.getLovValues());
+		logger.info("the task type is: " + this.getTaskType());
+		
+		logger.info("LOV Values: " + config.getLovValues());
 		
 	}
   /**

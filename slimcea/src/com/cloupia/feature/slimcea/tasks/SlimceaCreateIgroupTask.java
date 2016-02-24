@@ -1,5 +1,7 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import org.apache.log4j.Logger;
+
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
@@ -16,20 +18,14 @@ import com.rwhitear.nimbleRest.initiatorGroups.json.GetInitiatorGroupsDetailObje
 
 
 public class SlimceaCreateIgroupTask extends AbstractTask {
+	
+	private static Logger logger = Logger.getLogger( SlimceaCreateIgroupTask.class );
 
 	@Override
 	public void executeCustomAction(CustomActionTriggerContext context,
 			CustomActionLogger actionLogger) throws Exception {
 		SlimceaCreateIgroupConfig config = (SlimceaCreateIgroupConfig) context.loadConfigObject();
 
-		/*
-		actionLogger.addInfo("Username: " +config.getUsername());
-		actionLogger.addInfo("Password: " +config.getPassword());
-		actionLogger.addInfo("IP Address: " +config.getIpAddress());
-		actionLogger.addInfo("Protocol: " +config.getSanProtocol());
-		actionLogger.addInfo("Initiator Group Name: " +config.getInitiatorGroupName());
-		actionLogger.addInfo("Initiator Group Description: " +config.getDescription());
-		*/
 		
 		String ipAddress 			= config.getIpAddress();
 		String username 			= config.getUsername();
@@ -44,7 +40,7 @@ public class SlimceaCreateIgroupTask extends AbstractTask {
 		// Check that the initiator group doesn't already exist.
 		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
-		actionLogger.addInfo("Initiator Groups Response: " +iGroupsResponse );
+		logger.info("Initiator Groups Response: " +iGroupsResponse );
 		
 		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 
@@ -63,7 +59,7 @@ public class SlimceaCreateIgroupTask extends AbstractTask {
 		
 		String createResp = cig.create(initiatorGroupName, description, sanProtocol);
 		
-		actionLogger.addInfo("Create Initiator Group Response: " + createResp);
+		logger.info("Create Initiator Group Response: " + createResp);
 
 		actionLogger.addInfo("HTTP status code: " + cig.getHttpStatusCode() );
 		
