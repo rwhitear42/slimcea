@@ -38,9 +38,13 @@ public class SlimceaDeleteSnapshotTask extends AbstractTask {
 		
 		
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+		
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
 		// Get volumeID for volumeName.
+		actionLogger.addInfo( "Retrieving volume ID for volume ["+ volumeName +"]." );
+		
 		String gvResponse = new GetVolumes(ipAddress, token).getDetail();
 		
 		logger.info("GetVolumes JSON: " + gvResponse );		
@@ -75,6 +79,8 @@ public class SlimceaDeleteSnapshotTask extends AbstractTask {
 
 		
 		// Now that we have the volumeID, we can go ahead and get the snapshot ID for snapShotName.
+		actionLogger.addInfo( "Checking that snapshot ["+snapShotName+"] exists for volume ["+volumeName+"]." );
+		
 		String gsResponse = new GetSnapshots(ipAddress, token, volumeID).getDetail();
 
 		logger.info("GetSnapshots JSON: " +gsResponse );
@@ -90,6 +96,8 @@ public class SlimceaDeleteSnapshotTask extends AbstractTask {
 		}
 		
 		// Snapshot ID retrieved successfully. Offline the snapshot in case it is in an online state.
+		actionLogger.addInfo( "Checking online status for snapshot ["+snapShotName+"] and taking offline if necessary." );
+		
 		String offSnapResponse = new OfflineSnapshot(ipAddress, token, snapID).execute();
 				
 		logger.info("Offline snapshot response: " +offSnapResponse );
@@ -99,6 +107,8 @@ public class SlimceaDeleteSnapshotTask extends AbstractTask {
 		String delSnapResponse = new DeleteSnapshot(ipAddress, token, snapID).execute();
 				
 		logger.info("Delete snapshot response: " +delSnapResponse );
+		
+		actionLogger.addInfo( "Task completed successfully." );
 		
 	}
 

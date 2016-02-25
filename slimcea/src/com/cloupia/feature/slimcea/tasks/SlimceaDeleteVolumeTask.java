@@ -16,6 +16,8 @@ import com.rwhitear.nimbleRest.arrays.json.GetArraysDetailObject;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
 import com.rwhitear.nimbleRest.constants.NimbleRESTConstants;
 import com.rwhitear.nimbleRest.exceptions.ArraysException;
+import com.rwhitear.nimbleRest.exceptions.VolumeIdException;
+import com.rwhitear.nimbleRest.httpErrorHandling.json.ErrorResponseObject;
 import com.rwhitear.nimbleRest.snapshots.OfflineSnapshot;
 import com.rwhitear.nimbleRest.volumeCollections.AddVolumeToVolCollection;
 import com.rwhitear.nimbleRest.volumes.DeleteVolume;
@@ -70,7 +72,7 @@ public class SlimceaDeleteVolumeTask extends AbstractTask {
 				// Check for online snapshots and offline them if any found.
 				if( volDetail.getData().get(i).getOnline_snaps() != null ) {
 
-					actionLogger.addInfo("snaplen: " + volDetail.getData().get(i).getOnline_snaps().size() );
+					actionLogger.addInfo("Number of snapshots found for volume ["+volumeName+"]: " + volDetail.getData().get(i).getOnline_snaps().size() );
 							
 					for( int j = 0; j < volDetail.getData().get(i).getOnline_snaps().size(); j++ ) {
 								
@@ -120,16 +122,40 @@ public class SlimceaDeleteVolumeTask extends AbstractTask {
 					String addVolCollResponse = new AddVolumeToVolCollection(ipAddress, token, 
 							volDetail.getData().get(i).getId(), NimbleRESTConstants.NO_VOLUME_COLLECTION_ID ).execute();
 							
-					actionLogger.addInfo("Add Vol to VolColl Response: \n" + addVolCollResponse );
+					logger.info("Add Vol to VolColl Response: \n" + addVolCollResponse );
 							
 				} else {
 					actionLogger.addInfo("Volume [" +volumeName+ "] is not protected.");
 				}
 					
 				// All Dependencies have now been addressed. Go ahead and delete the volume.
-				String deleteVolResponse = new DeleteVolume(ipAddress, token, volDetail.getData().get(i).getId() ).execute();
+				actionLogger.addInfo("Deleting volume ["+volumeName+"]." ); 
+				
+				DeleteVolume dv = new DeleteVolume(ipAddress, token, volDetail.getData().get(i).getId() );
+				
+				String deleteVolResponse = dv.execute();
+				
+				
+				if( (dv.getHttpStatusCode() != 201) && (dv.getHttpStatusCode() != 200) ) {
+					
+					ErrorResponseObject ero = dv.getErrorResponse();
+					
+					for( int j = 0; j < ero.getMessages().size(); j++ ) {
+						
+						actionLogger.addError("Error ["+ero.getMessages().get(j).getCode()+"]: " + ero.getMessages().get(j).getText() );
+						
+					}
+					
+					throw new VolumeIdException("Request failed.");
+					
+				}
+
+				
+				//String deleteVolResponse = new DeleteVolume(ipAddress, token, volDetail.getData().get(i).getId() ).execute();
 						
 				logger.info("Delete Volume Response:\n" + deleteVolResponse );
+				
+				
 						
 				// All done. Break the loop.
 				break;

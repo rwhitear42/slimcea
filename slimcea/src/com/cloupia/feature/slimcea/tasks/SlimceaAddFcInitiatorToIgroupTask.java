@@ -35,9 +35,14 @@ public class SlimceaAddFcInitiatorToIgroupTask extends AbstractTask {
 		String wwpn = config.getWwpn();
 
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
-		// Get iGroupID.
+		
+		// Check that the chosen initiator group exists.
+		actionLogger.addInfo( "Verifying existence of initiator group [" + initiatorGroupName + "]." );
+		
 		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
 		logger.info("Initiator Groups Response: " +iGroupsResponse );
@@ -63,6 +68,8 @@ public class SlimceaAddFcInitiatorToIgroupTask extends AbstractTask {
 		}
 		
 		// Getting this far means an iGroup match was made. Continue.
+		actionLogger.addInfo( "Adding initiator ["+ alias +"]["+ wwpn +"] to initiator group ["+ initiatorGroupName +"]." );
+		
 		CreateFcInitiator cii = new CreateFcInitiator(ipAddress, token);
 		
 		String ciiCreateResponse = cii.create(initiatorGroupID, alias, wwpn);
@@ -84,6 +91,8 @@ public class SlimceaAddFcInitiatorToIgroupTask extends AbstractTask {
 			throw new InitiatorGroupException("Request failed.");
 			
 		}
+		
+		actionLogger.addInfo( "Task completed successfully." );
 		
 
 		//if user decides to rollback a workflow containing this task, then using the change tracker
@@ -116,12 +125,19 @@ public class SlimceaAddFcInitiatorToIgroupTask extends AbstractTask {
 
 	@Override
 	public TaskOutputDefinition[] getTaskOutputDefinitions() {
+		
 		TaskOutputDefinition[] ops = new TaskOutputDefinition[2];
+		
 		//NOTE: If you want to use the output of this task as input to another task. Then the second argument 
 		//of the output definition MUST MATCH the type of UserInputField in the config of the task that will
 		//be receiving this output.  Take a look at HelloWorldConfig as an example.
-		ops[0] = new TaskOutputDefinition( SlimceaConstants.NIMBLE_INITIATOR_GROUP_NAME, SlimceaConstants.GENERIC_TEXT_INPUT, "Three" );
-		ops[1] = new TaskOutputDefinition( SlimceaConstants.NIMBLE_INITIATOR_NAME, SlimceaConstants.GENERIC_TEXT_INPUT, "Three" );
+		ops[0] = new TaskOutputDefinition( 	SlimceaConstants.NIMBLE_INITIATOR_GROUP_NAME, 
+											SlimceaConstants.GENERIC_TEXT_INPUT, 
+											"Initiator Group Name." );
+		ops[1] = new TaskOutputDefinition( 	SlimceaConstants.NIMBLE_INITIATOR_NAME, 
+											SlimceaConstants.GENERIC_TEXT_INPUT, 
+											"Initiator Alias." );
+		
 		return ops;
 	}
 }

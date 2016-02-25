@@ -35,6 +35,8 @@ public class SlimceaAddIscsiInitiatorToIgroupTask extends AbstractTask {
 		String iqn = config.getIqn();
 
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
 		// Get iGroupID.
@@ -63,6 +65,8 @@ public class SlimceaAddIscsiInitiatorToIgroupTask extends AbstractTask {
 		}
 		
 		// Getting this far means an iGroup match was made. Continue.
+		actionLogger.addInfo( "Adding initiator ["+ initiatorLabel +"]["+ iqn +"] to initiator group ["+ initiatorGroupName +"]." );
+		
 		CreateIscsiInitiator cii = new CreateIscsiInitiator(ipAddress, token);
 		
 		String ciiCreateResponse = cii.create(initiatorGroupID, initiatorLabel, iqn);
@@ -85,7 +89,9 @@ public class SlimceaAddIscsiInitiatorToIgroupTask extends AbstractTask {
 			
 		}
 		
-
+		actionLogger.addInfo( "Task completed successfully." );
+		
+		
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)
 		//NOTE: use the getTaskType() method in your handler to pass as the 5th argument

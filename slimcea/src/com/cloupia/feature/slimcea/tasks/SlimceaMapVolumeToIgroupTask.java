@@ -35,6 +35,8 @@ public class SlimceaMapVolumeToIgroupTask extends AbstractTask {
 		
 		
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+		
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
 		

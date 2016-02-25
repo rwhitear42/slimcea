@@ -33,6 +33,8 @@ public class SlimceaRemoveFcInitiatorFromIgroupTask extends AbstractTask {
 
 		
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+		
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
 		// Get iGroupID.
@@ -42,6 +44,8 @@ public class SlimceaRemoveFcInitiatorFromIgroupTask extends AbstractTask {
 		
 		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 
+		actionLogger.addInfo( "Retrieving initiator ID for alias ["+alias+"]." );
+		
 		String initiatorID = "";
 		
 		for( int i=0; i < iGroupObj.getData().size(); i++ ) {
@@ -68,9 +72,13 @@ public class SlimceaRemoveFcInitiatorFromIgroupTask extends AbstractTask {
 		}
 		
 		// Initiator ID found. Go ahead and delete it.
+		actionLogger.addInfo( "Removing initiator ["+alias+"]." );
+		
 		String deleteInitiatorResponse = new DeleteInitiator(ipAddress, token, initiatorID).execute();
 		
 		logger.info("deleteInitiatorResponse: " + deleteInitiatorResponse );
+		
+		actionLogger.addInfo( "Task completed successfully." );
 				
 	}
 

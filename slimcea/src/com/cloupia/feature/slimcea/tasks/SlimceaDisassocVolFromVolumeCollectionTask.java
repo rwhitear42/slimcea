@@ -33,9 +33,12 @@ public class SlimceaDisassocVolFromVolumeCollectionTask extends AbstractTask {
 		
 
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+		
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 
 		// Check that the volume exists and retrieve its id.
+		actionLogger.addInfo( "Checking for the existence of volume[" + volumeName + "]." );
 		
 		// Retrieve JSON response for detailed Volume information.
 		String volumesJsonData = new GetVolumes(ipAddress, token).getDetail();
@@ -61,12 +64,13 @@ public class SlimceaDisassocVolFromVolumeCollectionTask extends AbstractTask {
 					
 		}
 				
-		// Ensure that the volume collection id for volCollName has been found.
 		if( volID == "") {
 					
 			throw new VolumeIdException("Failed to find volume ["+volumeName+"].");
 		
 		}
+		
+		actionLogger.addInfo( "Removing volume collection association for volume [" + volumeName + "]." );
 		
 		// All prerequisites satisfied. Build the volume to volume collection association.
 		String removeVolFromVolCollResponse = new AddVolumeToVolCollection(ipAddress, token, volID, 

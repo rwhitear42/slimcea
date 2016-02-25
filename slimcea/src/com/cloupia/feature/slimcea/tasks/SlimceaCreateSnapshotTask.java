@@ -40,10 +40,14 @@ public class SlimceaCreateSnapshotTask extends AbstractTask {
 		
 		// Get token.
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+		
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 
 		
 		// Get volumeID for volumeName.
+		actionLogger.addInfo( "Retrieving volume ID for volume ["+ volumeName +"]." );
+		
 		String gvResponse = new GetVolumes(ipAddress, token).getDetail();
 		
 		logger.info("GetVolumes JSON: " + gvResponse );		
@@ -78,6 +82,8 @@ public class SlimceaCreateSnapshotTask extends AbstractTask {
 
 		// Check that the snapshot doesn't already exist.
 		// Now that we have the volumeID, we can go ahead and get the snapshot ID for snapShotName.
+		actionLogger.addInfo( "Checking that snapshot ["+snapShotName+"] doesn't already exist for volume ["+volumeName+"]." );
+		
 		String gsResponse = new GetSnapshots(ipAddress, token, volumeID).getDetail();
 
 		logger.info("GetSnapshots JSON: " +gsResponse );
@@ -93,6 +99,7 @@ public class SlimceaCreateSnapshotTask extends AbstractTask {
 		}
 
 		// Snapshot doesn't exist, go ahead and create it.
+		actionLogger.addInfo( "Creating snapshot." );
 		
 		CreateSnapshot cs = new CreateSnapshot(ipAddress, token, snapShotName, volumeID, description, online, writable);
 		
@@ -100,6 +107,7 @@ public class SlimceaCreateSnapshotTask extends AbstractTask {
 		
 		logger.info("Create Snapshot Response: " + csResponse );
 
+		actionLogger.addInfo( "Task completed successfully." );
 		
 			
 		//if user decides to rollback a workflow containing this task, then using the change tracker

@@ -37,9 +37,12 @@ public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
 		String volCollName = config.getVolumeCollectionName();
 
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 
 		// Check that the volume exists and retrieve its id.
+		actionLogger.addInfo( "Checking for the existence of volume[" + volumeName + "]." );
 		
 		// Retrieve JSON response for detailed Volume information.
 		String volumesJsonData = new GetVolumes(ipAddress, token).getDetail();
@@ -74,7 +77,8 @@ public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
 	
 		
 		// Check that the volume collection exists and get its id.
-		
+		actionLogger.addInfo( "Checking for the existence of volume collection[" + volCollName + "]." );
+
 		// Retrieve JSON response for detailed volume collections information.
 		String volCollectionJsonData = new GetVolumeCollections(ipAddress, token).getDetail();
 
@@ -107,11 +111,13 @@ public class SlimceaAssocVolToVolumeCollectionTask extends AbstractTask {
 		}
 		
 		// All prerequisites satisfied. Build the volume to volume collection association.
+		actionLogger.addInfo( "Adding volume ["+ volumeName +"] to volume collection[" + volCollName + "]." );
+		
 		String addVol2VolCollResponse = new AddVolumeToVolCollection(ipAddress, token, volID, volCollID).execute();
 		
 		logger.info("addVol2VolColl Response: " +addVol2VolCollResponse );
 
-		
+		actionLogger.addInfo( "Task completed successfully." );
 
 		//if user decides to rollback a workflow containing this task, then using the change tracker
 		//we can take care of rolling back this task (i.e, disabling snmp)

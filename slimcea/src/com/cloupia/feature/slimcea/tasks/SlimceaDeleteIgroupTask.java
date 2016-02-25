@@ -1,13 +1,20 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 
+import com.cloupia.feature.slimcea.lovs.registration.RegisterInitiatorGroupsLOVs;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionLogger;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionTriggerContext;
+import com.rwhitear.nimbleRest.arrays.GetArrays;
+import com.rwhitear.nimbleRest.arrays.ParseArraysDetailResponse;
+import com.rwhitear.nimbleRest.arrays.json.GetArraysDetailObject;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
+import com.rwhitear.nimbleRest.exceptions.ArraysException;
 import com.rwhitear.nimbleRest.exceptions.InitiatorGroupException;
 import com.rwhitear.nimbleRest.httpErrorHandling.json.ErrorResponseObject;
 import com.rwhitear.nimbleRest.initiatorGroups.DeleteInitiatorGroup;
@@ -32,12 +39,16 @@ public class SlimceaDeleteIgroupTask extends AbstractTask {
 		String initiatorGroupName = config.getInitiatorGroupName(); 
 
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+		
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
 		// Check that iGroup exists.
 		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
 		logger.info("Initiator Groups Response: " +iGroupsResponse );
+		
+		actionLogger.addInfo( "Checking that initiator group ["+ initiatorGroupName +"] currently exists." );
 		
 		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 
@@ -63,6 +74,8 @@ public class SlimceaDeleteIgroupTask extends AbstractTask {
 		}
 
 		// Initiator group exists, go ahead and delete it.
+		actionLogger.addInfo( "Deleting initiator group ["+ initiatorGroupName +"]." );
+		
 		DeleteInitiatorGroup dig = new DeleteInitiatorGroup(ipAddress, token, iGroupID);
 		
 		String deleteResponse = dig.execute();
@@ -84,7 +97,52 @@ public class SlimceaDeleteIgroupTask extends AbstractTask {
 			throw new InitiatorGroupException("Request failed.");
 			
 		}
+		
+		actionLogger.addInfo( "Task completed successfully." );
+		
+		
+		
+		// Update initiator groups LOVs.
+		
+		actionLogger.addInfo("Re-registering dynamic LOVs.");
+		
+		// Get array name for preamble to LOV name.
+		
+		String arrayName = "";
+		
+		String getArraysResponse = new GetArrays(ipAddress, token).getDetail();
+		
+		GetArraysDetailObject arraysObj = new ParseArraysDetailResponse(getArraysResponse).parse();
+		
+		logger.info("arrays size: " + arraysObj.getData().size() );
+		
+		if( arraysObj.getData().size() != 1 ) {
+			
+			throw new ArraysException("Failed to retrieve array name.");
+			
+		} else {
+			
+			arrayName = arraysObj.getData().get(0).getName();
+			
+		}
 
+		// Get Initiator Groups.
+		
+		iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
+		
+		logger.info("Initiator Groups Response: " +iGroupsResponse );
+		
+		iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
+
+		HashMap<String,String> iGroupsMap = new HashMap<>();
+		
+		for( int i = 0; i < iGroupObj.getData().size(); i++ ) {
+			
+			iGroupsMap.put( iGroupObj.getData().get(i).getName(), iGroupObj.getData().get(i).getName());
+			
+		}
+
+		new RegisterInitiatorGroupsLOVs( iGroupsMap, arrayName ).registerWFInputs();
 		
 	}
 

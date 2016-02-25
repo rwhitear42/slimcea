@@ -1,7 +1,10 @@
 package com.cloupia.feature.slimcea.tasks;
 
+import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 
+import com.cloupia.feature.slimcea.lovs.registration.RegisterVolumesLOVs;
 import com.cloupia.service.cIM.inframgr.AbstractTask;
 import com.cloupia.service.cIM.inframgr.TaskConfigIf;
 import com.cloupia.service.cIM.inframgr.TaskOutputDefinition;
@@ -12,7 +15,11 @@ import com.rwhitear.nimbleRest.accessControlRecords.DeleteAccessControlRecord;
 import com.rwhitear.nimbleRest.accessControlRecords.GetAccessControlRecords;
 import com.rwhitear.nimbleRest.accessControlRecords.json.ACRobject;
 import com.rwhitear.nimbleRest.accessControlRecords.json.GetACRdetailResponse;
+import com.rwhitear.nimbleRest.arrays.GetArrays;
+import com.rwhitear.nimbleRest.arrays.ParseArraysDetailResponse;
+import com.rwhitear.nimbleRest.arrays.json.GetArraysDetailObject;
 import com.rwhitear.nimbleRest.authenticate.GetSessionToken;
+import com.rwhitear.nimbleRest.exceptions.ArraysException;
 import com.rwhitear.nimbleRest.exceptions.InitiatorGroupException;
 import com.rwhitear.nimbleRest.initiatorGroups.GetInitiatorGroups;
 import com.rwhitear.nimbleRest.initiatorGroups.ParseInitiatorGroupsDetailResponse;
@@ -22,6 +29,8 @@ import com.rwhitear.nimbleRest.snapshots.json.GetSnapshotDetailResponse;
 import com.rwhitear.nimbleRest.volumes.GetVolumes;
 import com.rwhitear.nimbleRest.volumes.VolumeClone;
 import com.rwhitear.nimbleRest.volumes.json.GetVolumesSummaryResponse;
+import com.rwhitear.nimbleRest.volumes.json.ParseVolumeDetailResponse;
+import com.rwhitear.nimbleRest.volumes.json.VolumesDetailJsonObject;
 
 
 public class SlimceaCloneVolumeTask extends AbstractTask {
@@ -46,6 +55,8 @@ public class SlimceaCloneVolumeTask extends AbstractTask {
 		
 		
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+		
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
 		
@@ -91,7 +102,7 @@ public class SlimceaCloneVolumeTask extends AbstractTask {
 				
 				iGroupID = iGroupObj.getData().get(i).getId();
 				
-				logger.info("iGroup ID ["+iGroupID+"] found for iGroup name [" +iGroupObj.getData().get(i).getName()+ "]." );
+				actionLogger.addInfo("iGroup ID ["+iGroupID+"] found for iGroup name [" +iGroupObj.getData().get(i).getName()+ "]." );
 				
 				break;
 				
@@ -134,6 +145,51 @@ public class SlimceaCloneVolumeTask extends AbstractTask {
 			logger.info("Create ACR JSON Response:\n"  + new CreateAccessControlRecord(ipAddress, token, cloneVolID, iGroupID).create());
 		}
 			
+		actionLogger.addInfo( "Task completed successfully." );
+		
+		
+		// Update Volumes LOVs.
+		
+		actionLogger.addInfo("Re-registering dynamic LOVs.");
+		
+		// Get array name for preamble to LOV name.
+		
+		String arrayName = "";
+		
+		String getArraysResponse = new GetArrays(ipAddress, token).getDetail();
+		
+		GetArraysDetailObject arraysObj = new ParseArraysDetailResponse(getArraysResponse).parse();
+		
+		logger.info("arrays size: " + arraysObj.getData().size() );
+		
+		if( arraysObj.getData().size() != 1 ) {
+			
+			throw new ArraysException("Failed to retrieve array name.");
+			
+		} else {
+			
+			arrayName = arraysObj.getData().get(0).getName();
+			
+		}
+
+		// Retrieve JSON response for detailed Volume information.
+		volumeJsonData = new GetVolumes(ipAddress, token).getDetail();
+						
+		VolumesDetailJsonObject volDetail = new ParseVolumeDetailResponse(volumeJsonData).parse();
+				
+		HashMap<String,String> volMap = new HashMap<>();
+		
+		for( int i = 0; i < volDetail.getData().size(); i++ ) {
+			
+			volMap.put( volDetail.getData().get(i).getName(), volDetail.getData().get(i).getName() );
+			
+		}
+
+		new RegisterVolumesLOVs( volMap, arrayName ).registerWFInputs();			
+
+		
+		
+		
 		
 		
 		//if user decides to rollback a workflow containing this task, then using the change tracker

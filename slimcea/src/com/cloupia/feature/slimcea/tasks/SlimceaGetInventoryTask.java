@@ -133,7 +133,6 @@ public class SlimceaGetInventoryTask extends AbstractTask {
 		
 		// Get Initiator Groups.
 		
-		// Check that iGroup exists.
 		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
 		logger.info("Initiator Groups Response: " +iGroupsResponse );

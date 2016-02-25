@@ -33,12 +33,16 @@ public class SlimceaRemoveIscsiInitiatorFromIgroupTask extends AbstractTask {
 
 		
 		// Retrieve Nimble array auth token.
+		actionLogger.addInfo( "Retrieving authentication token." );
+		
 		String token = new GetSessionToken(ipAddress, username, password).getNewToken();
 		
 		// Get iGroupID.
 		String iGroupsResponse = new GetInitiatorGroups(ipAddress, token).getDetail();
 		
 		logger.info("Initiator Groups Response: " +iGroupsResponse );
+		
+		actionLogger.addInfo( "Retrieving initiator ID for initiator ["+initiatorLabel+"]." );
 		
 		GetInitiatorGroupsDetailObject iGroupObj = new ParseInitiatorGroupsDetailResponse(iGroupsResponse).parse();
 
@@ -68,9 +72,13 @@ public class SlimceaRemoveIscsiInitiatorFromIgroupTask extends AbstractTask {
 		}
 		
 		// Initiator ID found. Go ahead and delete it.
+		actionLogger.addInfo( "Removing initiator ["+initiatorLabel+"]." );
+		
 		String deleteInitiatorResponse = new DeleteInitiator(ipAddress, token, initiatorID).execute();
 		
 		logger.info("deleteInitiatorResponse: " + deleteInitiatorResponse );
+		
+		actionLogger.addInfo( "Task completed successfully." );
 				
 	}
 
