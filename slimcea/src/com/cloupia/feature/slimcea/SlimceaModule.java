@@ -190,7 +190,9 @@ public class SlimceaModule extends AbstractCloupiaModule {
 	 * Creating New Account Type
 	 */
 	private void createAccountType(){
+		
 		AccountTypeEntry entry=new AccountTypeEntry();
+		
 		// This is mandatory, hold the information for device credential details
 		entry.setCredentialClass(SlimceaAccount.class);
 		
@@ -211,19 +213,22 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		// This is mandatory, on which accounts either physical or virtual
 		// account , new account //type belong to.
 		entry.setAccountClass(AccountTypeEntry.PHYSICAL_ACCOUNT);
+		
 		// Optional , prefix of the task
 		entry.setInventoryTaskPrefix("Slimcea Inventory Task");
 		
 		//Optional. Group inventory system tasks under this folder. 
 		//By default it is grouped under General Tasks
 		entry.setWorkflowTaskCategory("Slimcea Tasks");
+		
 		// Optional , collect the inventory frequency, whenever required you can
 		// change the
 		// inventory collection frequency, in mins.
 		entry.setInventoryFrequencyInMins(15);
+		
 		// This is mandatory,under which pod type , the new account type is
 		// applicable.
-		entry.setPodTypes(new String[] { "SmartStack" } );
+		entry.setPodTypes(new String[] { "SlimceaStack" } );
 		
 		
 		// This is optional, dependents on the need of session for collecting

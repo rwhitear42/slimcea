@@ -1,5 +1,7 @@
 package com.cloupia.feature.foo.inventory;
 
+// Piece of shite.
+
 import com.cloupia.feature.foo.constants.FooConstants;
 import com.cloupia.model.cIM.InfraAccountTypes;
 import com.cloupia.service.cIM.inframgr.reports.contextresolve.AbstractConvergedStackComponentBuilder;

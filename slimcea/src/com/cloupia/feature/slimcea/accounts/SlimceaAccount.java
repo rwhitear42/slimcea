@@ -36,14 +36,17 @@ public class SlimceaAccount extends AbstractInfraAccount implements
 			"http", "https" })
 	@HideFieldOnCondition(field = "isCredentialPolicy", op = FieldValidation.OP_EQUALS, value = "false")
 	private String protocol="http";
+	
 	@FormField(label = "Port", help = "Port Number", type = FormFieldDefinition.FIELD_TYPE_TEXT)
 	@Persistent
 	@HideFieldOnCondition(field = "isCredentialPolicy", op = FieldValidation.OP_EQUALS, value = "false")
 	private String port = "8080";
+	
 	@Persistent
 	@FormField(label = "Login", help = "Login")
 	@HideFieldOnCondition(field = "isCredentialPolicy", op = FieldValidation.OP_EQUALS, value = "false")
 	private String login;
+	
 	@Persistent
 	@FormField(label = "Password", help = "Password", type = FormFieldDefinition.FIELD_TYPE_PASSWORD)
 	@HideFieldOnCondition(field = "isCredentialPolicy", op = FieldValidation.OP_EQUALS, value = "false")
