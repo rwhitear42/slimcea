@@ -40,6 +40,9 @@
         <copy todir="${basedir}/build/${moduleID}/lib">
 	        <fileset dir="${basedir}/lib">
                 <include name="jsch/**"/>
+	        	<include name="apache-commons-httpclient/**"/>
+	        	<include name="ucsd-httprequest/**"/>
+	        	<include name="nimblerest-rwhitear/**"/>
 	        </fileset>
         </copy>
 		<zip destfile="${basedir}/feature-${moduleID}.zip" basedir="${basedir}/build">

@@ -16,7 +16,9 @@ public class SlimceaConstants {
 
 	public static final String SLIMCEA_HELLO_WORLD_NAME = "slimcea_name_from_other_tasks";
 	
-	public static final String SLIMCEA_MULTI_SELECT_TABULARVALUE_NAME = "SampleTabulerMultiInput";
+	public static final String SLIMCEA_MULTI_SELECT_TABULARVALUE_NAME = "SlimceaSampleTabulerMultiInput";
+	
+	public static final String SLIMCEA_NIMBLE_SAN_PROTOCOL_LOV_NAME = "slimcea_NimbleSanProtocolLovName";
 	
 	//this is the unique integer i'm giving for my dummy collector, it's a good idea
 	//to use some large number past 1000 so you avoid any potential collisions
@@ -36,10 +38,21 @@ public class SlimceaConstants {
 	public static final String DUMMY_CONTEXT_ONE = "slimcea.dummy.context.one";
 	public static final String DUMMY_CONTEXT_ONE_LABEL = "Dummy Context One";
 	
-	public static final String INFRA_ACCOUNT_LABEL = "slimcea Account";
-	public static final String INFRA_ACCOUNT_TYPE = "slimcea Account";
+	public static final String INFRA_ACCOUNT_LABEL = "Slimcea Account";
+	public static final String INFRA_ACCOUNT_TYPE = "Slimcea Account";
 	
 	public static final String SLIMCEA_ACCOUNT_DRILLDOWN_NAME = "slimcea.account.sample.child.drilldown.report";
-	public static final String SLIMCEA_ACCOUNT_DRILLDOWN_LABEL = "slimcea Account Drilldown Sample";
+	public static final String SLIMCEA_ACCOUNT_DRILLDOWN_LABEL = "Slimcea Account Drilldown Sample";
 
+	// Workflow task constants.
+	public static final String GENERIC_TEXT_INPUT = "gen_text_input";
+	public static final String PASSWORD = "password";
+	public static final String BOOLEAN = "Boolean";
+	
+	// Workflow output values.
+	public static final String NIMBLE_VOLUME_NAME = "NIMBLE_VOLUME_NAME";
+	public static final String NIMBLE_VOLUME_COLLECTION_NAME = "NIMBLE_VOLUME_COLLECTION_NAME";
+	public static final String NIMBLE_INITIATOR_GROUP_NAME = "NIMBLE_INITIATOR_GROUP_NAME";
+	public static final String NIMBLE_INITIATOR_NAME = "NIMBLE_INITIATOR_NAME";
+	
 }

@@ -13,19 +13,29 @@ import com.cloupia.feature.slimcea.accounts.inventory.SlimceaInventoryListener;
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.feature.slimcea.drilldownreports.SlimceaAccountSampleDrillDownReport;
 import com.cloupia.feature.slimcea.dummyOne.reports.DummyOneSampleReport;
+import com.cloupia.feature.slimcea.lovs.NimbleSanProtocolLovProvider;
 import com.cloupia.feature.slimcea.lovs.SimpleLovProvider;
 import com.cloupia.feature.slimcea.lovs.SimpleTabularProvider;
 import com.cloupia.feature.slimcea.menuProvider.DummyMenuProvider;
 import com.cloupia.feature.slimcea.resourceComputer.DummyVLANResourceComputer;
 import com.cloupia.feature.slimcea.scheduledTasks.DummyScheduleTask;
-import com.cloupia.feature.slimcea.tasks.CreateGroupTask;
-import com.cloupia.feature.slimcea.tasks.DisableSNMPNexusTask;
-import com.cloupia.feature.slimcea.tasks.EmailDatacentersTask;
-import com.cloupia.feature.slimcea.tasks.EnableSNMPNexusTask;
-import com.cloupia.feature.slimcea.tasks.HelloWorldTask;
-import com.cloupia.feature.slimcea.tasks.MultiSelectTabularTask;
-import com.cloupia.feature.slimcea.tasks.RollbackHelloWorldTask;
-import com.cloupia.feature.slimcea.tasks.SlimceaTaskContextTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaAddFcInitiatorToIgroupTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaAddIscsiInitiatorToIgroupTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaAssocVolToVolumeCollectionTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaCloneVolumeTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaCreateIgroupTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaCreateSnapshotTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaCreateVolumeTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaDeleteIgroupTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaDeleteSnapshotTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaDeleteVolumeTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaDisassocVolFromVolumeCollectionTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaGetInventoryTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaMapVolumeToIgroupTask;
+//import com.cloupia.feature.slimcea.tasks.SlimceaMultiSelectTabularTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaRemoveFcInitiatorFromIgroupTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaRemoveIscsiInitiatorFromIgroupTask;
+import com.cloupia.feature.slimcea.tasks.SlimceaUnMapVolFromIgroupTask;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceStatusParam;
 import com.cloupia.feature.slimcea.triggers.MonitorDummyDeviceType;
 import com.cloupia.lib.connector.ConfigItemDef;
@@ -50,23 +60,40 @@ public class SlimceaModule extends AbstractCloupiaModule {
 
 	@Override
 	public AbstractTask[] getTasks() {
-		AbstractTask task1 = new CreateGroupTask();
-		AbstractTask task2 = new EmailDatacentersTask();
-		AbstractTask task3 = new HelloWorldTask();
-		AbstractTask task4 = new EnableSNMPNexusTask();
-		AbstractTask task5 = new DisableSNMPNexusTask();
-		AbstractTask task6 = new RollbackHelloWorldTask();
-		AbstractTask task7 = new SlimceaTaskContextTask();
-		AbstractTask task8 = new MultiSelectTabularTask();
-		AbstractTask[] tasks = new AbstractTask[8];
-		tasks[0] = task1;
-		tasks[1] = task2;
-		tasks[2] = task3;
-		tasks[3] = task4;
-		tasks[4] = task5;
-		tasks[5] = task6;
-		tasks[6] = task7;
-		tasks[7] = task8;
+		AbstractTask task1   = new SlimceaCreateVolumeTask();
+		AbstractTask task2   = new SlimceaDeleteVolumeTask();
+		AbstractTask task3   = new SlimceaCreateSnapshotTask();
+		AbstractTask task4   = new SlimceaDeleteSnapshotTask();
+		AbstractTask task5   = new SlimceaCreateIgroupTask();
+		AbstractTask task6   = new SlimceaDeleteIgroupTask();
+		AbstractTask task7  = new SlimceaAssocVolToVolumeCollectionTask();
+		AbstractTask task8  = new SlimceaDisassocVolFromVolumeCollectionTask();
+		AbstractTask task9  = new SlimceaMapVolumeToIgroupTask();
+		AbstractTask task10  = new SlimceaUnMapVolFromIgroupTask();
+		AbstractTask task11  = new SlimceaCloneVolumeTask();
+		AbstractTask task12  = new SlimceaAddIscsiInitiatorToIgroupTask();
+		AbstractTask task13  = new SlimceaRemoveIscsiInitiatorFromIgroupTask();
+		AbstractTask task14  = new SlimceaAddFcInitiatorToIgroupTask();
+		AbstractTask task15  = new SlimceaRemoveFcInitiatorFromIgroupTask();
+		AbstractTask task16  = new SlimceaGetInventoryTask();
+		
+		AbstractTask[] tasks = new AbstractTask[16];
+		tasks[0]  = task1;
+		tasks[1]  = task2;
+		tasks[2]  = task3;
+		tasks[3]  = task4;
+		tasks[4]  = task5;
+		tasks[5]  = task6;
+		tasks[6]  = task7;
+		tasks[7]  = task8;
+		tasks[8]  = task9;
+		tasks[9]  = task10;		
+		tasks[10] = task11;
+		tasks[11] = task12;
+		tasks[12] = task13;
+		tasks[13] = task14;
+		tasks[14] = task15;
+		tasks[15] = task16;
 		return tasks;
 	}
 
@@ -109,9 +136,13 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		try {
 			//this is where you should register LOV providers for use in SimpleDummyAction
 			cfr.registerLovProviders(SimpleLovProvider.SIMPLE_LOV_PROVIDER, new SimpleLovProvider());
+			// Slimcea SAN protocol type LOV provider.
+			cfr.registerLovProviders(NimbleSanProtocolLovProvider.NIMBLE_SAN_PROTOCOL_LOV_PROVIDER, new NimbleSanProtocolLovProvider());	
+						
 			//you need to provide a unique id for this tabular provider, along with the implementation class, and the
 			//index of the selection and display columns, for most cases, you can blindly enter 0
 			cfr.registerTabularField(SimpleTabularProvider.SIMPLE_TABULAR_PROVIDER, SimpleTabularProvider.class, "0", "0");
+			
 			//this is where you should add your schedule tasks
 			addScheduleTask(new DummyScheduleTask());
 			
@@ -120,10 +151,10 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			//an issue elsewhere in the code!
 			ReportContextRegistry.getInstance().register(SlimceaConstants.DUMMY_CONTEXT_ONE, SlimceaConstants.DUMMY_CONTEXT_ONE_LABEL);
 
-			//FooAccount 
+			//SlimceaAccount 
 			ReportContextRegistry.getInstance().register(SlimceaConstants.INFRA_ACCOUNT_TYPE, SlimceaConstants.INFRA_ACCOUNT_LABEL);
 			
-			//Foo Drill down REport 
+			//Slimcea Drill down REport 
 			ReportContextRegistry.getInstance().register(SlimceaConstants.SLIMCEA_ACCOUNT_DRILLDOWN_NAME, SlimceaConstants.SLIMCEA_ACCOUNT_DRILLDOWN_LABEL);
 			
 			//register the left hand menu provider for the menu item i'm introducing
@@ -131,6 +162,13 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			
 			//Workflow input Types
 			WorkflowInputTypeDeclaration.registerWFInputs();
+			
+			// Nimble test for perf policies LOV provider.
+			//PerformancePoliciesLOVWorkflowInputType.registerWFInputs();
+			
+			
+			
+			
 			//Workflow input Types for multi select
 			InputTypeDeclaration.registerWFInputs();
 			
@@ -142,7 +180,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			//support for new Account Type
 			createAccountType();
 		} catch (Exception e) {
-			logger.error("Foo Module error registering components.", e);
+			logger.error("Slimcea Module error registering components.", e);
 		}
 		
 	}
@@ -174,18 +212,18 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		// account , new account //type belong to.
 		entry.setAccountClass(AccountTypeEntry.PHYSICAL_ACCOUNT);
 		// Optional , prefix of the task
-		entry.setInventoryTaskPrefix("Open Automation Inventory Task");
+		entry.setInventoryTaskPrefix("Slimcea Inventory Task");
 		
 		//Optional. Group inventory system tasks under this folder. 
 		//By default it is grouped under General Tasks
-		entry.setWorkflowTaskCategory("Foo Tasks");
+		entry.setWorkflowTaskCategory("Slimcea Tasks");
 		// Optional , collect the inventory frequency, whenever required you can
 		// change the
 		// inventory collection frequency, in mins.
 		entry.setInventoryFrequencyInMins(15);
 		// This is mandatory,under which pod type , the new account type is
 		// applicable.
-		entry.setPodTypes(new String[] { "FlexPod" });
+		entry.setPodTypes(new String[] { "SmartStack" } );
 		
 		
 		// This is optional, dependents on the need of session for collecting
@@ -195,6 +233,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		// This is mandatory, to test the connectivity of the new account. The
 		// Handler should be of type PhysicalConnectivityTestHandler.
 		entry.setTestConnectionHandler(new SlimceaTestConnectionHandler());
+		
 		// This is mandatory, we can implement inventory listener according to
 		// the account Type , collect the inventory details.
 		entry.setInventoryListener(new SlimceaInventoryListener());
@@ -221,9 +260,9 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			}
 
 			private void registerInventoryObjects(
-					AccountTypeEntry fooRecoverPointAccountEntry) {
-				ConfigItemDef fooRecoverPointStateInfo = fooRecoverPointAccountEntry
-						.createInventoryRoot("foo.inventory.root",
+					AccountTypeEntry SlimceaRecoverPointAccountEntry) {
+				ConfigItemDef SlimceaRecoverPointStateInfo = SlimceaRecoverPointAccountEntry
+						.createInventoryRoot("slimcea.inventory.root",
 								SlimceaInventoryItemHandler.class);
 			}
 

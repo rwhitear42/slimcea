@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 
 import com.cloupia.feature.slimcea.accounts.SlimceaAccountSampleReportImpl;
+import com.cloupia.feature.slimcea.lovs.NimbleVolumesLOVProviderOLD;
 import com.cloupia.model.cIM.FormFieldDefinition;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionHandlerIf;
 import com.cloupia.service.cIM.inframgr.customactions.CustomActionRegistry;
@@ -34,8 +35,8 @@ public class WorkflowInputTypeDeclaration {
 		
 		registerSampleLOVWorkflowInputType();
 		registerSampleTabularWorkflowInputType();
-		
-		
+		registerNimbleVolumesLOVWorkflowInputType();
+			
 	}
 	
   /**
@@ -48,15 +49,28 @@ public class WorkflowInputTypeDeclaration {
 		sampleInputType.addDeclaration(new WorkflowInputFieldTypeDeclaration(
 				"SampleLOVInput", "Sample LOV Input",
 				FormFieldDefinition.FIELD_TYPE_EMBEDDED_LOV, "sampleInputTypeLOV"));
-		
-		
+				
 		 LOVProviderRegistry.getInstance()
          .registerProvider(SampleLOVProvider.NAME,
-         new SampleLOVProvider());
-		 
-		
-		
+         new SampleLOVProvider());	
 	}
+	
+	// Register Nimble volumes LOV as a test. If this works, then it will
+	// need to be modified to prepend the LOV with the array name for 
+	// uniqueness.
+	private static void registerNimbleVolumesLOVWorkflowInputType(){
+		
+		WorkflowInputTypeRegistry sampleInputType = WorkflowInputTypeRegistry.getInstance();
+		sampleInputType.addDeclaration(new WorkflowInputFieldTypeDeclaration(
+				"NimbleVolumesLOV", "Nimble Volumes LOV",
+				FormFieldDefinition.FIELD_TYPE_EMBEDDED_LOV, "nimbleVolumesLOV"));
+				
+		 LOVProviderRegistry.getInstance()
+         .registerProvider(NimbleVolumesLOVProviderOLD.NAME,
+         new NimbleVolumesLOVProviderOLD());	
+	}
+	
+	
 	/**
 	* This method is used to register Workflow input of type tabular. 
 	* @return void
