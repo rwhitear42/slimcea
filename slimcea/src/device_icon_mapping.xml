@@ -20,7 +20,7 @@
 		this isn't that important, if you implemented it properly, you should never need to use this
 	 -->	
 	<VendorDefault>
-		<Vendor>slimcea</Vendor>
+		<Vendor>Nimble</Vendor>
 		<IconURL>/app/uploads/openauto/NimbleArray01_100x100.png</IconURL>
 	</VendorDefault>
 
@@ -31,8 +31,8 @@
 		Refer to DummyConvergedStackBuilder.java for details.
 	-->
 	<Device>
-		<DeviceType>Slimcea 101</DeviceType>
-		<Vendor>slimcea</Vendor>
+		<DeviceType>dummyModel</DeviceType>
+		<Vendor>Nimble</Vendor>
 		<IconURL>/app/uploads/openauto/NimbleArray01_100x100.png</IconURL>
 		<Description>blah blah blah</Description>
 		<IsSupported>true</IsSupported>

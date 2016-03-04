@@ -20,15 +20,15 @@ import com.cloupia.service.cIM.inframgr.reports.simplified.ReportableIf;
 @PersistenceCapable(detachable = "true")
 public class DummyAccount {
 	
-	@ReportField(label="Account Name")
+	@ReportField(label="Sniffles")
 	@Persistent
 	private String accountName;
 	
-	@ReportField(label="Status")
+	@ReportField(label="Bingle")
 	@Persistent
  	private String status;
 	
-	@ReportField(label="IP Address")
+	@ReportField(label="Poop")
 	@Persistent
  	private String ip;
 

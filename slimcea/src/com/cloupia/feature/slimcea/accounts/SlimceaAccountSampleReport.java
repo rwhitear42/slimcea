@@ -19,10 +19,10 @@ import com.cloupia.service.cIM.inframgr.reports.simplified.CloupiaReportWithActi
 public class SlimceaAccountSampleReport extends CloupiaReportWithActions {
 	
 	private static final String NAME = "slimcea.account.sample.report";
-	private static final String LABEL = "Slimcea Account Sample";
+	private static final String LABEL = "Please Just Fucking Work";
 	
-	public SlimceaAccountSampleReport() {
-		super();
+	public SlimceaAccountSampleReport() {	
+		super();		
 		//IMPORTANT: this tells the framework which column of this report you want to pass as the report context id
 		//when there is a UI action being launched in this report
 		this.setMgmtColumnIndex(0);

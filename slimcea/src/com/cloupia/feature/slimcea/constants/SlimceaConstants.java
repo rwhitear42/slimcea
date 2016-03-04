@@ -43,6 +43,10 @@ public class SlimceaConstants {
 	
 	public static final String SLIMCEA_ACCOUNT_DRILLDOWN_NAME = "slimcea.account.sample.child.drilldown.report";
 	public static final String SLIMCEA_ACCOUNT_DRILLDOWN_LABEL = "Slimcea Account Drilldown Sample";
+	
+	public static final String SLIMCEA_MY_FIRST_DROPDOWN = "slimcea.my.first.dropdown";
+	public static final String SLIMCEA_MY_FIRST_DROPDOWN_LABEL = "Slimcea My First Dropdown Label";
+	
 
 	// Workflow task constants.
 	public static final String GENERIC_TEXT_INPUT = "gen_text_input";

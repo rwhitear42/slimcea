@@ -6,6 +6,11 @@ import com.cloupia.feature.slimcea.accounts.AccountSystemTaskReport;
 import com.cloupia.feature.slimcea.accounts.DummyAccount;
 import com.cloupia.feature.slimcea.accounts.SlimceaAccount;
 import com.cloupia.feature.slimcea.accounts.SlimceaAccountSampleReport;
+import com.cloupia.feature.slimcea.accounts.SlimceaControllerMembersReport;
+import com.cloupia.feature.slimcea.accounts.SlimceaInitiatorGroupsReport;
+import com.cloupia.feature.slimcea.accounts.SlimceaPerformancePoliciesReport;
+import com.cloupia.feature.slimcea.accounts.SlimceaVolumeCollectionsReport;
+import com.cloupia.feature.slimcea.accounts.SlimceaVolumesReport;
 import com.cloupia.feature.slimcea.accounts.handler.SlimceaTestConnectionHandler;
 import com.cloupia.feature.slimcea.accounts.inventory.SlimceaConvergedStackBuilder;
 import com.cloupia.feature.slimcea.accounts.inventory.SlimceaInventoryItemHandler;
@@ -52,6 +57,10 @@ import com.cloupia.service.cIM.inframgr.thresholdmonitor.MonitoringTrigger;
 import com.cloupia.service.cIM.inframgr.thresholdmonitor.MonitoringTriggerUtil;
 import com.cloupia.feature.slimcea.workflow.WorkflowInputTypeDeclaration;
 import com.cloupia.feature.slimcea.multiselecttabularreports.MultiSelectTabularReport;
+import com.cloupia.feature.slimcea.reports.MyFirstReport;
+import com.cloupia.feature.slimcea.reports.SampleBarChartReport;
+import com.cloupia.feature.slimcea.reports.SamplePieChartReport;
+import com.cloupia.feature.slimcea.reports.SamplePieChartReport2;
 import com.cloupia.feature.slimcea.workflow.InputTypeDeclaration;
 
 public class SlimceaModule extends AbstractCloupiaModule {
@@ -112,16 +121,30 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		//this is where you register all your top level reports, i'm only registering the report
 		//extending genericinfraaccountreport because all my other reports are actually drilldown
 		//reports of that report
-		SlimceaAccountSampleDrillDownReport drilReport = new SlimceaAccountSampleDrillDownReport("slimcea.drilldown.report", "Drill Down", DummyAccount.class);
 		
-		CloupiaReport[] reports = new CloupiaReport[5];		
-		reports[0] = new DummyOneSampleReport();
-		reports[1] = new SlimceaAccountSampleReport();
+		//SlimceaAccountSampleDrillDownReport drilReport = new SlimceaAccountSampleDrillDownReport("slimcea.drilldowntest.report", "Drill Down Test", SlimceaAccount.class);
 		
-		reports[2] = drilReport;
-		reports[3] = new AccountSystemTaskReport();
-		reports[4] = new MultiSelectTabularReport();
+		CloupiaReport[] reports = new CloupiaReport[8];		
+		//reports[0] = new DummyOneSampleReport();
+		//reports[1] = new SlimceaAccountSampleReport();		
+		//reports[2] = drilReport;
+		//reports[3] = new AccountSystemTaskReport();
+		//reports[4] = new MultiSelectTabularReport();
+		//reports[5] = new DummyOneSampleReport();
+		//reports[6] = drilReport;
+		//reports[7] = new MyFirstReport();
+		
+		reports[0] = new SlimceaControllerMembersReport();
+		reports[1] = new SlimceaVolumesReport();
+		reports[2] = new SlimceaPerformancePoliciesReport();
+		reports[3] = new SlimceaInitiatorGroupsReport();
+		reports[4] = new SlimceaVolumeCollectionsReport();
+		reports[5] = new SamplePieChartReport();
+		reports[6] = new SamplePieChartReport2();
+		reports[7] = new SampleBarChartReport();
+		
 		return reports;
+		
 	}
 
 	@Override
@@ -156,6 +179,11 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			
 			//Slimcea Drill down REport 
 			ReportContextRegistry.getInstance().register(SlimceaConstants.SLIMCEA_ACCOUNT_DRILLDOWN_NAME, SlimceaConstants.SLIMCEA_ACCOUNT_DRILLDOWN_LABEL);
+			
+			//
+			// First test at registering a new drillable report.
+			//
+			ReportContextRegistry.getInstance().register(SlimceaConstants.SLIMCEA_MY_FIRST_DROPDOWN, SlimceaConstants.SLIMCEA_MY_FIRST_DROPDOWN_LABEL);			
 			
 			//register the left hand menu provider for the menu item i'm introducing
 			DummyMenuProvider menuProvider = new DummyMenuProvider();

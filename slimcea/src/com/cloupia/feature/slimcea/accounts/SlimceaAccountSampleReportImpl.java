@@ -1,9 +1,7 @@
 package com.cloupia.feature.slimcea.accounts;
 
-import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.log4j.Logger;
 
 import com.cloupia.fw.objstore.ObjStore;
@@ -19,7 +17,7 @@ import com.cloupia.service.cIM.inframgr.reports.TabularReportInternalModel;
  * you would rather generate your report from scratch, this is how you would go
  * about it. This class is called when a request to render the report is made,
  * you need to compile all the data into a TabularReport which will be returned
- * to the UI for rednering.
+ * to the UI for rendering.
  * 
  */
 public class SlimceaAccountSampleReportImpl implements TabularReportGeneratorIf {
@@ -43,20 +41,31 @@ public class SlimceaAccountSampleReportImpl implements TabularReportGeneratorIf 
 		 */
 		ObjStore<DummyAccount> dummyAssignStore = ObjStoreHelper
 				.getStore(DummyAccount.class);
+		
 		List<DummyAccount> objs = dummyAssignStore.queryAll();
 
 		TabularReportInternalModel model = new TabularReportInternalModel();
 
-		model.addTextColumn("Account Name", "Account Name");
-		model.addTextColumn("IP Address", "IP Address");
-		model.addTextColumn("Status", "Status");
+		model.addTextColumn("Device IP", "Device IP");
+		model.addTextColumn("Protocol", "Protocol");
+		model.addTextColumn("Port", "Port");
 		model.completedHeader();
 
 		for (int i = 0; i < objs.size(); i++) {
 			DummyAccount pojo = objs.get(i);
-			model.addTextValue(pojo.getAccountName());
+
+			logger.info("[RUSS] model.addTextValue(pojo.getDeviceIp())" + pojo.getIp());
+			
 			model.addTextValue(pojo.getIp());
+			
+			logger.info("[RUSS] model.addTextValue(pojo.getProtocol())" + pojo.getAccountName());
+
+			model.addTextValue(pojo.getAccountName());
+			
+			logger.info("[RUSS] model.addTextValue(pojo.getPort())" + pojo.getStatus());
+
 			model.addTextValue(pojo.getStatus());
+			
 			model.completedRow();
 		}
 

@@ -22,8 +22,11 @@ import com.cloupia.service.cIM.inframgr.reports.simplified.CloupiaReportAction;
 import com.cloupia.service.cIM.inframgr.reports.simplified.actions.DrillDownAction;
 
 public class SlimceaAccountSampleDrillDownReport extends CloupiaEasyDrillableReport {
+	
 	static Logger logger = Logger.getLogger(SlimceaAccountSampleDrillDownReport.class);
+	
 	private List<CloupiaReport> drillableReports = new ArrayList<CloupiaReport>();
+	
 	private List<CloupiaReportAction> apicActions = new ArrayList<CloupiaReportAction>();
 
 	private static String report_Name;
@@ -52,9 +55,9 @@ public class SlimceaAccountSampleDrillDownReport extends CloupiaEasyDrillableRep
 		super.setOperationLevel(OperationConstants.READ_STORAGE_INFRA);
 		this.setMgmtDisplayColumnIndex(0);
 		SlimceaAccountSampleDrillDownChildReport drilChildReport = new SlimceaAccountSampleDrillDownChildReport(
-				"Slimcea.drilldown.child.report", "Drill Down Child", DummyVLAN.class);
+				"slimcea.drilldown.child.report", "Drill Down Child", DummyVLAN.class);
 
-		// drilChildReport.setMgmtDisplayColumnIndex(0);
+		drilChildReport.setMgmtDisplayColumnIndex(0);
 		this.getDrillableReports().add(drilChildReport);
 		this.report_Name = name;
 		this.report_Label = label;
