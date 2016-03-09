@@ -1,7 +1,10 @@
 package com.cloupia.feature.slimcea.accounts;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
+import com.cisco.cuic.api.client.JSON;
 import com.cloupia.lib.connector.account.AccountUtil;
 import com.cloupia.lib.connector.account.PhysicalInfraAccount;
 import com.cloupia.model.cIM.ReportContext;
@@ -9,6 +12,8 @@ import com.cloupia.model.cIM.TabularReport;
 import com.cloupia.service.cIM.inframgr.TabularReportGeneratorIf;
 import com.cloupia.service.cIM.inframgr.reportengine.ReportRegistryEntry;
 import com.cloupia.service.cIM.inframgr.reports.TabularReportInternalModel;
+import com.rwhitear.nimbleRest.inventory.GetVolumesInventory;
+import com.rwhitear.nimbleRest.inventory.data.VolumeDataObject;
 
 
 /**
@@ -44,34 +49,54 @@ public class SlimceaVolumesReportImpl implements TabularReportGeneratorIf {
             throw new Exception("Unable to find the account:" + accountName);
         }
 		
+        String json = acc.getCredential();
+        
+        SlimceaAccountJsonObject specificAcc = (SlimceaAccountJsonObject) JSON.jsonToJavaObject(json, SlimceaAccountJsonObject.class);
+        
+        String username = specificAcc.getLogin();
+        String password = specificAcc.getPassword();
+        String deviceIp = specificAcc.getDeviceIp();
+        
+        GetVolumesInventory gvi = new GetVolumesInventory(username, password, deviceIp);
+        
+		VolumeDataObject vdo = gvi.getInventory();
 		
+		List<String> volNames = vdo.getVolNames();
+		List<Long> volSizes = vdo.getVolSizes();
+		List<Long> volUsageCompressedBytes = vdo.getVolUsageCompressedBytes();
+		List<Long> snapUsageCompressedBytes = vdo.getSnapUsageCompressedBytes();
+		List<Long> totalUsageBytes = vdo.getTotalUsageBytes();
+
+        
 		TabularReportInternalModel model = new TabularReportInternalModel();
 
-		model.addTextColumn("Account Name", "Account Name");
-		model.addTextColumn("Username", "Username");
-		model.addTextColumn("Password", "Password");
-		model.addTextColumn("IP", "IP");
 		model.addTextColumn("Name", "Name");
-		model.addTextColumn("Size", "Size");
-		model.addTextColumn("Volume Usage", "Volume Usage");
-		model.addTextColumn("Snapshot Usage", "Snapshot Usage");
-		model.addTextColumn("Total Usage", "Total Usage");
+		model.addTextColumn("Size GB", "Size GB");
+		model.addTextColumn("Volume Usage Bytes", "Volume Usage Bytes");
+		model.addTextColumn("Snapshot Usage Bytes", "Snapshot Usage Bytes");
+		model.addTextColumn("Total Usage Bytes", "Total Usage Bytes");
 		model.completedHeader();
 
-		model.addTextValue("accountName");
-		model.addTextValue("login");
-		model.addTextValue("password");
-		model.addTextValue("deviceIp");
-		model.addTextValue("russVol01");
-		model.addTextValue("10.0 GB");
-		model.addTextValue("0 B");
-		model.addTextValue("0 B");
-		model.addTextValue("0 B");
-		model.completedRow();
+		Long volSizeGB;
+		
+		for( int i = 0; i < volNames.size(); i++ ) {
+			
+			model.addTextValue( volNames.get(i) );
+			
+			volSizeGB = (long) ( volSizes.get(i) / 1024.0 );
+			
+			model.addTextValue( volSizeGB.toString() );
+			model.addTextValue( volUsageCompressedBytes.get(i).toString() );
+			model.addTextValue( snapUsageCompressedBytes.get(i).toString() );
+			model.addTextValue( totalUsageBytes.get(i).toString() );
+			model.completedRow();
 
+		}
+		
 		model.updateReport(report);
-
+		
 		return report;
+		
 	}
 
 }
