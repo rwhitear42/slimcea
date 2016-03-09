@@ -16,9 +16,8 @@ public class SamplePieChartReport extends CloupiaNonTabularReport {
 
 	
 	//Returns implementation class
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Class getImplementationClass() { 
+	public Class<SamplePieChartReportImpl> getImplementationClass() { 
 		
 		return SamplePieChartReportImpl.class;
 		

@@ -30,9 +30,8 @@ public class MyFirstReport extends CloupiaReportWithActions {
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Class getImplementationClass() {
+	public Class<MyFirstReportImpl> getImplementationClass() {
 		return MyFirstReportImpl.class;
 	}
 

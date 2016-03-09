@@ -50,7 +50,7 @@ public class SlimceaVolumeCollectionsReport extends CloupiaReportWithActions {
 	}
 
 	@Override
-	public Class getImplementationClass() {
+	public Class<SlimceaVolumeCollectionsReportImpl> getImplementationClass() {
 		//this class handles all the report generation logic, look here for more details
 		return SlimceaVolumeCollectionsReportImpl.class;
 	}

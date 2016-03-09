@@ -125,14 +125,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		//SlimceaAccountSampleDrillDownReport drilReport = new SlimceaAccountSampleDrillDownReport("slimcea.drilldowntest.report", "Drill Down Test", SlimceaAccount.class);
 		
 		CloupiaReport[] reports = new CloupiaReport[8];		
-		//reports[0] = new DummyOneSampleReport();
-		//reports[1] = new SlimceaAccountSampleReport();		
-		//reports[2] = drilReport;
-		//reports[3] = new AccountSystemTaskReport();
-		//reports[4] = new MultiSelectTabularReport();
-		//reports[5] = new DummyOneSampleReport();
-		//reports[6] = drilReport;
-		//reports[7] = new MyFirstReport();
+
 		
 		reports[0] = new SlimceaControllerMembersReport();
 		reports[1] = new SlimceaVolumesReport();

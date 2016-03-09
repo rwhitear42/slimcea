@@ -2,11 +2,14 @@ package com.cloupia.feature.slimcea.accounts;
 
 import org.apache.log4j.Logger;
 
+import com.cloupia.lib.connector.account.AccountUtil;
+import com.cloupia.lib.connector.account.PhysicalInfraAccount;
 import com.cloupia.model.cIM.ReportContext;
 import com.cloupia.model.cIM.TabularReport;
 import com.cloupia.service.cIM.inframgr.TabularReportGeneratorIf;
 import com.cloupia.service.cIM.inframgr.reportengine.ReportRegistryEntry;
 import com.cloupia.service.cIM.inframgr.reports.TabularReportInternalModel;
+
 
 /**
  * This is an example demonstrating how to develop a report programmatically.  If you would rather
@@ -28,8 +31,26 @@ public class SlimceaVolumesReportImpl implements TabularReportGeneratorIf {
 		report.setReportName(reportEntry.getReportLabel());
 		report.setContext(context);
 		
+		String accountName = "";
+		String contextId = context.getId();
+		logger.info("###### Context at System Task report#####: "+contextId);
+		if(contextId != null)
+			//As the contextId returns as: "account Name;POD Name"
+			accountName = contextId.split(";")[0];
+		
+        PhysicalInfraAccount acc = AccountUtil.getAccountByName(accountName);
+        if (acc == null)
+        {
+            throw new Exception("Unable to find the account:" + accountName);
+        }
+		
+		
 		TabularReportInternalModel model = new TabularReportInternalModel();
 
+		model.addTextColumn("Account Name", "Account Name");
+		model.addTextColumn("Username", "Username");
+		model.addTextColumn("Password", "Password");
+		model.addTextColumn("IP", "IP");
 		model.addTextColumn("Name", "Name");
 		model.addTextColumn("Size", "Size");
 		model.addTextColumn("Volume Usage", "Volume Usage");
@@ -37,36 +58,12 @@ public class SlimceaVolumesReportImpl implements TabularReportGeneratorIf {
 		model.addTextColumn("Total Usage", "Total Usage");
 		model.completedHeader();
 
+		model.addTextValue("accountName");
+		model.addTextValue("login");
+		model.addTextValue("password");
+		model.addTextValue("deviceIp");
 		model.addTextValue("russVol01");
 		model.addTextValue("10.0 GB");
-		model.addTextValue("0 B");
-		model.addTextValue("0 B");
-		model.addTextValue("0 B");
-		model.completedRow();
-
-		model.addTextValue("sql-1-db");
-		model.addTextValue("10.0 GB");
-		model.addTextValue("0 B");
-		model.addTextValue("0 B");
-		model.addTextValue("0 B");
-		model.completedRow();
-
-		model.addTextValue("sql-2-db");
-		model.addTextValue("10.0 GB");
-		model.addTextValue("0 B");
-		model.addTextValue("0 B");
-		model.addTextValue("0 B");
-		model.completedRow();
-
-		model.addTextValue("test");
-		model.addTextValue("10.0 GB");
-		model.addTextValue("0 B");
-		model.addTextValue("0 B");
-		model.addTextValue("0 B");
-		model.completedRow();
-
-		model.addTextValue("test1");
-		model.addTextValue("25.0 GB");
 		model.addTextValue("0 B");
 		model.addTextValue("0 B");
 		model.addTextValue("0 B");

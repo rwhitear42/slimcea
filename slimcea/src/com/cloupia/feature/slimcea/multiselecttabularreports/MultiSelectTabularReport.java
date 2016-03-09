@@ -24,9 +24,8 @@ public class MultiSelectTabularReport extends CloupiaReportWithActions {
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Class getImplementationClass() {
+	public Class<MultiSelectTabularReportImpl> getImplementationClass() {
 		
 		return MultiSelectTabularReportImpl.class;
 	}

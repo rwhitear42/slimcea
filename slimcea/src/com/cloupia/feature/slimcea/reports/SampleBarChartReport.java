@@ -14,9 +14,8 @@ public class SampleBarChartReport extends CloupiaNonTabularReport {
 	private static final String LABEL = "Slimcea Bar Chart";
 	
 	// returns the implementation class
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Class getImplementationClass() { 
+	public Class<SampleBarChartReportImpl> getImplementationClass() { 
 		
 		return SampleBarChartReportImpl.class;
 		
