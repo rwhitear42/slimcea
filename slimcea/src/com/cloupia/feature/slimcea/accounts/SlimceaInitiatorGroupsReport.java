@@ -1,10 +1,8 @@
 package com.cloupia.feature.slimcea.accounts;
 
-import com.cloupia.feature.slimcea.accounts.pagination.SlimceaAccountReportHandler;
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
 import com.cloupia.model.cIM.DynReportContext;
 import com.cloupia.model.cIM.ReportContextRegistry;
-import com.cloupia.model.cIM.ReportDefinition;
 import com.cloupia.service.cIM.inframgr.reportengine.ContextMapRule;
 import com.cloupia.service.cIM.inframgr.reports.simplified.CloupiaReportAction;
 import com.cloupia.service.cIM.inframgr.reports.simplified.CloupiaReportWithActions;
@@ -40,9 +38,9 @@ public class SlimceaInitiatorGroupsReport extends CloupiaReportWithActions {
 	}
 
 	@Override
-	public Class getImplementationClass() {
+	public Class<SlimceaInitiatorGroupsReportImpl> getImplementationClass() {
 		//this class handles all the report generation logic, look here for more details
-		return SlimceaAccountSampleReportImpl.class;
+		return SlimceaInitiatorGroupsReportImpl.class;
 	}
 
 	@Override
@@ -92,52 +90,5 @@ public class SlimceaInitiatorGroupsReport extends CloupiaReportWithActions {
 		
 		return rules;
 	}
-	/*
-	 * Below  methods
-	 * getPaginationModelClass, 
-	 * getPaginationProvider, 
-	 * isPaginated,
-	 * and getReportHint
-	 * are added for the Pagination support
-	 */
 	
-	/*
-	 * This method is used to get the Model class for the Pagination support
-	 * @return Class This returns Paginated Report Model class
-	 */
-	@Override
-	public Class getPaginationModelClass() {
-		// TODO Auto-generated method stub
-		return SlimceaInitiatorGroupsAccountReport.class;
-	}
-
-	/*
-	 * This method is used to get the Pagination Handler class for the Pagination support
-	 * @return Class This returns Pagination handler class
-	 */
-	@Override
-	public Class getPaginationProvider() {
-		// TODO Auto-generated method stub
-		return SlimceaAccountReportHandler.class;
-	}
-
-	/*
-	 * This method is used to check whether the report is Pagination or not.
-	 * @return boolean This returns true(if it is pagination supported report)
-	 */
-	@Override
-	public boolean isPaginated() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	/*
-	 * This method is used to get ReportHint type.
-	 * If the report type  is pagination,explicitly we have to specify the return type as ReportDefinition.REPORT_HINT_PAGINATED_TABLE.
-	 * @return int This returns PaginationHint 
-	 */
-	@Override
-	public int getReportHint(){
-		return ReportDefinition.REPORT_HINT_PAGINATED_TABLE;
-	}
-
 }

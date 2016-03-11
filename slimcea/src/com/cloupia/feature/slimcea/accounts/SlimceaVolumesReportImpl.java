@@ -77,13 +77,13 @@ public class SlimceaVolumesReportImpl implements TabularReportGeneratorIf {
 		model.addTextColumn("Total Usage Bytes", "Total Usage Bytes");
 		model.completedHeader();
 
-		Long volSizeGB;
+		Double volSizeGB;
 		
 		for( int i = 0; i < volNames.size(); i++ ) {
 			
 			model.addTextValue( volNames.get(i) );
 			
-			volSizeGB = (long) ( volSizes.get(i) / 1024.0 );
+			volSizeGB = (double) ( volSizes.get(i) / 1024.0 );
 			
 			model.addTextValue( volSizeGB.toString() );
 			model.addTextValue( volUsageCompressedBytes.get(i).toString() );

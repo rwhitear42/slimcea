@@ -1,12 +1,19 @@
 package com.cloupia.feature.slimcea.accounts;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
+import com.cisco.cuic.api.client.JSON;
+import com.cloupia.lib.connector.account.AccountUtil;
+import com.cloupia.lib.connector.account.PhysicalInfraAccount;
 import com.cloupia.model.cIM.ReportContext;
 import com.cloupia.model.cIM.TabularReport;
 import com.cloupia.service.cIM.inframgr.TabularReportGeneratorIf;
 import com.cloupia.service.cIM.inframgr.reportengine.ReportRegistryEntry;
 import com.cloupia.service.cIM.inframgr.reports.TabularReportInternalModel;
+import com.rwhitear.nimbleRest.inventory.GetVolumeCollectionsInventory;
+import com.rwhitear.nimbleRest.inventory.data.VolumeCollectionsDataObject;
 
 /**
  * This is an example demonstrating how to develop a report programmatically.  If you would rather
@@ -28,6 +35,35 @@ public class SlimceaVolumeCollectionsReportImpl implements TabularReportGenerato
 		report.setReportName(reportEntry.getReportLabel());
 		report.setContext(context);
 		
+		String accountName = "";
+		String contextId = context.getId();
+		logger.info("###### Context at System Task report#####: "+contextId);
+		if(contextId != null)
+			//As the contextId returns as: "account Name;POD Name"
+			accountName = contextId.split(";")[0];
+		
+        PhysicalInfraAccount acc = AccountUtil.getAccountByName(accountName);
+        if (acc == null)
+        {
+            throw new Exception("Unable to find the account:" + accountName);
+        }
+		
+        String json = acc.getCredential();
+        
+        SlimceaAccountJsonObject specificAcc = (SlimceaAccountJsonObject) JSON.jsonToJavaObject(json, SlimceaAccountJsonObject.class);
+        
+        String username = specificAcc.getLogin();
+        String password = specificAcc.getPassword();
+        String deviceIp = specificAcc.getDeviceIp();
+
+        GetVolumeCollectionsInventory gvci = new GetVolumeCollectionsInventory(username, password, deviceIp);
+		
+		VolumeCollectionsDataObject vcdo = gvci.getInventory();
+		
+		List<String> 	volCollectionNames 	= vcdo.getVolCollectionNames();
+		List<String> 	synchronization 	= vcdo.getSynchronization();
+
+		
 		TabularReportInternalModel model = new TabularReportInternalModel();
 
 		model.addTextColumn("Volume Collection", "Volume Collection");
@@ -37,22 +73,18 @@ public class SlimceaVolumeCollectionsReportImpl implements TabularReportGenerato
 		model.addTextColumn("Last Replication", "Last Replication");
 		model.addTextColumn("Total Snapshots to Retain", "Total Snapshots to Retain");
 		model.completedHeader();
-
-		model.addTextValue("myVolColl");
-		model.addTextValue("None");
-		model.addTextValue("Unknown");
-		model.addTextValue("No replication partner");
-		model.addTextValue("Unknown");
-		model.addTextValue("48");
-		model.completedRow();
-
-		model.addTextValue("russVolColl");
-		model.addTextValue("None");
-		model.addTextValue("2016-03-02 10:00");
-		model.addTextValue("No replication partner");
-		model.addTextValue("Unknown");
-		model.addTextValue("48");
-		model.completedRow();
+		
+		for( int i = 0; i < volCollectionNames.size(); i++ ) {
+			
+			model.addTextValue( volCollectionNames.get(i) );
+			model.addTextValue( synchronization.get(i) );
+			model.addTextValue("N/A");
+			model.addTextValue("N/A");
+			model.addTextValue("N/A");
+			model.addTextValue("N/A");
+			model.completedRow();
+			
+		}
 
 		model.updateReport(report);
 

@@ -124,17 +124,19 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		
 		//SlimceaAccountSampleDrillDownReport drilReport = new SlimceaAccountSampleDrillDownReport("slimcea.drilldowntest.report", "Drill Down Test", SlimceaAccount.class);
 		
-		CloupiaReport[] reports = new CloupiaReport[8];		
+		CloupiaReport[] reports = new CloupiaReport[6];		
 
 		
-		reports[0] = new SlimceaControllerMembersReport();
-		reports[1] = new SlimceaVolumesReport();
-		reports[2] = new SlimceaPerformancePoliciesReport();
-		reports[3] = new SlimceaInitiatorGroupsReport();
-		reports[4] = new SlimceaVolumeCollectionsReport();
-		reports[5] = new SamplePieChartReport();
-		reports[6] = new SamplePieChartReport2();
-		reports[7] = new SampleBarChartReport();
+		
+		reports[0] = new SlimceaVolumesReport();
+		reports[1] = new SlimceaPerformancePoliciesReport();
+		reports[2] = new SlimceaInitiatorGroupsReport();
+		reports[3] = new SlimceaVolumeCollectionsReport();
+		reports[4] = new SamplePieChartReport();
+		reports[5] = new SampleBarChartReport();
+		
+		//reports[0] = new SlimceaControllerMembersReport();
+		//reports[6] = new SamplePieChartReport2();
 		
 		return reports;
 		
@@ -198,8 +200,10 @@ public class SlimceaModule extends AbstractCloupiaModule {
 	        MonitoringTrigger monTrigger = new MonitoringTrigger(new MonitorDummyDeviceType(), new MonitorDummyDeviceStatusParam());
 	        MonitoringTriggerUtil.register(monTrigger);
 			menuProvider.registerWithProvider();
+			
 			//support for new Account Type
 			createAccountType();
+			
 		} catch (Exception e) {
 			logger.error("Slimcea Module error registering components.", e);
 		}
