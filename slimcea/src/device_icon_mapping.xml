@@ -12,7 +12,7 @@
 	 this isn't that important, if you implemented it properly, you should never need to use this
 	  -->
 	<CategoryDefault>
-		<IconURL>/app/uploads/openauto/NimbleArray01_100x100.png</IconURL>
+		<IconURL>/app/uploads/openauto/NimbleArrayIcon_150x75.png</IconURL>
 	</CategoryDefault>
 
 	<!--  
@@ -20,8 +20,8 @@
 		this isn't that important, if you implemented it properly, you should never need to use this
 	 -->	
 	<VendorDefault>
-		<Vendor>Slimcea Account</Vendor>
-		<IconURL>/app/uploads/openauto/NimbleArray01_100x100.png</IconURL>
+		<Vendor>Nimble</Vendor>
+		<IconURL>/app/uploads/openauto/NimbleArrayIcon_150x75.png</IconURL>
 	</VendorDefault>
 
 	<!--  typically there can be any number of Device tags, one per each Vendor+DeviceType combination -->
@@ -31,9 +31,9 @@
 		Refer to DummyConvergedStackBuilder.java for details.
 	-->
 	<Device>
-		<DeviceType>Slimcea Account</DeviceType>
-		<Vendor>Slimcea Account</Vendor>
-		<IconURL>/app/uploads/openauto/NimbleArray01_100x100.png</IconURL>
+		<DeviceType>dummyModel</DeviceType>
+		<Vendor>Nimble</Vendor>
+		<IconURL>/app/uploads/openauto/NimbleArrayIcon_150x75.png</IconURL>
 		<Description>blah blah blah</Description>
 		<IsSupported>true</IsSupported>
 	</Device>	

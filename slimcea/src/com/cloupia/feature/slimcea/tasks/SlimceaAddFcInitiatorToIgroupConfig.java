@@ -10,6 +10,15 @@ import com.cloupia.service.cIM.inframgr.customactions.UserInputField;
 import com.cloupia.service.cIM.inframgr.customactions.WorkflowInputFieldTypeDeclaration;
 import com.cloupia.service.cIM.inframgr.forms.wizard.FormField;
 
+/**
+ * Slimcea Add Fibre Channel Initiator to Initiator Group configuration class. Persists database entries
+ * for Nimble array ipAddress, username, password, FC initiator group name, FC initiator alias and WWPN
+ * inputs.
+ * 
+ * @author rwhitear@cisco.com
+ *
+ * @version 1.0
+ */
 @PersistenceCapable(detachable = "true", table = "slimcea_addfcinitiatortoigrouptask")
 public class SlimceaAddFcInitiatorToIgroupConfig implements TaskConfigIf {
 
@@ -75,46 +84,81 @@ public class SlimceaAddFcInitiatorToIgroupConfig implements TaskConfigIf {
 		this.configEntryId = configEntryId;
 	}
 
+	/**
+	 * @return Nimble array username.
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * @param username Set Nimble array username.
+	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
+	/**
+	 * @return Nimble array password.
+	 */
 	public String getPassword() {
 		return password;
 	}
+
+	/**
+	 * @param password Set Nimble array password.
+	 */
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	/**
+	 * @return Nimble array IP address.
+	 */
 	public String getIpAddress() {
 		return ipAddress;
 	}
+
+	/**
+	 * @param ipAddress Set Nimble array IP address.
+	 */
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
 	}
 	
+	/**
+	 * @return Nimble array fibre channel initiator group name.
+	 */
 	public String getInitiatorGroupName() {
 		return initiatorGroupName;
 	}
 
+	/**
+	 * @param initiatorGroupName Set Nimble array initiator group name.
+	 */
 	public void setInitiatorGroupName(String initiatorGroupName) {
 		this.initiatorGroupName = initiatorGroupName;
 	}
 
+	/**
+	 * @return Nimble array fibre channel initiator alias.
+	 */
 	public String getAlias() {
 		return alias;
 	}
 
+	/**
+	 * @param alias Set Nimble array fibre channel initiator alias.
+	 */
 	public void setAlias(String alias) {
 		this.alias = alias;
 	}
 
+	/**
+	 * @return Nimble array fibre channel initiator worldwide port name.
+	 */
 	public String getWwpn() {
 		return wwpn;
 	}

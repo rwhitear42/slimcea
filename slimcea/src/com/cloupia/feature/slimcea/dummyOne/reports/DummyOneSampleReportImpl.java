@@ -21,6 +21,7 @@ public class DummyOneSampleReportImpl implements TabularReportGeneratorIf {
 
 	@Override
 	public TabularReport getTabularReportReport(ReportRegistryEntry reportEntry, ReportContext context) throws Exception {
+		
 		TabularReport report = new TabularReport();
 
 		report.setGeneratedTime(System.currentTimeMillis());
@@ -37,9 +38,9 @@ public class DummyOneSampleReportImpl implements TabularReportGeneratorIf {
 		for (int i=0; i<5; i++)
 		{
 			
-			model.addTextValue("N/A");
-			model.addTextValue("N/A");
-			model.addTextValue("N/A");
+			model.addTextValue("One");
+			model.addTextValue("Two");
+			model.addTextValue("Three");
 			model.completedRow();
 		}
 

@@ -13,15 +13,19 @@ public class MultiSelectTabularReport extends CloupiaReportWithActions {
 
 	@Override
 	public CloupiaReportAction[] getActions() {
+		
 		MultiSelectTabularReportAction multiSelectTabularReportAction = new MultiSelectTabularReportAction();
+		
 		CloupiaReportAction[] actions = new CloupiaReportAction[1];
+		
 		actions[0] = multiSelectTabularReportAction;
+		
 		return actions;
 
 	}
 
 	@Override
-	public Class getImplementationClass() {
+	public Class<MultiSelectTabularReportImpl> getImplementationClass() {
 		
 		return MultiSelectTabularReportImpl.class;
 	}
@@ -55,7 +59,8 @@ public class MultiSelectTabularReport extends CloupiaReportWithActions {
 	// it to
 	@Override
 	public int getMenuID() {
-		return SlimceaConstants.DUMMY_MENU_1;
+		//return SlimceaConstants.DUMMY_MENU_1;
+		return 51;
 	}
 
 	@Override

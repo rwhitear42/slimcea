@@ -2,17 +2,16 @@ package com.cloupia.feature.slimcea;
 
 import org.apache.log4j.Logger;
 
-import com.cloupia.feature.slimcea.accounts.AccountSystemTaskReport;
-import com.cloupia.feature.slimcea.accounts.DummyAccount;
 import com.cloupia.feature.slimcea.accounts.SlimceaAccount;
-import com.cloupia.feature.slimcea.accounts.SlimceaAccountSampleReport;
+import com.cloupia.feature.slimcea.accounts.SlimceaInitiatorGroupsReport;
+import com.cloupia.feature.slimcea.accounts.SlimceaPerformancePoliciesReport;
+import com.cloupia.feature.slimcea.accounts.SlimceaVolumeCollectionsReport;
+import com.cloupia.feature.slimcea.accounts.SlimceaVolumesReport;
 import com.cloupia.feature.slimcea.accounts.handler.SlimceaTestConnectionHandler;
 import com.cloupia.feature.slimcea.accounts.inventory.SlimceaConvergedStackBuilder;
 import com.cloupia.feature.slimcea.accounts.inventory.SlimceaInventoryItemHandler;
 import com.cloupia.feature.slimcea.accounts.inventory.SlimceaInventoryListener;
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
-import com.cloupia.feature.slimcea.drilldownreports.SlimceaAccountSampleDrillDownReport;
-import com.cloupia.feature.slimcea.dummyOne.reports.DummyOneSampleReport;
 import com.cloupia.feature.slimcea.lovs.NimbleSanProtocolLovProvider;
 import com.cloupia.feature.slimcea.lovs.SimpleLovProvider;
 import com.cloupia.feature.slimcea.lovs.SimpleTabularProvider;
@@ -51,7 +50,7 @@ import com.cloupia.service.cIM.inframgr.reports.simplified.CloupiaReport;
 import com.cloupia.service.cIM.inframgr.thresholdmonitor.MonitoringTrigger;
 import com.cloupia.service.cIM.inframgr.thresholdmonitor.MonitoringTriggerUtil;
 import com.cloupia.feature.slimcea.workflow.WorkflowInputTypeDeclaration;
-import com.cloupia.feature.slimcea.multiselecttabularreports.MultiSelectTabularReport;
+import com.cloupia.feature.slimcea.reports.SlimceaArrayUsagePieChartReport;
 import com.cloupia.feature.slimcea.workflow.InputTypeDeclaration;
 
 public class SlimceaModule extends AbstractCloupiaModule {
@@ -112,16 +111,24 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		//this is where you register all your top level reports, i'm only registering the report
 		//extending genericinfraaccountreport because all my other reports are actually drilldown
 		//reports of that report
-		SlimceaAccountSampleDrillDownReport drilReport = new SlimceaAccountSampleDrillDownReport("slimcea.drilldown.report", "Drill Down", DummyAccount.class);
+		
+		//SlimceaAccountSampleDrillDownReport drilReport = new SlimceaAccountSampleDrillDownReport("slimcea.drilldowntest.report", "Drill Down Test", SlimceaAccount.class);
 		
 		CloupiaReport[] reports = new CloupiaReport[5];		
-		reports[0] = new DummyOneSampleReport();
-		reports[1] = new SlimceaAccountSampleReport();
+
+		reports[0] = new SlimceaVolumesReport();
+		reports[1] = new SlimceaPerformancePoliciesReport();
+		reports[2] = new SlimceaInitiatorGroupsReport();
+		reports[3] = new SlimceaVolumeCollectionsReport();	
+		reports[4] = new SlimceaArrayUsagePieChartReport();
+			
+		//reports[0] = new SlimceaControllerMembersReport();
+		//reports[4] = new SamplePieChartReport();
+		//reports[5] = new SampleBarChartReport();
+		//reports[6] = new SamplePieChartReport2();
 		
-		reports[2] = drilReport;
-		reports[3] = new AccountSystemTaskReport();
-		reports[4] = new MultiSelectTabularReport();
 		return reports;
+		
 	}
 
 	@Override
@@ -157,6 +164,11 @@ public class SlimceaModule extends AbstractCloupiaModule {
 			//Slimcea Drill down REport 
 			ReportContextRegistry.getInstance().register(SlimceaConstants.SLIMCEA_ACCOUNT_DRILLDOWN_NAME, SlimceaConstants.SLIMCEA_ACCOUNT_DRILLDOWN_LABEL);
 			
+			//
+			// First test at registering a new drillable report.
+			//
+			ReportContextRegistry.getInstance().register(SlimceaConstants.SLIMCEA_MY_FIRST_DROPDOWN, SlimceaConstants.SLIMCEA_MY_FIRST_DROPDOWN_LABEL);			
+			
 			//register the left hand menu provider for the menu item i'm introducing
 			DummyMenuProvider menuProvider = new DummyMenuProvider();
 			
@@ -177,8 +189,10 @@ public class SlimceaModule extends AbstractCloupiaModule {
 	        MonitoringTrigger monTrigger = new MonitoringTrigger(new MonitorDummyDeviceType(), new MonitorDummyDeviceStatusParam());
 	        MonitoringTriggerUtil.register(monTrigger);
 			menuProvider.registerWithProvider();
+			
 			//support for new Account Type
 			createAccountType();
+			
 		} catch (Exception e) {
 			logger.error("Slimcea Module error registering components.", e);
 		}
@@ -190,7 +204,9 @@ public class SlimceaModule extends AbstractCloupiaModule {
 	 * Creating New Account Type
 	 */
 	private void createAccountType(){
+		
 		AccountTypeEntry entry=new AccountTypeEntry();
+		
 		// This is mandatory, hold the information for device credential details
 		entry.setCredentialClass(SlimceaAccount.class);
 		
@@ -211,19 +227,22 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		// This is mandatory, on which accounts either physical or virtual
 		// account , new account //type belong to.
 		entry.setAccountClass(AccountTypeEntry.PHYSICAL_ACCOUNT);
+		
 		// Optional , prefix of the task
 		entry.setInventoryTaskPrefix("Slimcea Inventory Task");
 		
 		//Optional. Group inventory system tasks under this folder. 
 		//By default it is grouped under General Tasks
 		entry.setWorkflowTaskCategory("Slimcea Tasks");
+		
 		// Optional , collect the inventory frequency, whenever required you can
 		// change the
 		// inventory collection frequency, in mins.
 		entry.setInventoryFrequencyInMins(15);
+		
 		// This is mandatory,under which pod type , the new account type is
 		// applicable.
-		entry.setPodTypes(new String[] { "SmartStack" } );
+		entry.setPodTypes(new String[] { "SlimceaStack" } );
 		
 		
 		// This is optional, dependents on the need of session for collecting
@@ -261,6 +280,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 
 			private void registerInventoryObjects(
 					AccountTypeEntry SlimceaRecoverPointAccountEntry) {
+				@SuppressWarnings("unused")
 				ConfigItemDef SlimceaRecoverPointStateInfo = SlimceaRecoverPointAccountEntry
 						.createInventoryRoot("slimcea.inventory.root",
 								SlimceaInventoryItemHandler.class);
