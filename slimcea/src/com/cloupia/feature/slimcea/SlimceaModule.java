@@ -2,11 +2,7 @@ package com.cloupia.feature.slimcea;
 
 import org.apache.log4j.Logger;
 
-import com.cloupia.feature.slimcea.accounts.AccountSystemTaskReport;
-import com.cloupia.feature.slimcea.accounts.DummyAccount;
 import com.cloupia.feature.slimcea.accounts.SlimceaAccount;
-import com.cloupia.feature.slimcea.accounts.SlimceaAccountSampleReport;
-import com.cloupia.feature.slimcea.accounts.SlimceaControllerMembersReport;
 import com.cloupia.feature.slimcea.accounts.SlimceaInitiatorGroupsReport;
 import com.cloupia.feature.slimcea.accounts.SlimceaPerformancePoliciesReport;
 import com.cloupia.feature.slimcea.accounts.SlimceaVolumeCollectionsReport;
@@ -16,8 +12,6 @@ import com.cloupia.feature.slimcea.accounts.inventory.SlimceaConvergedStackBuild
 import com.cloupia.feature.slimcea.accounts.inventory.SlimceaInventoryItemHandler;
 import com.cloupia.feature.slimcea.accounts.inventory.SlimceaInventoryListener;
 import com.cloupia.feature.slimcea.constants.SlimceaConstants;
-import com.cloupia.feature.slimcea.drilldownreports.SlimceaAccountSampleDrillDownReport;
-import com.cloupia.feature.slimcea.dummyOne.reports.DummyOneSampleReport;
 import com.cloupia.feature.slimcea.lovs.NimbleSanProtocolLovProvider;
 import com.cloupia.feature.slimcea.lovs.SimpleLovProvider;
 import com.cloupia.feature.slimcea.lovs.SimpleTabularProvider;
@@ -56,11 +50,7 @@ import com.cloupia.service.cIM.inframgr.reports.simplified.CloupiaReport;
 import com.cloupia.service.cIM.inframgr.thresholdmonitor.MonitoringTrigger;
 import com.cloupia.service.cIM.inframgr.thresholdmonitor.MonitoringTriggerUtil;
 import com.cloupia.feature.slimcea.workflow.WorkflowInputTypeDeclaration;
-import com.cloupia.feature.slimcea.multiselecttabularreports.MultiSelectTabularReport;
-import com.cloupia.feature.slimcea.reports.MyFirstReport;
-import com.cloupia.feature.slimcea.reports.SampleBarChartReport;
-import com.cloupia.feature.slimcea.reports.SamplePieChartReport;
-import com.cloupia.feature.slimcea.reports.SamplePieChartReport2;
+import com.cloupia.feature.slimcea.reports.SlimceaArrayUsagePieChartReport;
 import com.cloupia.feature.slimcea.workflow.InputTypeDeclaration;
 
 public class SlimceaModule extends AbstractCloupiaModule {
@@ -124,18 +114,17 @@ public class SlimceaModule extends AbstractCloupiaModule {
 		
 		//SlimceaAccountSampleDrillDownReport drilReport = new SlimceaAccountSampleDrillDownReport("slimcea.drilldowntest.report", "Drill Down Test", SlimceaAccount.class);
 		
-		CloupiaReport[] reports = new CloupiaReport[6];		
+		CloupiaReport[] reports = new CloupiaReport[5];		
 
-		
-		
 		reports[0] = new SlimceaVolumesReport();
 		reports[1] = new SlimceaPerformancePoliciesReport();
 		reports[2] = new SlimceaInitiatorGroupsReport();
-		reports[3] = new SlimceaVolumeCollectionsReport();
-		reports[4] = new SamplePieChartReport();
-		reports[5] = new SampleBarChartReport();
-		
+		reports[3] = new SlimceaVolumeCollectionsReport();	
+		reports[4] = new SlimceaArrayUsagePieChartReport();
+			
 		//reports[0] = new SlimceaControllerMembersReport();
+		//reports[4] = new SamplePieChartReport();
+		//reports[5] = new SampleBarChartReport();
 		//reports[6] = new SamplePieChartReport2();
 		
 		return reports;
@@ -291,6 +280,7 @@ public class SlimceaModule extends AbstractCloupiaModule {
 
 			private void registerInventoryObjects(
 					AccountTypeEntry SlimceaRecoverPointAccountEntry) {
+				@SuppressWarnings("unused")
 				ConfigItemDef SlimceaRecoverPointStateInfo = SlimceaRecoverPointAccountEntry
 						.createInventoryRoot("slimcea.inventory.root",
 								SlimceaInventoryItemHandler.class);

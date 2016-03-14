@@ -55,7 +55,7 @@ public class SlimceaAccountAPI {
 	   */
 	public static SlimceaAccountAPI getslimceaAccountAPI(SlimceaAccount account) throws Exception
 	{
-		return getInstanceFor(account.getServerAddress(), account.getLogin(),  account.getPassword(),Integer.parseInt(account.getPort()), account.getProtocol());
+		return getInstanceFor(account.getServerAddress(), account.getLogin(),  account.getPassword(), 5392, account.getProtocol());
 	}
       /**
 	   * This method is used to get slimceaAccountAPI object 
